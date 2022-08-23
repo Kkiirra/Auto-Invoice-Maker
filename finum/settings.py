@@ -40,7 +40,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = 'finum.urls'
 
 TEMPLATES = [
     {
@@ -61,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = 'finum.wsgi.application'
 
 
 DATABASES = {
@@ -118,7 +118,7 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'customuser.CustomUser'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.finum.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django_imap_backend.ImapBackend'
 EMAIL_IMAP_SECRETS = [
     {
