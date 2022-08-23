@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load static i18n %}
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+<!--begin::Content-->
+<div class="d-flex flex-column flex-center text-center p-10">
+    <!--begin::Wrapper-->
+    <div class="card card-flush w-lg-650px py-5">
+        <div class="card-body py-15 py-lg-20">
+            <!--begin::Title-->
+            <h1 class="fw-bolder fs-2hx text-gray-900 mb-4">{% trans "Welcome" %}!</h1>
+            <p class="text-gray-900 fs-2hx mb-4">{% trans "For first start your company" %} </p>
+            <!--end::Title-->
+            <!--begin::Text-->
+            <!--end::Text-->
+            <!--begin::Illustration-->
+            <div class="mb-3">
+                <img src="{% static 'images/auth/start.png' %}" class="mw-100 mh-300px theme-light-show" alt="" />
+            </div>
+            <!--end::Illustration-->
+            <!--begin::Link-->
+            <div class="mb-0">
+                <a href="{% url 'company:companies' %}" class="btn btn-sm btn-primary">{% trans "Companies" %}</a>
+            </div>
+            <!--end::Link-->
+        </div>
+    </div>
+    <!--end::Wrapper-->
+</div>
+<!--end::Content-->
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

@@ -1,0 +1,760 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-18 10:30+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: .\templates\accounts\account.html:27 .\templates\accounts\account.html:42
+#: .\templates\accounts\account.html:131
+#: .\templates\accounts\account_edit.html:44
+#: .\templates\company\companies.html:133
+#: .\templates\company\companies.html:273
+#: .\templates\company\companies.html:303
+#: .\templates\customuser\settings.html:132
+msgid "Accounts"
+msgstr "Счета"
+
+#: .\templates\accounts\account.html:33
+#: .\templates\accounts\account_edit.html:34 .\templates\base.html:1325
+#: .\templates\company\companies.html:34
+#: .\templates\company\company_edit.html:33
+#: .\templates\customuser\settings.html:34
+msgid "Profile"
+msgstr "Профиль"
+
+#: .\templates\accounts\account.html:74 .\templates\company\companies.html:76
+#: .\templates\customuser\settings.html:75
+msgid "Enter your first & last name"
+msgstr "Введите имя и фамилию"
+
+#: .\templates\accounts\account.html:121 .\templates\accounts\account.html:126
+#: .\templates\base.html:1357 .\templates\base.html:1544
+#: .\templates\company\companies.html:123
+#: .\templates\customuser\settings.html:43
+#: .\templates\customuser\settings.html:122
+msgid "Settings"
+msgstr "Настройки"
+
+#: .\templates\accounts\account.html:136 .\templates\company\companies.html:138
+#: .\templates\customuser\settings.html:137
+msgid "Subscribe"
+msgstr "Подписка"
+
+#: .\templates\accounts\account.html:170 .\templates\company\companies.html:171
+#: .\templates\contractors\contractors.html:66 .\templates\orders\order.html:63
+#: .\templates\transactions\transactions.html:61
+msgid "Search"
+msgstr "Поиск"
+
+#: .\templates\accounts\account.html:188 .\templates\company\companies.html:188
+#: .\templates\company\company_edit.html:249
+#: .\templates\contractors\contractors.html:84 .\templates\orders\order.html:80
+#: .\templates\transactions\transactions.html:79
+msgid "Filter"
+msgstr "Фильтр"
+
+#: .\templates\accounts\account.html:193 .\templates\company\companies.html:194
+#: .\templates\company\company_edit.html:255
+#: .\templates\contractors\contractors.html:90 .\templates\orders\order.html:85
+#: .\templates\transactions\transactions.html:84
+msgid "Filter Options"
+msgstr "Фильтр опции"
+
+#: .\templates\accounts\account.html:206 .\templates\company\companies.html:208
+#: .\templates\company\company_edit.html:269
+#: .\templates\contractors\contractors.html:104
+#: .\templates\orders\order.html:98
+#: .\templates\transactions\transactions.html:97
+msgid "Date from"
+msgstr "Дата от"
+
+#: .\templates\accounts\account.html:208 .\templates\company\companies.html:210
+#: .\templates\company\company_edit.html:271
+#: .\templates\contractors\contractors.html:106
+#: .\templates\orders\order.html:100
+#: .\templates\transactions\transactions.html:99
+msgid "Date to"
+msgstr "Дата до"
+
+#: .\templates\accounts\account.html:217 .\templates\company\companies.html:219
+#: .\templates\company\company_edit.html:280
+#: .\templates\contractors\contractors.html:115
+#: .\templates\orders\order.html:109
+#: .\templates\transactions\transactions.html:108
+msgid "Reset"
+msgstr "Сброс"
+
+#: .\templates\accounts\account.html:218 .\templates\company\companies.html:220
+#: .\templates\company\company_edit.html:281
+#: .\templates\contractors\contractors.html:116
+#: .\templates\orders\order.html:110
+#: .\templates\transactions\transactions.html:109
+msgid "Apply"
+msgstr "Принять"
+
+#: .\templates\accounts\account.html:269
+#: .\templates\company\company_edit.html:332
+msgid "Account Name"
+msgstr "Название счёта"
+
+#: .\templates\accounts\account.html:270 .\templates\accounts\account.html:393
+#: .\templates\accounts\account_edit.html:160
+#: .\templates\company\companies.html:366
+#: .\templates\company\company_edit.html:333
+#: .\templates\company\company_edit.html:447
+msgid "Bank"
+msgstr "Банк"
+
+#: .\templates\accounts\account.html:271
+#: .\templates\accounts\account_edit.html:176
+#: .\templates\company\company_edit.html:334 .\templates\orders\order.html:159
+#: .\templates\orders\order_edit.html:149
+msgid "Company"
+msgstr "Компания"
+
+#: .\templates\accounts\account.html:272 .\templates\company\companies.html:274
+#: .\templates\company\company_edit.html:335
+msgid "Created Date"
+msgstr "Дата создания"
+
+#: .\templates\accounts\account.html:273
+#: .\templates\company\company_edit.html:336 .\templates\orders\order.html:157
+#: .\templates\transactions\transactions.html:162
+msgid "Currency"
+msgstr "Валюта"
+
+#: .\templates\accounts\account.html:274 .\templates\company\companies.html:275
+#: .\templates\company\company_edit.html:337
+#: .\templates\contractors\contractors.html:163
+#: .\templates\orders\order.html:161 .\templates\orders\order.html:193
+#: .\templates\transactions\transactions.html:165
+#: .\templates\transactions\transactions.html:205
+msgid "Actions"
+msgstr "Действия"
+
+#: .\templates\accounts\account.html:324 .\templates\company\companies.html:438
+#: .\templates\company\company_edit.html:378
+#: .\templates\contractors\contractors.html:191
+#: .\templates\orders\order.html:205
+#: .\templates\transactions\transactions.html:217
+msgid "Edit"
+msgstr "Редактировать"
+
+#: .\templates\accounts\account.html:329 .\templates\company\companies.html:443
+#: .\templates\company\company_edit.html:383
+#: .\templates\contractors\contractors.html:196
+#: .\templates\orders\order.html:210
+#: .\templates\transactions\transactions.html:222
+msgid "Delete"
+msgstr "Удалить"
+
+#: .\templates\accounts\account.html:360 .\templates\company\companies.html:335
+#: .\templates\company\company_edit.html:414
+msgid "Add new Account"
+msgstr "Добавить счёт"
+
+#: .\templates\accounts\account.html:383
+#: .\templates\accounts\account_edit.html:148
+#: .\templates\accounts\account_edit.html:153
+#: .\templates\company\companies.html:358
+#: .\templates\company\companies.html:361
+#: .\templates\company\company_edit.html:437
+#: .\templates\company\company_edit.html:440
+msgid "Account name"
+msgstr "Название счёта"
+
+#: .\templates\accounts\account.html:408
+#: .\templates\company\company_edit.html:461 .\templates\orders\order.html:272
+msgid "Select your Company"
+msgstr "Выберите компанию"
+
+#: .\templates\accounts\account.html:420
+#: .\templates\accounts\account_edit.html:189
+#: .\templates\company\companies.html:380
+#: .\templates\company\company_edit.html:473 .\templates\orders\order.html:301
+#: .\templates\orders\order_edit.html:188
+msgid "Select your Currency"
+msgstr "Выберите валюту"
+
+#: .\templates\accounts\account.html:439
+#: .\templates\accounts\account_edit.html:226
+#: .\templates\company\companies.html:400
+#: .\templates\company\companies.html:511
+#: .\templates\company\company_edit.html:178
+#: .\templates\company\company_edit.html:492
+#: .\templates\contractors\contractor_edit.html:155
+#: .\templates\contractors\contractors.html:263
+#: .\templates\customuser\settings.html:240 .\templates\orders\order.html:328
+#: .\templates\orders\order_edit.html:237
+#: .\templates\transactions\transaction_edit.html:227
+msgid "Discard"
+msgstr "Отмена"
+
+#: .\templates\accounts\account.html:443 .\templates\company\companies.html:404
+#: .\templates\company\companies.html:515
+#: .\templates\company\company_edit.html:496
+#: .\templates\contractors\contractors.html:267
+#: .\templates\orders\order.html:332
+msgid "Submit"
+msgstr "Отправить"
+
+#: .\templates\accounts\account.html:444 .\templates\company\companies.html:405
+#: .\templates\company\companies.html:516
+#: .\templates\company\company_edit.html:497
+#: .\templates\contractors\contractors.html:268
+#: .\templates\customuser\signin.html:105
+#: .\templates\customuser\signup.html:123 .\templates\orders\order.html:333
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
+
+#: .\templates\accounts\account.html:566
+#: .\templates\company\company_edit.html:646
+msgid "Are you sure you want to delete this account"
+msgstr "Вы уверены, что хотите удалить счёт?"
+
+#: .\templates\accounts\account.html:570
+#: .\templates\company\company_edit.html:650
+#: .\templates\contractors\contractors.html:421
+#: .\templates\orders\order.html:513
+msgid "Yes, delete"
+msgstr "Да, удалить"
+
+#: .\templates\accounts\account.html:571 .\templates\company\companies.html:670
+#: .\templates\company\company_edit.html:651
+#: .\templates\contractors\contractors.html:422
+#: .\templates\orders\order.html:514
+#: .\templates\transactions\transactions.html:491
+msgid "No, cancel"
+msgstr "Нет, отмена"
+
+#: .\templates\accounts\account.html:587 .\templates\company\companies.html:686
+#: .\templates\company\company_edit.html:667
+#: .\templates\contractors\contractors.html:438
+msgid "You have deleted"
+msgstr "Успешно удалено"
+
+#: .\templates\accounts\account.html:591 .\templates\accounts\account.html:605
+#: .\templates\base.html:4596 .\templates\company\companies.html:690
+#: .\templates\company\companies.html:704
+#: .\templates\company\companies.html:780
+#: .\templates\company\companies.html:803
+#: .\templates\company\company_edit.html:671
+#: .\templates\company\company_edit.html:685
+#: .\templates\contractors\contractors.html:442
+#: .\templates\contractors\contractors.html:456
+#: .\templates\orders\order.html:533 .\templates\orders\order.html:547
+msgid "Ok, got it"
+msgstr "Принять"
+
+#: .\templates\accounts\account.html:602
+#: .\templates\company\company_edit.html:682
+msgid "Account was not deleted"
+msgstr "Счёт не был удалён"
+
+#: .\templates\accounts\account_edit.html:28
+#: .\templates\customuser\settings.html:28
+msgid "Account Settings"
+msgstr "Настройки счёта"
+
+#: .\templates\accounts\account_edit.html:80
+msgid "Change your account settings"
+msgstr "Настройки счёта"
+
+#: .\templates\accounts\account_edit.html:131
+msgid "Account Details"
+msgstr "Детали счёта"
+
+#: .\templates\accounts\account_edit.html:212
+#: .\templates\company\company_edit.html:164
+#: .\templates\customuser\settings.html:226
+#: .\templates\orders\order_edit.html:223
+msgid "Creation Date"
+msgstr "Дата создания"
+
+#: .\templates\accounts\account_edit.html:227
+#: .\templates\company\company_edit.html:179
+#: .\templates\contractors\contractor_edit.html:156
+#: .\templates\customuser\settings.html:241
+#: .\templates\orders\order_edit.html:238
+#: .\templates\transactions\transaction_edit.html:228
+msgid "Save Changes"
+msgstr "Сохранить"
+
+#: .\templates\base.html:61
+msgid "Dashboard"
+msgstr "Главная"
+
+#: .\templates\base.html:1290 .\templates\transactions\transaction_edit.html:34
+#: .\templates\transactions\transactions.html:26
+#: .\templates\transactions\transactions.html:31
+msgid "Transactions"
+msgstr "Транзакции"
+
+#: .\templates\base.html:1301 .\templates\orders\order.html:26
+#: .\templates\orders\order.html:33 .\templates\orders\order_edit.html:34
+msgid "Orders"
+msgstr "Заявки"
+
+#: .\templates\base.html:1312 .\templates\contractors\contractor_edit.html:34
+#: .\templates\contractors\contractors.html:28
+#: .\templates\contractors\contractors.html:34
+msgid "Contractors"
+msgstr "Подрядчики"
+
+#: .\templates\base.html:1378
+msgid "My companies"
+msgstr "Мои компании"
+
+#: .\templates\base.html:1400
+msgid "My accounts"
+msgstr "Мои счета"
+
+#: .\templates\base.html:1420 .\templates\base.html:1560
+msgid "Subscription"
+msgstr "Подписка"
+
+#: .\templates\base.html:1435
+msgid "Integrations"
+msgstr "Интеграции"
+
+#: .\templates\base.html:1530
+msgid "Anonymous user"
+msgstr "Анонимный пользователь"
+
+#: .\templates\base.html:1550 .\templates\company\companies.html:28
+#: .\templates\company\companies.html:43 .\templates\company\companies.html:128
+#: .\templates\company\company_edit.html:43
+#: .\templates\company\start_company.html:27
+#: .\templates\customuser\settings.html:127
+msgid "Companies"
+msgstr "Компании"
+
+#: .\templates\base.html:1634
+msgid "English"
+msgstr "Английский"
+
+#: .\templates\base.html:1642
+msgid "Polish"
+msgstr "Польский"
+
+#: .\templates\base.html:1651
+msgid "Ukraine"
+msgstr "Украинский"
+
+#: .\templates\base.html:1657
+msgid "Russian"
+msgstr "Русский"
+
+#: .\templates\base.html:1666
+msgid "Sign Out"
+msgstr "Выйти"
+
+#: .\templates\base.html:4459
+msgid "Session"
+msgstr "Сессия"
+
+#: .\templates\base.html:4466
+msgid "Support"
+msgstr "Помощь"
+
+#: .\templates\base.html:4558
+msgid "Are you sure you would like to cancel?"
+msgstr "Вы уверены, что хотите отменить?"
+
+#: .\templates\base.html:4562
+msgid "Yes, cancel it!"
+msgstr "Да, отменить!"
+
+#: .\templates\base.html:4563 .\templates\base.html:4586
+#: .\templates\company\companies.html:770
+#: .\templates\company\companies.html:793
+msgid "No, return"
+msgstr "Нет, вернуться"
+
+#: .\templates\base.html:4570
+msgid "Your form has not been cancelled!."
+msgstr "Ваша форма не отменена"
+
+#: .\templates\base.html:4573 .\templates\transactions\transactions.html:510
+msgid "Ok, got it!"
+msgstr "Принять"
+
+#: .\templates\base.html:4581 .\templates\company\companies.html:765
+#: .\templates\company\companies.html:788
+msgid "Are you sure you would like to cancel"
+msgstr "Вы уверены, что хотите отменить?"
+
+#: .\templates\base.html:4585 .\templates\company\companies.html:769
+#: .\templates\company\companies.html:792
+msgid "Yes, cancel it"
+msgstr "Да, отменить"
+
+#: .\templates\base.html:4593 .\templates\company\companies.html:800
+msgid "Your form has not been cancelled"
+msgstr "Ваша форма не отменена"
+
+#: .\templates\company\companies.html:242
+msgid "Add Company"
+msgstr "Добавить компанию"
+
+#: .\templates\company\companies.html:271
+msgid "Company Name"
+msgstr "Название компании"
+
+#: .\templates\company\companies.html:272
+msgid "User"
+msgstr "Пользователь"
+
+#: .\templates\company\companies.html:321
+msgid "Add Account"
+msgstr "Добавить счёт"
+
+#: .\templates\company\companies.html:426
+#: .\templates\company\company_edit.html:366
+#: .\templates\contractors\contractors.html:179
+msgid "Action"
+msgstr "Действие"
+
+#: .\templates\company\companies.html:474
+msgid "Add new Company"
+msgstr "Добавить компанию"
+
+#: .\templates\company\companies.html:497
+#: .\templates\company\companies.html:500
+#: .\templates\company\company_edit.html:149
+#: .\templates\company\company_edit.html:154
+msgid "Company name"
+msgstr "Название компании"
+
+#: .\templates\company\companies.html:665
+msgid "Are you sure you want to delete this company?"
+msgstr "Вы уверены, что хотите удалить компанию?"
+
+#: .\templates\company\companies.html:669
+#: .\templates\transactions\transactions.html:490
+msgid "Yes, delete!"
+msgstr "Да, удалить!"
+
+#: .\templates\company\companies.html:701
+msgid "Company was not deleted"
+msgstr "Компания не удалена"
+
+#: .\templates\company\company_edit.html:27
+msgid "Company Settings"
+msgstr "Настройки компании"
+
+#: .\templates\company\company_edit.html:81
+msgid "Change your company settings"
+msgstr "Настройки вашей компании"
+
+#: .\templates\company\company_edit.html:132
+msgid "Company Details"
+msgstr "Сведения о компании"
+
+#: .\templates\company\company_edit.html:203
+#, fuzzy
+#| msgid "Accounts"
+msgid "accounts"
+msgstr "Счета"
+
+#: .\templates\company\start_company.html:15
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+#: .\templates\company\start_company.html:16
+msgid "For first start your company"
+msgstr "Для начала создайте компанию"
+
+#: .\templates\contractors\contractor_edit.html:27
+msgid "Contractor Settings"
+msgstr "Настройки Подрядчика"
+
+#: .\templates\contractors\contractor_edit.html:72
+msgid "Change your contractor settings"
+msgstr "Настройки вашего Подрядчика"
+
+#: .\templates\contractors\contractor_edit.html:123
+msgid "Contractor Details"
+msgstr "Сведения о Подрядчике"
+
+#: .\templates\contractors\contractor_edit.html:140
+#: .\templates\contractors\contractor_edit.html:145
+#: .\templates\contractors\contractors.html:162
+#: .\templates\contractors\contractors.html:249
+#: .\templates\contractors\contractors.html:252
+#: .\templates\orders\order.html:294
+#: .\templates\transactions\transactions.html:296
+msgid "Contractor name"
+msgstr "Имя Подрядчика"
+
+#: .\templates\contractors\contractors.html:226
+msgid "Add new Contractor"
+msgstr "Добавить Подрядчика"
+
+#: .\templates\contractors\contractors.html:417
+msgid "Are you sure you want to delete this Contractor"
+msgstr "Вы уверены, что хотите удалить Подрядчика?"
+
+#: .\templates\contractors\contractors.html:453
+msgid "Contractor was not deleted"
+msgstr "Подрядчик не был удалён"
+
+#: .\templates\customuser\settings.html:151
+msgid "Profile Details"
+msgstr "Детали профиля"
+
+#: .\templates\customuser\settings.html:166
+msgid "Full Name"
+msgstr "Полное Имя"
+
+#: .\templates\customuser\settings.html:174
+msgid "First name"
+msgstr "Имя"
+
+#: .\templates\customuser\settings.html:179
+msgid "Last name"
+msgstr "Фамилия"
+
+#: .\templates\customuser\settings.html:193
+msgid "Contact Phone"
+msgstr "Контактный телефон"
+
+#: .\templates\customuser\settings.html:198
+msgid "Phone number"
+msgstr "Номер телефона"
+
+#: .\templates\customuser\settings.html:206
+msgid "Country"
+msgstr "Страна"
+
+#: .\templates\customuser\settings.html:259
+msgid "Sign-in Method"
+msgstr "Методы входа"
+
+#: .\templates\customuser\settings.html:271
+msgid "Email Address"
+msgstr "Адрес электронной почты"
+
+#: .\templates\customuser\settings.html:284
+#: .\templates\customuser\signin.html:79 .\templates\customuser\signup.html:77
+#: .\templates\customuser\signup.html:108
+msgid "Password"
+msgstr "Пароль"
+
+#: .\templates\customuser\settings.html:290
+msgid "Reset Password"
+msgstr "Сброс пароля"
+
+#: .\templates\customuser\settings.html:307
+#: .\templates\customuser\settings.html:354
+msgid "Deactivate Account"
+msgstr "Деактивация аккаунта"
+
+#: .\templates\customuser\settings.html:334
+msgid "You Are Deactivating Your Account"
+msgstr "Вы деактивируете ваш аккаунт"
+
+#: .\templates\customuser\settings.html:335
+msgid ""
+"For extra security, this requires you to confirm your email or phone number "
+"when you reset yousignr password."
+msgstr ""
+"Для дополнительной безопасности вам потребуется подтвердить свой адрес "
+"электронной почты или номер телефона при сбросе пароля для входа в систему."
+
+#: .\templates\customuser\settings.html:337
+msgid "Learn more"
+msgstr "Узнать больше"
+
+#: .\templates\customuser\settings.html:347
+msgid "I confirm my account deactivation"
+msgstr "Я подтверждаю деактивацию аккаунта"
+
+#: .\templates\customuser\settings.html:384
+msgid "Successfully sent"
+msgstr "Успешно отправлено"
+
+#: .\templates\customuser\signin.html:51 .\templates\customuser\signin.html:102
+msgid "Sign In"
+msgstr "Вход"
+
+#: .\templates\customuser\signin.html:54 .\templates\customuser\signup.html:55
+msgid "Full access for 14 days. No credit card required."
+msgstr "Полный доступ на 14 дней. Кредитная карта не требуется."
+
+#: .\templates\customuser\signin.html:67 .\templates\customuser\signup.html:66
+msgid "Email"
+msgstr "Элетронная почта"
+
+#: .\templates\customuser\signin.html:94
+msgid "Forgot Password"
+msgstr "Забыли пароль?"
+
+#: .\templates\customuser\signin.html:112
+msgid "Not a Member yet"
+msgstr "Не зарегистрированы?"
+
+#: .\templates\customuser\signin.html:113
+#: .\templates\customuser\signup.html:120
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+#: .\templates\customuser\signup.html:52
+msgid "Sign Up"
+msgstr "Зарегистрироваться"
+
+#: .\templates\customuser\signup.html:95
+msgid "Use 8 or more characters with a mix of letters, numbers &amp; symbols."
+msgstr "Используйте 8 или больше символов используя числа, буквы, спец. символы."
+
+#: .\templates\customuser\signup.html:130
+msgid "Already have an Account"
+msgstr "У вас уже есть аккаунт"
+
+#: .\templates\customuser\signup.html:131
+msgid "Sign in"
+msgstr "Вход"
+
+#: .\templates\orders\order.html:132
+msgid "Add Order"
+msgstr "Добавить заявку"
+
+#: .\templates\orders\order.html:155
+msgid "Order Date"
+msgstr "Дата заявки"
+
+#: .\templates\orders\order.html:156 .\templates\orders\order.html:314
+#: .\templates\orders\order.html:317
+msgid "Order Amount"
+msgstr "Сумма заявки"
+
+#: .\templates\orders\order.html:158 .\templates\orders\order.html:284
+#: .\templates\orders\order_edit.html:167
+#: .\templates\transactions\transaction_edit.html:156
+#: .\templates\transactions\transactions.html:160
+#: .\templates\transactions\transactions.html:286
+msgid "Contractor"
+msgstr "Подрядчик"
+
+#: .\templates\orders\order.html:160 .\templates\orders\order.html:263
+msgid "Order Name"
+msgstr "Название счёта"
+
+#: .\templates\orders\order.html:240
+msgid "Add new Order"
+msgstr "Добавить заявку"
+
+#: .\templates\orders\order.html:266 .\templates\orders\order_edit.html:138
+msgid "Order name"
+msgstr "Название заявки"
+
+#: .\templates\orders\order.html:509
+msgid "Are you sure you want to delete this order"
+msgstr "Вы уверены, что хотите удалить заявку"
+
+#: .\templates\orders\order.html:530
+#: .\templates\transactions\transactions.html:507
+msgid "You have deleted!"
+msgstr "Успешно удалено"
+
+#: .\templates\orders\order.html:544
+msgid "Order was not deleted."
+msgstr "Заявка не была удалена"
+
+#: .\templates\orders\order_edit.html:28
+msgid "Order Settings"
+msgstr "Настройки Заявки"
+
+#: .\templates\orders\order_edit.html:70
+msgid "Change your order settings"
+msgstr "Настройки вашей Заявки"
+
+#: .\templates\orders\order_edit.html:121
+msgid "Order Details"
+msgstr "Детали Заявки"
+
+#: .\templates\orders\order_edit.html:207
+#: .\templates\transactions\transaction_edit.html:197
+#: .\templates\transactions\transactions.html:161
+msgid "Amount"
+msgstr "Сумма"
+
+#: .\templates\orders\order_edit.html:212
+msgid "Order amount"
+msgstr "Сумма заявки"
+
+#: .\templates\transactions\transaction_edit.html:28
+msgid "Transaction Settings"
+msgstr "Настройки транзакции"
+
+#: .\templates\transactions\transaction_edit.html:42
+msgid "Transaction edit"
+msgstr "Детали транзакции"
+
+#: .\templates\transactions\transaction_edit.html:70
+msgid "Change your transaction settings"
+msgstr "Настройки вашей Транзакции"
+
+#: .\templates\transactions\transaction_edit.html:121
+msgid "Transaction Details"
+msgstr "Детали транзакции"
+
+#: .\templates\transactions\transaction_edit.html:138
+#: .\templates\transactions\transactions.html:164
+#: .\templates\transactions\transactions.html:274
+msgid "Account"
+msgstr "Счёт"
+
+#: .\templates\transactions\transaction_edit.html:177
+#: .\templates\transactions\transactions.html:314
+msgid "Transaction Type"
+msgstr "Тип транзакции"
+
+#: .\templates\transactions\transaction_edit.html:213
+#: .\templates\transactions\transactions.html:159
+msgid "Transaction Date"
+msgstr "Дата транзакции"
+
+#: .\templates\transactions\transactions.html:131
+msgid "Add Transaction"
+msgstr "Добавить Транзакцию"
+
+#: .\templates\transactions\transactions.html:163
+msgid "Transaction type"
+msgstr "Тип транзакции"
+
+#: .\templates\transactions\transactions.html:252
+msgid "Add new Transaction"
+msgstr "Добавить Транзакцию"
+
+#: .\templates\transactions\transactions.html:305
+#: .\templates\transactions\transactions.html:308
+msgid "Transaction Amount"
+msgstr "Сумма Транзакции"
+
+#: .\templates\transactions\transactions.html:486
+msgid "Are you sure you want to delete this transaction?"
+msgstr "Вы уверены, что хотите удалить транзакцию?"
+
+#: .\templates\transactions\transactions.html:521
+msgid "Transaction was not deleted."
+msgstr "Транзакция не была удалена."
+
+#~ msgid "Language"
+#~ msgstr "Язык"
