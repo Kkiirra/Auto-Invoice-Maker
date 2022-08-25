@@ -78,6 +78,5 @@ def start_company(request):
         return render(request, 'company/start_company.html')
 
 
-@login_required(login_url='/signin/')
 def dashboard(request):
     return render(request, 'dashboard.html')

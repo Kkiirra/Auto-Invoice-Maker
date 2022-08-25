@@ -15,7 +15,7 @@ def orders_view(request):
 
     if companies:
         orders = Order.objects.filter(user_account=user_account)
-        contractors = Contractor.objects.all()
+        contractors = Contractor.objects.filter(user_account=user_account)
         return render(request, 'orders/order.html', {'orders': orders, 'companies': companies,
                                                      'contractors': contractors,
                                                      'currencies': currencies})

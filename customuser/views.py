@@ -173,3 +173,10 @@ def password_email_request(request):
         'password': password_form
     }
     return render(request, 'registration/password_reset_form.html', context)
+
+
+def deactivate_user(request):
+    user = request.user
+    user.is_active = False
+    user.save()
+    return redirect('company:dashboard')

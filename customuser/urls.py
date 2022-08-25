@@ -1,7 +1,7 @@
 from django.urls import path, re_path, reverse
 from .views import signup, signin, signout, settings, \
     password_reset_request, activate_link, email_send_success, \
-    email_invalid, bad_request
+    email_invalid, bad_request, deactivate_user
 
 app_name = 'customuser'
 
@@ -16,4 +16,5 @@ urlpatterns = [
     path('activate-email-link/done/', email_send_success, name='email_send_success'),
     path('email-invalid-link/', email_invalid, name='email_invalid'),
     path('bad_request/', bad_request, name='bad_request'),
+    path('deactivate/', deactivate_user, name='deactivate'),
 ]

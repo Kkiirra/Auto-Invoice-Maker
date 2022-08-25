@@ -298,7 +298,7 @@
                     <!--begin::Content-->
                     <div id="kt_account_settings_deactivate" class="collapse show">
                         <!--begin::Form-->
-                        <form id="kt_account_deactivate_form" class="form">
+                        <form id="kt_account_deactivate_form" class="form" method="post" action="{% url 'customuser:deactivate' %}">{% csrf_token %}
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
                                 <!--begin::Notice-->
@@ -330,7 +330,7 @@
                                 <!--end::Notice-->
                                 <!--begin::Form input row-->
                                 <div class="form-check form-check-solid fv-row">
-                                    <input name="deactivate" class="form-check-input" type="checkbox" value="" id="deactivate" />
+                                    <input required name="deactivate" class="form-check-input" type="checkbox" value="" id="deactivate" />
                                     <label class="form-check-label fw-semibold ps-2 fs-6" for="deactivate">{% trans "I confirm my account deactivation" %}</label>
                                 </div>
                                 <!--end::Form input row-->
