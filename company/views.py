@@ -79,4 +79,7 @@ def start_company(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    if request.user.is_authenticated:
+        return render(request, 'dashboard.html')
+    else:
+        return HttpResponseRedirect('/signin/')

@@ -80,7 +80,9 @@
                                             </div>
 
 										</div>
-                            <button class="btn" id="resetFilter"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                            <div class="my_reset_button refresh_button" id="resetFilter">
+<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 16 16" width="16px" height="16px"><path fill="#f78f8f" d="M8 9.704L4.057 13.646 2.354 11.943 6.296 8 2.354 4.057 4.057 2.354 8 6.296 11.943 2.354 13.646 4.057 9.704 8 13.646 11.943 11.943 13.646z"/><path fill="#c74343" d="M11.943,2.707l1.35,1.35L9.704,7.646L9.35,8l0.354,0.354l3.589,3.589l-1.35,1.35L8.354,9.704L8,9.35 L7.646,9.704l-3.589,3.589l-1.35-1.35l3.589-3.589L6.65,8L6.296,7.646L2.707,4.057l1.35-1.35l3.589,3.589L8,6.65l0.354-0.354 L11.943,2.707 M11.943,2L8,5.943L4.057,2L2,4.057L5.943,8L2,11.943L4.057,14L8,10.057L11.943,14L14,11.943L10.057,8L14,4.057 L11.943,2L11.943,2z"/></svg>
+                            </div>
 
 
                             <!--begin::Toolbar-->
@@ -259,6 +261,14 @@
 									<!--begin::Scroll-->
 									<div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px">
                                         <div class="fv-row mb-7">
+											<!--begin::Label-->
+											<label class="required fs-6 fw-semibold mb-2">{% trans "Transaction Date" %}</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+                                            <input class="form-control form-control-lg form-control-solid" id="datetimes" type="text" name="datetimes"/>
+											<!--end::Input-->
+										</div>
+                                        <div class="fv-row mb-7">
 														<!--begin::Label-->
 														<label class="required fs-6 fw-semibold mb-2">{% trans "Account" %}</label>
 														<!--end::Label-->
@@ -286,8 +296,7 @@
                                                         {% endif %}
 
                                         </div>
-														<!--end::Input-->
-
+                                        <!--end::Input-->
                                         <!--begin::Input group-->
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
@@ -413,7 +422,7 @@ var element= $(this).parents("tr");
 </script>
 <script>
     $(document).ready(function() {
-    $('#select_contractor').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
+    $('#select_contractor').select2({tags: true, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
     $('#select_account').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
     $('#select_transaction_type').select2({tags: true, minimumResultsForSearch: -1});
 });
@@ -436,38 +445,21 @@ var element= $(this).parents("tr");
 	$(tr).css('display', visible);
   });
 }
-
-$('#resetFilter').click(function() {
-	filterRows();
-});
-</script>
-<script>
-$(function() {
-  $('input[name="daterange"]').daterangepicker({
-    autoApply: false,
-    locale: {
-      format: 'MM.DD.YYYY',
-      cancelLabel: 'Clear'
-    },
-  }, function(start, end, label) {
-    filterRows(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
-  });
-});
 </script>
 <script type="text/javascript">
 $(function() {
-
-    var start = moment().subtract(29, 'days');
+    var start = moment().subtract(60, 'days');
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
         filterRows(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
     }
 
     $('#reportrange').daterangepicker({
         startDate: start,
         endDate: end,
+
         locale: {
             format: 'MM.DD.YYYY',
             cancelLabel: 'Clear'
@@ -481,9 +473,36 @@ $(function() {
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
     }, cb);
-
     cb(start, end);
-
 });
 </script>
+<script>
+    $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+    $('.my_reset_button').css("display", "block");
+});
+</script>
+<script>
+    $('#resetFilter').click(function() {
+    var start = moment();
+    var end = moment();
+	$('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+    $('.my_reset_button').css("display", "none");
+	filterRows();
+});
+</script>
+<script>
+$(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    timePicker: true,
+    timePicker24Hour: true,
+    timePickerSeconds: true,
+    drops: "down",
+    locale: {
+      format: 'DD.MM.YYYY HH:mm:ss',
+    },
+    singleDatePicker: true
+  });
+});
+</script>
+
 {% endblock scripts %}

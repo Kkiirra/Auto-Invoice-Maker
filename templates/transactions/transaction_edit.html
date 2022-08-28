@@ -122,8 +122,21 @@
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
 
-
+                                <!--begin::Input group-->
+                                <div class="row mb-6">
                                     <!--begin::Label-->
+                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
+                                        <span>{% trans "Transaction Date" %}</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Col-->
+                                    <div class="col-lg-8 fv-row">
+                                        <input class="form-control form-control-lg form-control-solid" type="text" name="datetimes"  value="{{ transaction.transaction_date|date:'j.m.Y H:i:s' }}"/>
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
+                                <!--end::Input group-->
+
                                 <div class="row mb-6">
 														<!--begin::Label-->
                                     <label class="col-lg-4 col-form-label fw-semibold fs-">{% trans "Account" %}</label>
@@ -197,21 +210,6 @@
                                 </div>
 
                                 <!--end::Input group-->
-
-							<!--begin::Input group-->
-							<div class="row mb-6">
-								<!--begin::Label-->
-								<label class="col-lg-4 col-form-label fw-semibold fs-6">
-									<span>{% trans "Transaction Date" %}</span>
-								</label>
-								<!--end::Label-->
-								<!--begin::Col-->
-								<div class="col-lg-8 fv-row">
-                                    <input class="form-control form-control-lg form-control-solid" type="text" name="datetimes"  value="{{ transaction.transaction_date|date:'j.m.Y H:i:s' }}"/>
-								</div>
-								<!--end::Col-->
-							</div>
-							<!--end::Input group-->
                                 <!--begin::Input group-->
 							<div class="row mb-6">
 								<!--begin::Label-->
@@ -264,12 +262,14 @@ $(function() {
     timePicker: true,
     timePicker24Hour: true,
     timePickerSeconds: true,
-    drops: "up",
+    opens: "center",
+    drops: "down",
     locale: {
-      format: 'DD.MM.YYYY HH:mm:s',
+      format: 'DD.MM.YYYY HH:mm:ss',
     },
     singleDatePicker: true
   });
 });
 </script>
+
 {% endblock scripts %}

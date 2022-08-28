@@ -60305,3 +60305,12 @@ body {
  .d_flex_wrap {
     flex-wrap: wrap;
  }
+
+ .my_reset_button {
+    padding-bottom: 4px;
+    border-radius: 100%;
+    border: none;
+    margin-right: 15px;
+    display: none;
+    cursor: pointer;
+ }

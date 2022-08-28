@@ -1,11 +1,12 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
-from django.utils.dateparse import parse_datetime
 from customuser.models import User_Account
 from .models import Transaction, Transaction_type
 from accounts.models import Account
 from company.models import Currency, Company
 from contractors.models import Contractor
+from dateutil.parser import parse
+from django.core.exceptions import ValidationError
 
 
 def transactions_view(request):
@@ -26,12 +27,11 @@ def transactions_view(request):
 def add_transaction(request):
     if request.method == 'POST':
 
+        transaction_date = parse(request.POST.get('datetimes'), dayfirst=True)
         account_uid = request.POST.get('account_uid')
         contractor_uid = request.POST.get('contractor_uid')
-
         transaction_amount = request.POST.get('transaction_amount')
         transaction_type = request.POST.get('transaction_type')
-
         contractor_name = request.POST.get('contractor_name')
 
 
@@ -40,14 +40,16 @@ def add_transaction(request):
         if contractor_name:
             contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
         else:
-            contractor = Contractor.objects.get(uid=contractor_uid)
-
+            try:
+                contractor = Contractor.objects.get(uid=contractor_uid)
+            except ValidationError:
+                contractor = Contractor.objects.create(contractor_name=contractor_uid, user_account=user_account)
         account = Account.objects.get(uid=account_uid, user_account=user_account)
         new_transaction = Transaction.objects.create(account=account,
                                                      contractor=contractor,
                                                      sum_of_transactions=transaction_amount,
                                                      transaction_type=transaction_type,
-                                                     user_account=user_account)
+                                                     user_account=user_account, transaction_date=transaction_date)
 
         return HttpResponseRedirect('/transactions/')
 
@@ -92,7 +94,7 @@ def transaction_edit(request, tr_uid):
         contractor_uid = request.POST.get('contractor_uid')
         transaction_type = request.POST.get('transaction_type')
         transaction_amount = request.POST.get('transaction_amount')
-        # transaction_date = request.POST.get('datetimes')
+        transaction_date = parse(request.POST.get('datetimes'), dayfirst=True)
         if account_uid:
             account = Account.objects.filter(uid=account_uid, user_account=user_account)[0]
             transaction.update(account=account)
@@ -102,5 +104,5 @@ def transaction_edit(request, tr_uid):
             transaction.update(contractor=contractor)
 
         transaction.update(transaction_type=transaction_type,
-                           sum_of_transactions=transaction_amount)
+                           sum_of_transactions=transaction_amount, transaction_date=transaction_date)
         return HttpResponseRedirect(f'/transactions/{tr_uid}/')
