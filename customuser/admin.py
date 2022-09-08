@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, User_Account, Countries
+from .models import CustomUser, User_Account, Countries, DateFormat
 
 
 class CustomUserAdmin(UserAdmin):
@@ -40,3 +40,5 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(User_Account)
 admin.site.register(Countries)
+admin.site.register(DateFormat)
+

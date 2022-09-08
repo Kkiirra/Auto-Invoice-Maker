@@ -27,7 +27,7 @@ class Transaction(models.Model):
     user_account = models.ForeignKey(User_Account, on_delete=models.CASCADE)
     account = ForeignKey(Account, related_name='accounts', on_delete=models.CASCADE)
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)
-    sum_of_transactions = models.CharField(max_length=255)
+    sum_of_transactions = models.DecimalField(decimal_places=2, max_digits=30)
     transaction_type = models.CharField(max_length=255)
 
     transaction_date = models.DateTimeField(
@@ -38,7 +38,7 @@ class Transaction(models.Model):
     )
 
     def __str__(self):
-        return self.sum_of_transactions
+        return self.transaction_type
 
     class Meta:
         verbose_name = 'Transaction'

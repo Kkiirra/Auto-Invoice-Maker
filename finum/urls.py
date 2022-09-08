@@ -21,7 +21,7 @@ urlpatterns += i18n_patterns(
     path('', include('orders.urls', namespace='orders')),
     path('', include('contractors.urls', namespace='contractors')),
     path('', include('subscription.urls', namespace='subscription')),
-
+    path('', include('dashboard.urls', namespace='dashboard')),
 )
 
 if settings.DEBUG:

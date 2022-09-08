@@ -196,17 +196,74 @@
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
                                     <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="country" >
+
                                         {% for country in countries %}
-                                        {% if request.user.user_country == country.country %}
-                                            <option value="{{ country }}" selected>{{ country }}</option>
-                                        {% else %}
-                                            <option value="{{ country }}" >{{ country }}</option>
-                                        {% endif %}
+                                            {% if request.user.user_country == country.country %}
+                                                <option value="{{ country }}" selected>{{ country }}</option>
+                                            {% else %}
+                                                <option value="{{ country }}" >{{ country }}</option>
+                                            {% endif %}
+
                                         {% endfor %}
+                                        {% if request.user.user_country %}
+                                            <option value="" selected disabled>Country</option>
+                                        {% endif %}
                                     </select>
 								</div>
 								<!--end::Col-->
 							</div>
+
+                            <div class="row mb-6">
+								<!--begin::Label-->
+								<label class="col-lg-4 col-form-label fw-semibold fs-6">
+									<span>{% trans "Default Currency" %}</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Col-->
+								<div class="col-lg-8 fv-row">
+                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="currency" >
+                                        {% for currency in currencies %}
+                                            {% if user_account.default_currency == currency %}
+                                                <option value="{{ currency }}" selected>{{ currency }}</option>
+                                            {% else %}
+                                                <option value="{{ currency }}" >{{ currency }}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                        {% if not user_account.default_currency %}
+                                            <option value="" selected disabled>Currency</option>
+                                        {% endif %}
+                                    </select>
+								</div>
+								<!--end::Col-->
+							</div>
+							<div class="row mb-6">
+								<!--begin::Label-->
+								<label class="col-lg-4 col-form-label fw-semibold fs-6">
+									<span>{% trans "Date Format" %}</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Col-->
+								<div class="col-lg-8 fv-row">
+                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="date_format" >
+
+                                        {% for date in dates %}
+                                            {% if user_account.default_date == date %}
+                                                <option value="{{ date }}" selected>{{ date }}</option>
+                                            {% else %}
+                                                <option value="{{ date }}" >{{ date }}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                        {% if not user_account.default_date %}
+                                            <option value="" selected disabled>Date format</option>
+                                        {% endif %}
+                                    </select>
+								</div>
+								<!--end::Col-->
+							</div>
+
+
 							<div class="row mb-6">
 								<!--begin::Label-->
 								<label class="col-lg-4 col-form-label fw-semibold fs-6">

@@ -88,6 +88,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 class User_Account(models.Model):
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    default_date = models.CharField(max_length=10, blank=True, null=True)
+    default_currency = models.CharField(max_length=3, blank=True, null=True)
+
+
     date_creation = models.DateTimeField(
         verbose_name=_("date_creation"), default=timezone.now,
     )
@@ -109,3 +114,16 @@ class Countries(models.Model):
     class Meta:
         verbose_name = 'Country'
         verbose_name_plural = 'Countries'
+
+
+class DateFormat(models.Model):
+    format = models.CharField(max_length=10)
+
+
+    def __str__(self):
+        return self.format
+
+
+    class Meta:
+        verbose_name = 'Format'
+        verbose_name_plural = 'Formats'

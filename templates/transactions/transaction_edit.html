@@ -176,24 +176,6 @@
                                 </div>
                                     <!--end::Col-->
                                     <!--begin::Label-->
-                                <div class="row mb-6">
-														<!--begin::Label-->
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-">{% trans "Transaction Type" %}</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <div class="col-lg-8 fv-row ">
-                                        <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_transaction_type" name="transaction_type">
-                                        {% for transaction_type in transaction_types %}
-                                            {% if transaction.transaction_type == transaction_type.transaction_type %}
-                                                <option value="{{ transaction_type }}" selected>{{ transaction_type }}</option>
-                                            {% else %}
-                                                <option value="{{ transaction_type }}">{{ transaction_type }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-												</div>
-														<!--end::Input-->
-													</div>
 
                                 <div class="row mb-6">
                                     <!--begin::Label-->
@@ -219,7 +201,7 @@
 								<!--end::Label-->
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
-									<input class="form-control form-control-lg form-control-solid" type="text" value="{{ transaction.creation_date|date:'j.m.Y G:i:s' }}"/>
+									<input class="form-control form-control-lg form-control-solid" type="text" value="{{ transaction.creation_date|date:'d.m.Y G:i:s' }}"/>
 								</div>
 								<!--end::Col-->
 							</div>
@@ -262,7 +244,6 @@ $(function() {
     timePicker: true,
     timePicker24Hour: true,
     timePickerSeconds: true,
-    opens: "center",
     drops: "down",
     locale: {
       format: 'DD.MM.YYYY HH:mm:ss',

@@ -30,6 +30,7 @@ var KTModalUpdateCustomer = function() {
 						cancelButton: "btn btn-active-light"
 					}
 				}).then((function(t) {
+				    $('.daterangepicker').css('display', 'none');
 					t.value ? (c.reset(), r.hide()) : "cancel" === t.dismiss && Swal.fire({
 						text: "Your form has not been cancelled!.",
 						icon: "error",

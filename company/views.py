@@ -76,10 +76,3 @@ def start_company(request):
         return redirect('company:dashboard')
     else:
         return render(request, 'company/start_company.html')
-
-
-def dashboard(request):
-    if request.user.is_authenticated:
-        return render(request, 'dashboard.html')
-    else:
-        return HttpResponseRedirect('/signin/')

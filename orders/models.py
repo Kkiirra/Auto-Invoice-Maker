@@ -16,7 +16,7 @@ class Order(models.Model):
     company = ForeignKey(Company, on_delete=models.CASCADE)
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)
     currency = models.CharField(max_length=255)
-    order_sum = models.CharField(max_length=255)
+    order_sum = models.DecimalField(decimal_places=2, max_digits=30)
 
     order_date = models.DateTimeField(
         verbose_name=_("order date"), default=timezone.now,

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from customuser.models import User_Account
 from .models import Transaction, Transaction_type
 from accounts.models import Account
-from company.models import Currency, Company
+from company.models import Currency
 from contractors.models import Contractor
 from dateutil.parser import parse
 from django.core.exceptions import ValidationError
@@ -13,15 +13,18 @@ def transactions_view(request):
     if request.method == 'GET':
         user_account = User_Account.objects.filter(owner=request.user)
         user_account = user_account[0]
-        transactions = Transaction.objects.filter(user_account=user_account)
         accounts = Account.objects.filter(user_account=user_account)
-        contractors = Contractor.objects.filter(user_account=user_account)
-        currencies = Currency.objects.all()
-        transactions_types = Transaction_type.objects.all()
-        return render(request, 'transactions/transactions.html', {'currencies': currencies,
-                                                                  'transactions': transactions,
-                                                                  'accounts': accounts, 'contractors': contractors,
-                                                                  'transactions_types': transactions_types})
+        if accounts:
+            transactions = Transaction.objects.filter(user_account=user_account)
+            contractors = Contractor.objects.filter(user_account=user_account)
+            currencies = Currency.objects.all()
+            transactions_types = Transaction_type.objects.all()
+            return render(request, 'transactions/transactions.html', {'currencies': currencies,
+                                                                      'transactions': transactions,
+                                                                      'accounts': accounts, 'contractors': contractors,
+                                                                      'transactions_types': transactions_types})
+        else:
+            return redirect('company:start_company')
 
 
 def add_transaction(request):
@@ -31,7 +34,7 @@ def add_transaction(request):
         account_uid = request.POST.get('account_uid')
         contractor_uid = request.POST.get('contractor_uid')
         transaction_amount = request.POST.get('transaction_amount')
-        transaction_type = request.POST.get('transaction_type')
+        transaction_type = request.POST.get('type_transact')
         contractor_name = request.POST.get('contractor_name')
 
 
@@ -92,7 +95,6 @@ def transaction_edit(request, tr_uid):
 
         account_uid = request.POST.get('account_uid')
         contractor_uid = request.POST.get('contractor_uid')
-        transaction_type = request.POST.get('transaction_type')
         transaction_amount = request.POST.get('transaction_amount')
         transaction_date = parse(request.POST.get('datetimes'), dayfirst=True)
         if account_uid:
@@ -103,6 +105,6 @@ def transaction_edit(request, tr_uid):
             contractor = Contractor.objects.filter(uid=contractor_uid, user_account=user_account)[0]
             transaction.update(contractor=contractor)
 
-        transaction.update(transaction_type=transaction_type,
+        transaction.update(
                            sum_of_transactions=transaction_amount, transaction_date=transaction_date)
         return HttpResponseRedirect(f'/transactions/{tr_uid}/')

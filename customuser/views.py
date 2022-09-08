@@ -10,10 +10,12 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
+
+from company.models import Currency
 from .forms import SignUpForm, LogInForm
 from django.contrib.auth import get_user_model
 from .token import account_activation_token
-from .models import User_Account, Countries, CustomUser
+from .models import User_Account, Countries, CustomUser, DateFormat
 
 
 def signup(request):
@@ -37,7 +39,7 @@ def signup(request):
                 'token': account_activation_token.make_token(user),
             }
             email = render_to_string(email_template_name, message)
-            send_mail(subject, email, 'noreply@finum.online', [user, ], fail_silently=False)
+            send_mail(subject, email, 'hello@finum.online', [user, ], fail_silently=False)
             return redirect('customuser:email_send_success')
 
         else:
@@ -60,7 +62,7 @@ def signin(request):
 
             if user:
                 login(request, user)
-                return redirect('company:dashboard')
+                return redirect('dashboard:dashboard')
             else:
                 form.add_error('email', 'Invalid input email or password data')
         context['errors'] = form.errors
@@ -75,7 +77,11 @@ def signout(request):
 
 def settings(request):
     if request.user.is_authenticated:
+        user_account = User_Account.objects.filter(owner=request.user)
         countries = Countries.objects.all()
+        dates = DateFormat.objects.all()
+        currencies = Currency.objects.all()
+
         if request.method == 'POST':
 
             fist_name = request.POST.get('fname')
@@ -83,10 +89,18 @@ def settings(request):
             country = request.POST.get('country')
             number = request.POST.get('phone')
 
+            date_format = request.POST.get('date_format')
+            default_currency = request.POST.get('currency')
+
             user = CustomUser.objects.filter(pk=request.user.id).update(first_name=fist_name, last_name=last_name,
-                                    phone_number=number, user_country=country)
+                                    phone_number=number)
+
+            if country:
+                user.update(user_country=country)
+
             return redirect('customuser:settings')
-        return render(request, 'customuser/settings.html', {'countries': countries})
+        return render(request, 'customuser/settings.html', {'countries': countries, 'dates': dates,
+                                                            'currencies': currencies, 'user_account': user_account[0]})
     else:
         return HttpResponseRedirect('/signin/')
 
@@ -98,7 +112,7 @@ def password_reset_request(request):
     email_template_name = "registration/password_reset_email.txt"
     c = {
         "email": user,
-        'domain': '127.0.0.1:8000',
+        'domain': 'app.finum.online',
         'site_name': 'Finum',
         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
         "user": user,
@@ -107,7 +121,7 @@ def password_reset_request(request):
     }
     email = render_to_string(email_template_name, c)
     try:
-        send_mail(subject, email, 'noreply@finum.online', [user.email, ], fail_silently=False)
+        send_mail(subject, email, 'hello@finum.online', [user, ], fail_silently=False)
         return JsonResponse({'mail': 'Successfully sent'}, status=200)
     except Exception:
         return JsonResponse({'mail': 'Something was wrong'}, status=404)
@@ -153,7 +167,7 @@ def password_email_request(request):
                     email_template_name = 'registration/password_reset_email.txt'
                     parameters = {
                         'email': user.email,
-                        'domain': '127.0.0.1:8000',
+                        'domain': 'app.finum.online',
                         'site_name': 'Finum',
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                         'token': default_token_generator.make_token(user),
@@ -161,7 +175,7 @@ def password_email_request(request):
                     }
                     email = render_to_string(email_template_name, parameters)
                     try:
-                        send_mail(subject, email, 'noreply@finum.online', [user.email], fail_silently=False)
+                        send_mail(subject, email, 'hello@finum.online', [user.email], fail_silently=False)
                     except:
                         return HttpResponse('Invalid Header')
                     return redirect('password_reset_done')
@@ -179,4 +193,4 @@ def deactivate_user(request):
     user = request.user
     user.is_active = False
     user.save()
-    return redirect('company:dashboard')
+    return redirect('dashboard:dashboard')

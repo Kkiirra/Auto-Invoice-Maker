@@ -5,6 +5,8 @@ from customuser.models import User_Account
 from .models import Order
 from company.models import Company, Currency
 from contractors.models import Contractor
+from dateutil.parser import parse
+from django.core.exceptions import ValidationError
 
 
 @login_required(login_url='/signin/')
@@ -47,6 +49,7 @@ def add_order(request):
         order_amount = request.POST.get('order_amount')
         currency = request.POST.get('currency_name')
         contractor_name = request.POST.get('contractor_name')
+        order_date = parse(request.POST.get('datetimes'), dayfirst=True)
 
         user_account = User_Account.objects.get(owner=request.user)
         company = Company.objects.get(uid=company_uid, user_account=user_account)
@@ -54,11 +57,14 @@ def add_order(request):
         if contractor_name:
             contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_name)
         else:
-            contractor = Contractor.objects.get(uid=contractor_uid, user_account=user_account)
+            try:
+                contractor = Contractor.objects.get(uid=contractor_uid)
+            except ValidationError:
+                contractor = Contractor.objects.create(contractor_name=contractor_uid, user_account=user_account)
 
         new_order = Order.objects.create(order_name=order_name,
                                         company=company, contractor=contractor, order_sum=order_amount,
-                                        currency=currency, user_account=user_account)
+                                        currency=currency, user_account=user_account, order_date=order_date)
         return HttpResponseRedirect('/orders/')
 
 
@@ -82,11 +88,12 @@ def order_edit(request, ord_uid):
         order_sum = request.POST.get('order_sum')
         company_uid = request.POST.get('company_uid')
         contractor_uid = request.POST.get('contractor_uid')
+        order_date = parse(request.POST.get('datetimes'), dayfirst=True)
 
         order = Order.objects.filter(uid=ord_uid)
         company = Company.objects.filter(uid=company_uid)[0]
         contractor = Contractor.objects.filter(uid=contractor_uid)[0]
 
         order.update(order_name=new_order_name, currency=currency_name, order_sum=order_sum,
-                     company=company, contractor=contractor)
+                     company=company, contractor=contractor, order_date=order_date)
         return HttpResponseRedirect(f'/orders/{ord_uid}/')

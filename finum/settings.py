@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-n6%lx!ewa7x1c=j69wljp3(uj5r*!ib_ar&)8o-hf1=zne$&=y
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['159.253.18.106']
+ALLOWED_HOSTS = ['159.253.18.106', 'app.finum.online', '127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'orders',
     'contractors',
     'subscription',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -119,16 +120,10 @@ MEDIA_URL = 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'customuser.CustomUser'
 # EMAIL_BACKEND = 'django.finum.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django_imap_backend.ImapBackend'
-EMAIL_IMAP_SECRETS = [
-    {
-        'HOST':  '185.4.75.108',
-        'PORT':  143,   # по умолчанию 143 и для SSL 993
-        'USER':  'noreply@finum.online',
-        'PASSWORD':  'QaL6ZGFfcX2erecj',
-        'MAILBOX':  'finum',   # Создано, если не существует
-        'SSL':  False   # По умолчанию
-    }
-]
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = '159.253.18.106'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hello@finum.online'
+EMAIL_HOST_PASSWORD = 'Xwlt1Ss8ap0pffJg'
 

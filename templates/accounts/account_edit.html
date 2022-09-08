@@ -145,12 +145,12 @@
                                 <div class="row mb-6">
                                     <!--begin::Label-->
                                     <label class="col-lg-4 col-form-label fw-semibold fs-6">
-                                        <span>{% trans "Account name" %}</span>
+                                        <span>{% trans "Account ID" %}</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <input type="tel" name="new_account_name" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Account name' %}" value="{{ account.account_name }}"/>
+                                        <input type="tel" name="new_account_id" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Account ID' %}" value="{{ account.account_id }}" minlength="11" maxlength="11"/>
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -218,7 +218,21 @@
 								</div>
 								<!--end::Col-->
 							</div>
+                            <div class="row mb-6">
+                                    <!--begin::Label-->
+                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
+                                        <span>{% trans "Account Description" %}</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Col-->
+                                    <div class="col-lg-8 fv-row">
+                                        <textarea name="account_description" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Account Description' %}" >{{ account.account_description }}</textarea>
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
+
 							<!--end::Input group-->
+
                             </div>
                             <!--end::Card body-->
                             <!--begin::Actions-->

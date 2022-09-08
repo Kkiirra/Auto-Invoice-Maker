@@ -187,22 +187,51 @@
 									<div class="px-7 py-5">
 										<!--begin::Input group-->
 										<div class="mb-10">
-											<!--begin::Label-->
-											<!--end::Label-->
-											<!--begin::Input-->
-											<div>{% trans "Date from" %}</div>
-											<input style="margin-bottom: 9px;" type="date" class="form-control" id="datefilterfrom" data-date-split-input="true">
-											<div>{% trans "Date to" %}</div>
-											<input type="date" class="form-control" id="datefilterto" data-date-split-input="true">
-											<button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal" data-bs-target="#kt_customers_export_modal"></button>
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Currency:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select class="form-select form-select-solid" data-placeholder="Select option" id="currency_filter_select">
+                                                                    <option></option>
+																	{% for currency in currencies %}
+																	<option value="{{ currency }}">{{ currency }}</option>
+																	{% endfor %}
+																</select>
+																<!--end::Input-->
+															</div>
+                                        <div class="mb-10">
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Banks:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select class="form-select form-select-solid" data-placeholder="Select option" id="bank_filter_select">
+                                                                    <option></option>
+                                                                    {% for bank in banks %}
+                                                                    <option value="{{bank.bank_name}}">{{ bank }}</option>
+                                                                    {% endfor %}
+																</select>
+																<!--end::Input-->
+															</div>
+										<div class="mb-10">
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Banks:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select class="form-select form-select-solid" data-placeholder="Select option" id="companies_filter_select">
+                                                                    <option></option>
+                                                                    {% for company in companies %}
+                                                                    <option value="{{company}}">{{ company }}</option>
+                                                                    {% endfor %}
+																</select>
+																<!--end::Input-->
+															</div>
 
-										</div>
 										<!--end::Input group-->
 
 										<!--begin::Actions-->
 										<div class="d-flex justify-content-end">
-											<button type="reset" class="btn btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset" id="resetFilter">{% trans "Reset" %}</button>
-											<button type="click" class="btn btn-primary" id="submit_filter_funkt" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">{% trans "Apply" %}</button>
+											<button type="reset" class="btn btn-light btn-active-light-primary me-2" id="reset_options">Reset</button>
+											<button type="click" class="btn btn-primary" id="apply_filter" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">{% trans "Apply" %}</button>
 
 										</div>
 										<!--end::Actions-->
@@ -253,11 +282,12 @@
 <!--																<input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_customers_table .form-check-input" value="1" />-->
 <!--															</div>-->
 <!--														</th>-->
-									<th class="min-w-125px">{% trans "Account Name" %}</th>
-									<th class="min-w-125px">{% trans "Bank" %}</th>
-									<th class="min-w-125px">{% trans "Company" %}</th>
-									<th class="min-w-125px">{% trans "Created Date" %}</th>
+									<th class="min-w-125px">{% trans "Account ID" %}</th>
 									<th class="min-w-125px">{% trans "Currency" %}</th>
+									<th class="min-w-125px">{% trans "Bank" %}</th>
+									<th class="min-w-125px">{% trans "Account Description" %}</th>
+									<th class="min-w-125px">{% trans "Company" %}</th>
+
 									<th class="text-end min-w-70px">{% trans "Actions" %}</th>
 								</tr>
 								<!--end::Table row-->
@@ -276,23 +306,25 @@
 									<!--end::Checkbox-->
 									<!--begin::Name=-->
 									<td>
-										<a href="{% url 'accounts:account_edit' ac_uid=account.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ account.account_name }}</a>
+										<a href="{% url 'accounts:account_edit' ac_uid=account.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ account.account_id }}</a>
 									</td>
 									<!--end::Name=-->
+									<td>{{ account.currency }}</td>
+
 									<td>
 										{{ account.bank }}
 									</td>
 									<!--begin::Accounts=-->
+									<td>{{ account.account_description }}</td>
+
 									<td>
 										<a href="{% url 'company:this_company' com_uid=account.company.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ account.company }}</a>
 									</td>
 									<!--end::Accounts=-->
 
 									<!--begin::Date=-->
-									<td>{{ account.date_joined|date:"j.m.Y" }}</td>
 									<!--end::Date=-->
 									<!--begin::Date=-->
-									<td>{{ account.currency }}</td>
 									<!--end::Date=-->
 									<!--begin::Action=-->
 									<td class="text-end">
@@ -367,10 +399,11 @@
 										<!--begin::Input group-->
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
-											<label class="required fs-6 fw-semibold mb-2">{% trans "Account name" %}</label>
+											<label class="required fs-6 fw-semibold mb-2">{% trans "Account ID" %}</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input required type="text" class="form-control form-control-solid" placeholder="Account name" name="account_name"/>
+											<input type="text" class="form-control form-control-solid" placeholder="{% trans 'Account ID' %}" name="account_id" id="kt_docs_maxlength_basic" minlength="11" maxlength="11"/>
+											<span class="fs-6 text-muted">Enter your Account ID number, example: PL534355363</span>
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -415,6 +448,14 @@
 														</select>
 														<!--end::Input-->
 													</div>
+										<div class="fv-row mb-7">
+											<!--begin::Label-->
+											<label class="fs-6 fw-semibold mb-2">{% trans "Account Description" %}</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+											<input type="text" class="form-control form-control-solid" placeholder="{% trans 'Account Description' %}" name="account_description"/>
+											<!--end::Input-->
+										</div>
 
 									</div>
 									<!--end::Scroll-->
@@ -528,22 +569,16 @@
 {% endblock content %}
 
 {% block scripts %}
-		<script>var hostUrl = "static/";</script>
-		<!--begin::Custom Javascript(used by this page)-->
-		<script src="{% static 'js/custom/apps/customers/list/export.js'%}"></script>
 		<script src="{% static 'js/custom/apps/customers/list/list.js'%}"></script>
-		<script src="{% static 'js/custom/apps/customers/add.js' %}"></script>
-		<script src="{% static 'js/widgets.bundle.js' %}"></script>
-		<script src="{% static 'js/custom/widgets.js' %}"></script>
-		<script src="{% static 'js/custom/apps/chat/chat.js'%}"></script>
-		<script src="{% static 'js/custom/utilities/modals/upgrade-plan.js' %}s"></script>
-		<script src="{% static 'js/custom/utilities/modals/create-app.js' %}"></script>
-		<script src="{% static 'js/custom/utilities/modals/users-search.js' %}"></script>
 		<script>
 			$(document).ready(function() {
 			$('#select_currency').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
 			$('#select_company').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
 			$('#select_bank').select2({tags: true, dropdownParent: $("#select_bank").parent()});
+			$('#currency_filter_select').select2({tags: false, minimumResultsForSearch: -1});
+			$('#bank_filter_select').select2({tags: false});
+			$('#companies_filter_select').select2({tags: false});
+
 		});
 		</script>
 		<script>
@@ -598,31 +633,42 @@
 		})
 		});
 		</script>
+
 		<script>
-			function filterRows() {
-		  var from = $('#datefilterfrom').val();
-		  var to = $('#datefilterto').val();
+var str=""
+$('#apply_filter').on('click',function(){
 
-		  from = from || '1970/01/01'; // default from to a old date if it is not set
-		  to = to || '2999/12/31';
+    var rows = $('#kt_customers_table tr:not(:first)');
+    rows.hide();
 
-		  var dateFrom = moment(from);
-		  var dateTo = moment(to);
+    var sub = $("#currency_filter_select").val();
+    var select = $("#bank_filter_select").val();
+    var contractor = $("#companies_filter_select").val();
 
-		  $('#kt_customers_table tbody tr').each(function(i, tr) {
-			var val = $(tr).find("td:nth-child(4)").text();
-			var dateVal = moment(val, "DD.MM.YYYY");
-			var visible = (dateVal.isBetween(dateFrom, dateTo, null, [])) ? "" : "none"; // [] for inclusive
-			$(tr).css('display', visible);
-		  });
-		}
+    if (select==null) {
+        var select = "";
+    }
 
-		$('#submit_filter_funkt').on("click", filterRows);
+    str = ":contains('" + sub + "'):contains('" + select + "'):contains('" + contractor + "')"
+    rows.filter(str).show();
+});
+</script>
 
-		$('#resetFilter').click(function() {
-			$('#datefilterfrom').val('').change();
-			$('#datefilterto').val('').change();
-			filterRows();
-		});
-		</script>
+<script>
+    $('#reset_options').click(function() {
+     $('tr').show();
+	 $("#currency_filter_select").val('').trigger('change');
+	 $("#bank_filter_select").val('').trigger('change');
+	 $("#companies_filter_select").val('').trigger('change');
+
+});
+</script>
+<script>
+$('#kt_docs_maxlength_basic').maxlength({
+    alwaysShow: true,
+    threshold: 20,
+    warningClass: "badge badge-danger",
+    limitReachedClass: "badge badge-success"
+});
+</script>
 {% endblock scripts %}

@@ -12,15 +12,17 @@ def company_add_account(request, com_uid):
     этой компании"""
     if request.method == 'POST':
 
-        account = request.POST.get('account_name')
+        account_id = request.POST.get('account_id')
+        account_description = request.POST.get('account_description')
         bank = request.POST.get('bank_name')
         currency_name = request.POST.get('currency_name')
 
         user_account = User_Account.objects.get(owner=request.user)
         this_company = Company.objects.filter(uid=com_uid, user=request.user)
 
-        new_account = Account.objects.create(account_name=account, bank=bank, company=this_company[0],
-                                          currency=currency_name, user_account=user_account)
+        new_account = Account.objects.create(account_id=account_id, bank=bank, company=this_company[0],
+                                          currency=currency_name, user_account=user_account,
+                                             account_description=account_description)
         return HttpResponseRedirect(f'/profile/companies/{com_uid}/')
 
 
@@ -61,7 +63,8 @@ def accounts(request):
 
     else:
         company_uid = request.POST.get('company_uid')
-        account = request.POST.get('account_name')
+        account_id = request.POST.get('account_id')
+        account_description = request.POST.get('account_description')
         bank = request.POST.get('bank_name')
         currency_name = request.POST.get('currency_name')
 
@@ -69,8 +72,9 @@ def accounts(request):
         user_account = User_Account.objects.get(owner=request.user)
         this_company = Company.objects.filter(user=request.user)
 
-        new_account = Account.objects.create(account_name=account, bank=bank, company=this_company[0],
-                                              currency=currency_name, user_account=user_account)
+        new_account = Account.objects.create(account_id=account_id, bank=bank, company=this_company[0],
+                                              currency=currency_name, user_account=user_account,
+                                             account_description=account_description)
         return HttpResponseRedirect('/profile/accounts/')
 
 
@@ -114,8 +118,10 @@ def account_edit(request, ac_uid):
             else:
                 return redirect('customuser:bad_request')
         else:
-            new_account_name = request.POST.get('new_account_name')
+            account_id = request.POST.get('new_account_id')
+            account_description = request.POST.get('account_description')
             new_bank = request.POST.get('bank_name')
             currency_name = request.POST.get('currency_name')
-            account.update(account_name=new_account_name, bank=new_bank, currency=currency_name)
+            account.update(account_id=account_id, bank=new_bank, currency=currency_name,
+                           account_description=account_description)
             return HttpResponseRedirect(f'/profile/accounts/{ac_uid}/')

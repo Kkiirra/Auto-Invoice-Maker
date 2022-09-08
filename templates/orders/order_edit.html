@@ -117,6 +117,18 @@ here
                             {% csrf_token %}
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
+                                <div class="row mb-6">
+                                    <!--begin::Label-->
+                                    <label class="col-lg-4 col-form-label fw-semibold fs-6">
+                                        <span>{% trans "Order Date" %}</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Col-->
+                                    <div class="col-lg-8 fv-row">
+                                        <input class="form-control form-control-lg form-control-solid" type="text" name="datetimes"  value="{{ order.order_date|date:'j.m.Y H:i:s' }}"/>
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
 
                                 <!--begin::Input group-->
                                 <div class="row mb-6">
@@ -250,4 +262,19 @@ here
 
 });
 </script>
+<script>
+$(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    timePicker: true,
+    timePicker24Hour: true,
+    timePickerSeconds: true,
+    drops: "down",
+    locale: {
+      format: 'DD.MM.YYYY HH:mm:ss',
+    },
+    singleDatePicker: true
+  });
+});
+</script>
+
 {% endblock scripts %}
