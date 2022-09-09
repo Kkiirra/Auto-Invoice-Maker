@@ -316,7 +316,7 @@
 														<label class="required fs-6 fw-semibold mb-2">{% trans "Account name" %}</label>
 														<!--end::Label-->
 														<!--begin::Input-->
-														<input required type="text" class="form-control form-control-solid account_input" placeholder="{% trans 'Account name' %}" name="account_name"/>
+														<input required type="text" class="form-control form-control-solid account_input" placeholder="{% trans 'Account name' %}" name="account_id"/>
 														<!--end::Input-->
 													</div>
 													<div class="fv-row mb-7">
@@ -325,7 +325,7 @@
 														<!--end::Label-->
 														<!--begin::Input-->
 
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_bank" name="bank_name" >
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" data-control="select2"  id="select_bank" name="bank_name" >
 															{% for bank in banks %}
 															<option value="{{ bank.bank_name }}">{{ bank.bank_name }}</option>
 															{% endfor %}
@@ -715,5 +715,10 @@ $('#apply_filter').on('click',function(){
 	 $('#datetimefilter').val('');
 });
 </script>
-
+<script>
+	$(document).ready(function() {
+	$('#select_bank').select2({tags: false, minimumResultsForSearch: -1, dropdownParent: $("#kt-toolbar-filter").parent()});
+	$('#select_currency').select2({tags: false, minimumResultsForSearch: -1, dropdownParent: $("#kt-toolbar-filter").parent()});
+});
+</script>
 {% endblock scripts %}

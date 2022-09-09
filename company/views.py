@@ -11,6 +11,7 @@ def companies_list(request):
 
     currency = Currency.objects.all()
     banks = Bank.objects.all()
+    print(currency, banks)
 
     if request.method == 'GET':
         try:
@@ -48,7 +49,6 @@ def this_company(request, com_uid):
 
     currency = Currency.objects.all()
     banks = Bank.objects.all()
-
     try:
         company = Company.objects.filter(uid=com_uid, user=request.user)
     except:

@@ -72,6 +72,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'app_finum_on',
+#         'USER': 'app_finum_on',
+#         'PASSWORD': 'Dv56wWTRAiN05JUc',
+#         'HOST': 'localhost',
+#         'PORT': 'portNumber',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {

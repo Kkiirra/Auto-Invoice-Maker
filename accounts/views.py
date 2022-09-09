@@ -31,16 +31,17 @@ def add_accounts(request, com_uid):
     """Добавление счёта на странице profile/companies с помощью pop-up"""
     if request.method == 'POST':
 
-        account = request.POST.get('account_name')
+        account = request.POST.get('account_id')
         bank = request.POST.get('bank_name')
         currency_name = request.POST.get('currency_name')
-
+        print(account, bank, currency_name)
         user_account = User_Account.objects.get(owner=request.user)
         this_company = Company.objects.filter(uid=com_uid, user=request.user)
-        new_account = Account.objects.create(account_name=account, bank=bank, company=this_company[0],
+        new_account = Account.objects.create(account_id=account, bank=bank, company=this_company[0],
                                           currency=currency_name, user_account=user_account)
         return HttpResponseRedirect('/profile/companies/')
-
+    else:
+        print('DSAHFASFHDFHS')
 
 
 @login_required(login_url='/signin/')
