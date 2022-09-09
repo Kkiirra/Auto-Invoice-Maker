@@ -92,9 +92,8 @@ def settings(request):
             date_format = request.POST.get('date_format')
             default_currency = request.POST.get('currency')
 
-            user = CustomUser.objects.filter(pk=request.user.id).update(first_name=fist_name, last_name=last_name,
-                                    phone_number=number)
-
+            user = CustomUser.objects.filter(pk=request.user.id)
+            user.update(first_name=fist_name, last_name=last_name, phone_number=number)
             if country:
                 user.update(user_country=country)
 
