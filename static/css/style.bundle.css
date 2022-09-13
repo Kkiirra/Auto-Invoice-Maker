@@ -60217,9 +60217,6 @@ select:focus + .focus {
   border-radius: inherit;
 }
 
-body {
-    font-family: sans-serif
-}
 .dialog-ovelay {
     position: fixed;
     top: 0;

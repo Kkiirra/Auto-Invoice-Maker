@@ -189,6 +189,7 @@ here
                                     <th class="min-w-125px ">{% trans "Currency" %}</th>
                                     <th class="min-w-125px ">{% trans "Contractor" %}</th>
                                     <th class="min-w-125px ">{% trans "Company" %}</th>
+                                    <th class="min-w-125px ">{% trans "Status" %}</th>
                                     <th class="min-w-125px ">{% trans "Order Name" %}</th>
                                     <th class="text-end min-w-70px">{% trans "Actions" %}</th>
                                 </tr>
@@ -208,6 +209,19 @@ here
                                     <td>
                                         <a href="{% url 'company:this_company' com_uid=order.company.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ order.company }}</a>
                                     </td>
+
+                                    <td>
+                                        <div class="badge badge-light-danger" style="padding: 0">Canceled</div>
+<!--                                        {% if order.order_status == "Draft" %}-->
+<!--                                        <div class="badge badge-light-primary">Draft</div>-->
+<!--                                        {% elif order.order_status == "Done" %}-->
+<!--                                        <div class="badge badge-light-success">Done</div>-->
+<!--                                        {% elif order.order_status == "Canceled" %}-->
+<!--                                        {% else %}-->
+<!--                                        <div class="badge badge-light-warning">In progress {{ order.order_status }}</div>-->
+<!--                                        {% endif %}-->
+                                    </td>
+
                                     <td>
                                         <a href="{% url 'orders:order_edit' ord_uid=order.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ order.order_name }}</a>
                                     </td>

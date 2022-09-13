@@ -4,7 +4,7 @@ from transactions.models import Transaction
 from customuser.models import User_Account
 from django.db.models import Sum, Max
 from orders.models import Order
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from dateutil.parser import parse
 
 
@@ -134,7 +134,7 @@ def date_dashboard(request, date):
 
 def dashboard(request):
     if request.user.is_authenticated:
-        date_range = ['2022-08-01', '2022-09-07']
+        date_range = ['2022-08-01', date.today().strftime('%Y-%m-%d')]
 
         date_list = daterange(date_range[0], date_range[1])
         income_val_dict = dict()

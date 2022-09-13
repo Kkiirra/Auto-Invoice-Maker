@@ -198,14 +198,14 @@
                                     <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="country" >
 
                                         {% for country in countries %}
-                                            {% if request.user.user_country == country.country %}
+                                            {% if request.user.user_country == country %}
                                                 <option value="{{ country }}" selected>{{ country }}</option>
                                             {% else %}
                                                 <option value="{{ country }}" >{{ country }}</option>
                                             {% endif %}
 
                                         {% endfor %}
-                                        {% if request.user.user_country %}
+                                        {% if not request.user.user_country %}
                                             <option value="" selected disabled>Country</option>
                                         {% endif %}
                                     </select>
@@ -237,31 +237,31 @@
 								</div>
 								<!--end::Col-->
 							</div>
-							<div class="row mb-6">
-								<!--begin::Label-->
-								<label class="col-lg-4 col-form-label fw-semibold fs-6">
-									<span>{% trans "Date Format" %}</span>
-								</label>
-								<!--end::Label-->
-								<!--begin::Col-->
-								<div class="col-lg-8 fv-row">
-                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="date_format" >
+<!--							<div class="row mb-6">-->
+<!--								&lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--								<label class="col-lg-4 col-form-label fw-semibold fs-6">-->
+<!--									<span>{% trans "Date Format" %}</span>-->
+<!--								</label>-->
+<!--								&lt;!&ndash;end::Label&ndash;&gt;-->
+<!--								&lt;!&ndash;begin::Col&ndash;&gt;-->
+<!--								<div class="col-lg-8 fv-row">-->
+<!--                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="date_format" >-->
 
-                                        {% for date in dates %}
-                                            {% if user_account.default_date == date %}
-                                                <option value="{{ date }}" selected>{{ date }}</option>
-                                            {% else %}
-                                                <option value="{{ date }}" >{{ date }}</option>
-                                            {% endif %}
+<!--                                        {% for date in dates %}-->
+<!--                                            {% if user_account.default_date == date %}-->
+<!--                                                <option value="{{ date }}" selected>{{ date }}</option>-->
+<!--                                            {% else %}-->
+<!--                                                <option value="{{ date }}" >{{ date }}</option>-->
+<!--                                            {% endif %}-->
 
-                                        {% endfor %}
-                                        {% if not user_account.default_date %}
-                                            <option value="" selected disabled>Date format</option>
-                                        {% endif %}
-                                    </select>
-								</div>
-								<!--end::Col-->
-							</div>
+<!--                                        {% endfor %}-->
+<!--                                        {% if not user_account.default_date %}-->
+<!--                                            <option value="" selected disabled>Date format</option>-->
+<!--                                        {% endif %}-->
+<!--                                    </select>-->
+<!--								</div>-->
+<!--								&lt;!&ndash;end::Col&ndash;&gt;-->
+<!--							</div>-->
 
 
 							<div class="row mb-6">

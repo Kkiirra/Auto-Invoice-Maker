@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from customuser.models import User_Account
-from .models import Order
+from .models import Order, Order_status
 from company.models import Company, Currency
 from contractors.models import Contractor
 from dateutil.parser import parse
@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 
 @login_required(login_url='/signin/')
 def orders_view(request):
+    statuses = Order_status.objects.all()
     currencies = Currency.objects.all()
     user_account = User_Account.objects.filter(owner=request.user)[0]
     companies = Company.objects.filter(user_account=user_account)
@@ -20,7 +21,7 @@ def orders_view(request):
         contractors = Contractor.objects.filter(user_account=user_account)
         return render(request, 'orders/order.html', {'orders': orders, 'companies': companies,
                                                      'contractors': contractors,
-                                                     'currencies': currencies})
+                                                     'currencies': currencies, 'statuses': statuses})
     else:
         return redirect('company:start_company')
 

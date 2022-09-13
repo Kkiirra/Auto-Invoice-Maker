@@ -8,6 +8,18 @@ from django.utils.translation import gettext_lazy as _
 import uuid
 
 
+class Order_status(models.Model):
+    status = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.status
+
+
+    class Meta:
+        verbose_name = 'Order_status'
+        verbose_name_plural = 'Order_status'
+
+
 class Order(models.Model):
 
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -17,6 +29,7 @@ class Order(models.Model):
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)
     currency = models.CharField(max_length=255)
     order_sum = models.DecimalField(decimal_places=2, max_digits=30)
+    order_status = ForeignKey(Order_status, on_delete=models.CASCADE, blank=True, null=True)
 
     order_date = models.DateTimeField(
         verbose_name=_("order date"), default=timezone.now,
@@ -32,3 +45,4 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
+
