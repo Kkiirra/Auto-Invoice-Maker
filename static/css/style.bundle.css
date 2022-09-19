@@ -60256,6 +60256,7 @@ select:focus + .focus {
 .dialog-ovelay .dialog header .fa-close:hover {
     color: #b9b9b9
 }
+
 .dialog-ovelay .dialog header .fa-close:active {
     box-shadow: 0 0 5px #673AB7;
     color: #a2a2a2
