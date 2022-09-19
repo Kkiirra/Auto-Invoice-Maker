@@ -195,8 +195,8 @@
 								<!--end::Label-->
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
-                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="country" >
-
+                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="country" data-placeholder="Country">
+                                        <option value=""></option>
                                         {% for country in countries %}
                                             {% if request.user.user_country == country %}
                                                 <option value="{{ country }}" selected>{{ country }}</option>
@@ -205,9 +205,6 @@
                                             {% endif %}
 
                                         {% endfor %}
-                                        {% if not request.user.user_country %}
-                                            <option value="" selected disabled>Country</option>
-                                        {% endif %}
                                     </select>
 								</div>
 								<!--end::Col-->
@@ -221,18 +218,16 @@
 								<!--end::Label-->
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
-                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="currency" >
+                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="currency" data-placeholder="Currency">
+                                        <option value=""></option>
                                         {% for currency in currencies %}
-                                            {% if user_account.default_currency == currency %}
+                                            {% if user_account.default_currency == currency.currency %}
                                                 <option value="{{ currency }}" selected>{{ currency }}</option>
                                             {% else %}
                                                 <option value="{{ currency }}" >{{ currency }}</option>
                                             {% endif %}
 
                                         {% endfor %}
-                                        {% if not user_account.default_currency %}
-                                            <option value="" selected disabled>Currency</option>
-                                        {% endif %}
                                     </select>
 								</div>
 								<!--end::Col-->

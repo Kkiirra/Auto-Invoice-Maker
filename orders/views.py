@@ -97,9 +97,14 @@ def order_edit(request, ord_uid):
         company_uid = request.POST.get('company_uid')
         order_date = parse(request.POST.get('datetimes'), dayfirst=True)
 
-        quantities = request.POST.getlist('quantity[]')
-        products = request.POST.getlist('select_item')
-        prices = request.POST.getlist('price[]')
+        quantities = request.POST.getlist('quantity[]')  # quantity_new
+        products = request.POST.getlist('select_item')  # select_item_new
+        prices = request.POST.getlist('price[]')  # price_new
+
+
+        quantities_new = request.POST.getlist('quantity_new')
+        products_new = request.POST.getlist('select_item_new')
+        prices_new = request.POST.getlist('price_new')
 
         company = Company.objects.get(user_account=user_account, uid=company_uid)
 
@@ -109,7 +114,8 @@ def order_edit(request, ord_uid):
             contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
 
 
-        order = Order.objects.filter(user_account=user_account, uid=ord_uid).update(user_account=user_account, company=company, currency=currency,
+        order = Order.objects.filter(user_account=user_account, uid=ord_uid)
+        order.update(user_account=user_account, company=company, currency=currency,
                                          contractor=contractor, order_name=order_number, order_sum=order_total,
                                          order_date=order_date)
 
@@ -126,7 +132,16 @@ def order_edit(request, ord_uid):
                                                      product_price=price, currency=currency)
             order_item.update(product=product, quantity=quantity)
 
+        if quantities_new is not None and prices_new is not None and products_new is not None:
+            for product, price, quantity in zip(products_new, prices_new, quantities_new):
+                try:
+                    product = Product.objects.get(uid=product)
+                except ValidationError:
+                    product = Product.objects.create(user_account=user_account, product_name=product,
+                                                     product_price=price, currency=currency)
 
+                order_item = OrderItem.objects.create(user_account=user_account, product=product, order=order[0],
+                                                      quantity=int(quantity))
         return HttpResponseRedirect(f'/orders/{ord_uid}/')
 
 

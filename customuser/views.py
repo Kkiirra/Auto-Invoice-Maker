@@ -93,9 +93,8 @@ def settings(request):
             default_currency = request.POST.get('currency')
 
             user = CustomUser.objects.filter(pk=request.user.id)
-            user.update(first_name=fist_name, last_name=last_name, phone_number=number)
-            if country:
-                user.update(user_country=country)
+            user.update(first_name=fist_name, last_name=last_name, phone_number=number, user_country=country)
+            user_account.update(default_currency=default_currency)
 
             return redirect('customuser:settings')
         return render(request, 'customuser/settings.html', {'countries': countries, 'dates': dates,
