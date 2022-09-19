@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 
 
 def transactions_view(request):
+    print(request.method)
     if request.method == 'GET':
         user_account = User_Account.objects.filter(owner=request.user)
         user_account = user_account[0]

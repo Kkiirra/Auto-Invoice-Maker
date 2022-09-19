@@ -71,8 +71,10 @@ def this_company(request, com_uid):
 
 @login_required(login_url='/signin/')
 def start_company(request):
-    company = Company.objects.filter(user=request.user)
-    if company:
-        return redirect('company:dashboard')
+    user_account = User_Account.objects.get(owner=request.user)
+    company = Company.objects.filter(user_account=user_account)
+    accounts = Account.objects.filter(user_account=user_account)
+    if company and accounts:
+        return redirect('dashboard:dashboard')
     else:
         return render(request, 'company/start_company.html')
