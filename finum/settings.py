@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'contractors',
     'subscription',
     'dashboard',
+    'products',
+    'invoice',
 ]
 
 MIDDLEWARE = [

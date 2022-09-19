@@ -179,7 +179,7 @@
 															<!--begin::Input group-->
 															<div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">
 																<span class="fs-2x fw-bold text-gray-800">Order #</span>
-																<input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-125px" value="{{ order.order_name }}" placehoder="..." name="order_number">
+																<input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-125px" value="2021001" placehoder="..." name="order_number">
 															</div>
 															<!--end::Input group-->
 															<!--begin::Input group-->
@@ -190,7 +190,7 @@
 																<!--begin::Input-->
 																<div class="position-relative d-flex align-items-center">
 																	<!--begin::Datepicker-->
-																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="datetimes" type="text" value="{{ order.order_date|date:'j.m.Y H:i:s' }}">
+																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="datetimes" type="text">
 																	<!--end::Datepicker-->
 																	<!--begin::Icon-->
 																	<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -229,7 +229,8 @@
 																			{% endif %}
 																			{% endfor %}
 																		</select>
-                                                                    </div>																	<!--end::Input group-->
+                                                                    </div>
+																	<!--end::Input group-->
 <!--																	&lt;!&ndash;begin::Input group&ndash;&gt;-->
 <!--																	<div class="mb-5">-->
 <!--																		<input type="text" class="form-control form-control-solid" placeholder="Email">-->
@@ -344,32 +345,26 @@
 																	<!--end::Table head-->
 																	<!--begin::Table body-->
 																	<tbody>
-																	{% for item in order.items.all %}
-																	<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+																		<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																			<td class="pe-7">
-																<select class="form-select form-select-solid select_for_products" data-placeholder="Product" data-tags="true" data-control="select2" data-allow-clear="true" name="select_item">
+																<select class="form-select form-select-solid" data-placeholder="Product" id="product_filter_select" data-allow-clear="true" name="select_item">
                                                                     <option></option>
                                                                     {% for product in products %}
-																	{% if item.product == product %}
-                                                                    <option value="{{ product.uid }}" selected>{{ product }}</option>
-																	{% else %}
-																	<option value="{{ product.uid }}">{{ product }}</option>
-																	{% endif %}
+                                                                    <option value="{{ product.uid }}">{{ product }}</option>
                                                                     {% endfor %}
 																</select>
 
 																			</td>
 																			<td class="ps-0">
-																				<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="{{ item.quantity }}" data-kt-element="quantity">
+																				<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="1" data-kt-element="quantity">
 																			</td>
 																			<td>
-																				<input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0.00" value="{{ item.product.product_price }}" data-kt-element="price">
-																				<input type="text" style="display: none" value="{{ item.uid }}" name="item[]">
+																				<input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0.00" value="0.00" data-kt-element="price">
 																			</td>
 																			<td class="pt-8 text-end text-nowrap">$
 																			<span data-kt-element="total">0.00</span></td>
 																			<td class="pt-5 text-end">
-																				<button type="button" class="btn btn-sm btn-icon btn-active-color-primary remove_item_button" value="{{ item.uid }}" data-kt-element='remove-item'>
+																				<button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
 																					<!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
 																					<span class="svg-icon svg-icon-3">
 																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -382,7 +377,6 @@
 																				</button>
 																			</td>
 																		</tr>
-																	{% endfor %}
 																	</tbody>
 																	<!--end::Table body-->
 																	<!--begin::Table foot-->
@@ -417,7 +411,6 @@
 
 															<!--begin::Notes-->
 															<div class="card-footer d-flex justify-content-end py-6 px-9">
-																<input type="text" style="display: none" value="{{ order.uid }}" name="order_uid">
 																<button type="reset" class="btn btn-light btn-active-light-primary me-2">{% trans "Discard" %}</button>
 																<button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">{% trans "Save Changes" %}</button>
 															</div>
@@ -451,25 +444,23 @@
 													<div class="mb-8">
 														<!--begin::Option-->
 														<div class="funkyradio">
-
-        <div class="funkyradio-primary">
-            <input type="radio" name="radio" id="radio2" {% if order.order_status.status == 'In progress' %} checked="" {% endif %} value="In progress">
-            <label for="radio2">In progress</label>
-        </div>
-        <div class="funkyradio-success">
-            <input type="radio" name="radio" {% if order.order_status.status == 'Done' %} checked="" {% endif %} id="radio3" value="Done">
-            <label for="radio3">Done</label>
-        </div>
-        <div class="funkyradio-danger">
-            <input type="radio" name="radio" {% if order.order_status.status == 'Canceled' %} checked="" {% endif %} id="radio4" value="Canceled">
-            <label for="radio4">Canceled</label>
-        </div>
-        <div class="funkyradio-warning">
-            <input type="radio" name="radio" {% if order.order_status.status == 'Draft' %} checked="" {% endif %} id="radio5" value="Draft">
-            <label for="radio5">Draft</label>
-        </div>
-
-    </div>
+                                                            <div class="funkyradio-warning">
+                                                                <input type="radio" name="radio" id="radio2" checked="" value="Draft">
+                                                                <label for="radio2">Draft</label>
+                                                            </div>
+                                                            <div class="funkyradio-primary">
+                                                                <input type="radio" name="radio" id="radio5" value="In progress">
+                                                                <label for="radio5">In progress</label>
+                                                            </div>
+                                                            <div class="funkyradio-success">
+                                                                <input type="radio" name="radio" id="radio3" value="Done">
+                                                                <label for="radio3">Done</label>
+                                                            </div>
+                                                            <div class="funkyradio-danger">
+                                                                <input type="radio" name="radio" id="radio4" value="Canceled">
+                                                                <label for="radio4">Canceled</label>
+                                                            </div>
+                                                        </div>
 
 														<!--end::Option-->
 <!--														&lt;!&ndash;begin::Option&ndash;&gt;-->
@@ -580,37 +571,19 @@ $(function() {
     })
 </script>
 <script>
-$(".remove_item_button").click(function(e) {
-    e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "{% url 'products:delete_item' %}",
-        data: {
-            id: $(this).val(),
-            csrfmiddlewaretoken: "{{csrf_token}}"
-        },
-        success: function(result) {
-        },
-        error: function(result) {
-        }
-    });
-});
-</script>
-<script>
-	$(document).on("change", "input[name='radio']", function () {
+var doc = new jsPDF();
+var specialElementHandlers = {
+    '#editor': function (element, renderer) {
+        return true;
+    }
+};
 
-      $.ajax({
-        type: "POST",
-        url: '{% url 'orders:change_status' %}',
-        data: {
-        			order: "{{ order.uid }}",
-        			status: $(this).val(),
-        			csrfmiddlewaretoken: "{{csrf_token}}"
-				},
-        success: function(data) {
-            $("#result").load(result);
-         },
-      });
+$('#cmd').click(function () {
+    doc.fromHTML($('#content').html(), 15, 15, {
+        'width': 170,
+            'elementHandlers': specialElementHandlers
+    });
+    doc.save('sample-file.pdf');
 });
 </script>
 {% endblock scripts %}

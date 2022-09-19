@@ -161,7 +161,7 @@ here
 														<!--end::Content-->
 													</div>
                                 <!--begin::Add customer-->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_customer">{% trans "Add Order" %}</button>
+                                <a type="button" class="btn btn-primary" href="{% url 'orders:order_add' %}">{% trans "Add Order" %}</a>
                                 <!--end::Add customer-->
                             </div>
                             <!--end::Toolbar-->
@@ -211,15 +211,15 @@ here
                                     </td>
 
                                     <td>
-                                        <div class="badge badge-light-danger" style="padding: 0">Canceled</div>
-<!--                                        {% if order.order_status == "Draft" %}-->
-<!--                                        <div class="badge badge-light-primary">Draft</div>-->
-<!--                                        {% elif order.order_status == "Done" %}-->
-<!--                                        <div class="badge badge-light-success">Done</div>-->
-<!--                                        {% elif order.order_status == "Canceled" %}-->
-<!--                                        {% else %}-->
-<!--                                        <div class="badge badge-light-warning">In progress {{ order.order_status }}</div>-->
-<!--                                        {% endif %}-->
+                                        {% if order.order_status.status == 'Draft' %}
+                                            <div class="badge badge-light-warning" style="padding: 0">Draft</div>
+                                        {% elif order.order_status.status == 'Done' %}
+                                            <div class="badge badge-light-success" style="padding: 0">Done</div>
+                                        {% elif order.order_status.status == 'Canceled' %}
+                                            <div class="badge badge-light-danger" style="padding: 0">Canceled</div>
+                                        {% else %}
+                                            <div class="badge badge-light-primary" style="padding: 0">In progress</div>
+                                        {% endif %}
                                     </td>
 
                                     <td>

@@ -82,7 +82,27 @@
 										<!--end:Menu link-->
 
 									</div>
+									<div class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2
+									{% block nav_invoice %}
+									{% endblock nav_invoice %}">
+										<!--begin:Menu link-->
+										<span class="menu-link">
+											<a class="menu-title" href="{% url 'invoice:invoice' %}">{% trans "Invoices" %}</a>
+										</span>
+										<!--end:Menu link-->
+
+									</div>
 									<!--begin:Menu item-->
+									<div class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2
+									{% block nav_product %}
+									{% endblock nav_product %}">
+										<!--begin:Menu link-->
+										<span class="menu-link">
+											<a class="menu-title" href="{% url 'products:products' %}">{% trans "Products" %}</a>
+										</span>
+										<!--end:Menu link-->
+
+									</div>
 									<div class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2
 									{% block nav_contractor %}
 									{% endblock nav_contractor %}">
@@ -213,7 +233,6 @@
 										<!--begin:Menu link-->
 										<span class="menu-link">
 											<span class="menu-title">{% trans "Integrations" %}</span>
-											<span class="menu-arrow d-lg-none"></span>
 										</span>
 										<!--end:Menu link-->
 <!--										&lt;!&ndash;begin:Menu sub&ndash;&gt;-->
@@ -3307,7 +3326,7 @@
 		<script src="{% static 'js/scripts.bundle.js' %}"></script>
 		<!--end::Global Javascript Bundle-->
 		<!--begin::Vendors Javascript(used by this page)-->
-		<script src="{% static 'plugins/custom/datatables/datatables.bundle.js' %}"></script>
+<!--		<script src="{% static 'plugins/custom/datatables/datatables.bundle.js' %}"></script>-->
 		<!--end::Vendors Javascript-->
 
     	<script type="text/javascript">

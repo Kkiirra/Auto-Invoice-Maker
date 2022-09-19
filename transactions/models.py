@@ -3,7 +3,6 @@ from django.db.models import ForeignKey
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Account
-from company.models import Company
 import uuid
 from customuser.models import User_Account
 from contractors.models import Contractor

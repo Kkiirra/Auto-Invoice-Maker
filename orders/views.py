@@ -7,6 +7,7 @@ from company.models import Company, Currency
 from contractors.models import Contractor
 from dateutil.parser import parse
 from django.core.exceptions import ValidationError
+from products.models import Product, OrderItem
 
 
 @login_required(login_url='/signin/')
@@ -71,30 +72,123 @@ def add_order(request):
 
 @login_required(login_url='/signin/')
 def order_edit(request, ord_uid):
-    if request.method == 'GET':
-        user_account = User_Account.objects.get(owner=request.user)
+    user_account = User_Account.objects.get(owner=request.user)
 
+    if request.method == 'GET':
+
+        products = Product.objects.filter(user_account=user_account)
         order = Order.objects.get(uid=ord_uid, user_account=user_account)
         companies = Company.objects.filter(user_account=user_account)
         contractors = Contractor.objects.all()
         currencies = Currency.objects.all()
-
-        context = {'order': order, 'currencies': currencies, 'companies': companies, 'contractors': contractors}
+        # for index in order.items.all():
+        #     print(index)
+        context = {'order': order, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
+                   'products': products}
 
         return render(request, 'orders/order_edit.html', context)
     else:
-
-        new_order_name = request.POST.get('new_order_name')
-        currency_name = request.POST.get('currency_name')
-        order_sum = request.POST.get('order_sum')
-        company_uid = request.POST.get('company_uid')
+        order_total = float(request.POST.get('order_total'))
+        items = request.POST.getlist('item[]')
+        order_status = request.POST.get('radio')
+        currency = request.POST.get('currency_name')
         contractor_uid = request.POST.get('contractor_uid')
+        order_number = request.POST.get('order_number')
+        company_uid = request.POST.get('company_uid')
         order_date = parse(request.POST.get('datetimes'), dayfirst=True)
 
-        order = Order.objects.filter(uid=ord_uid)
-        company = Company.objects.filter(uid=company_uid)[0]
-        contractor = Contractor.objects.filter(uid=contractor_uid)[0]
+        quantities = request.POST.getlist('quantity[]')
+        products = request.POST.getlist('select_item')
+        prices = request.POST.getlist('price[]')
 
-        order.update(order_name=new_order_name, currency=currency_name, order_sum=order_sum,
-                     company=company, contractor=contractor, order_date=order_date)
+        company = Company.objects.get(user_account=user_account, uid=company_uid)
+
+        try:
+            contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
+        except ValidationError:
+            contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
+
+
+        order = Order.objects.filter(user_account=user_account, uid=ord_uid).update(user_account=user_account, company=company, currency=currency,
+                                         contractor=contractor, order_name=order_number, order_sum=order_total,
+                                         order_date=order_date)
+
+        for item, product, price, quantity in zip(items, products, prices, quantities):
+
+            order_item = OrderItem.objects.filter(user_account=user_account, uid=item)
+
+            try:
+                product = Product.objects.filter(uid=product)
+                product.update(product_price=price)
+                product = product[0]
+            except ValidationError:
+                product = Product.objects.create(user_account=user_account, product_name=product,
+                                                     product_price=price, currency=currency)
+            order_item.update(product=product, quantity=quantity)
+
+
         return HttpResponseRedirect(f'/orders/{ord_uid}/')
+
+
+def order_add(request):
+
+    user_account = User_Account.objects.get(owner=request.user)
+
+    if request.method == 'GET':
+
+        products = Product.objects.filter(user_account=user_account)
+        companies = Company.objects.filter(user_account=user_account)
+        contractors = Contractor.objects.all()
+        currencies = Currency.objects.all()
+        context = {'currencies': currencies, 'companies': companies, 'contractors': contractors,
+                   'products': products}
+
+        return render(request, 'orders/order_add.html', context)
+    else:
+        order_total = float(request.POST.get('order_total'))
+        order_status = request.POST.get('radio')
+        currency = request.POST.get('currency_name')
+        contractor_uid = request.POST.get('contractor_uid')
+        order_number = request.POST.get('order_number')
+        company_uid = request.POST.get('company_uid')
+        order_date = parse(request.POST.get('datetimes'), dayfirst=True)
+
+        quantities = request.POST.getlist('quantity[]')
+        products = request.POST.getlist('select_item')
+        prices = request.POST.getlist('price[]')
+
+        company = Company.objects.get(user_account=user_account, uid=company_uid)
+
+        try:
+            contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
+        except ValidationError:
+            contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
+
+        order_status = Order_status.objects.get(status=order_status)
+
+
+        new_order = Order.objects.create(user_account=user_account, company=company, currency=currency,
+                                         contractor=contractor, order_name=order_number, order_sum=order_total,
+                                         order_status=order_status, order_date=order_date)
+
+        for product, price, quantity in zip(products, prices, quantities):
+            try:
+                product = Product.objects.get(uid=product)
+            except ValidationError:
+                product = Product.objects.create(user_account=user_account, product_name=product,
+                                                     product_price=price, currency=currency)
+            order_item = OrderItem.objects.create(user_account=user_account, product=product, order=new_order,
+                                                  quantity=int(quantity))
+        return HttpResponseRedirect(f'/orders/')
+
+
+def change_status(request):
+    status = request.POST.get('status')
+    order_uid = request.POST.get('order')
+
+    new_status = Order_status.objects.get(status=status)
+
+    order = Order.objects.filter(uid=order_uid).update(order_status=new_status)
+
+
+    return JsonResponse({}, status=200)

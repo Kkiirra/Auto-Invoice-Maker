@@ -135,7 +135,7 @@ def date_dashboard(request, date):
 def dashboard(request):
     if request.user.is_authenticated:
         date_range = ['2022-08-01', date.today().strftime('%Y-%m-%d')]
-
+        print(date_range)
         date_list = daterange(date_range[0], date_range[1])
         income_val_dict = dict()
 
@@ -147,22 +147,21 @@ def dashboard(request):
 
         user_account = User_Account.objects.get(owner=request.user)
 
-        orders = Order.objects.filter(user_account=user_account)
+        orders = Order.objects.filter(user_account=user_account, order_date__range=date_range)
 
         total_order_value = orders.aggregate(Sum('order_sum'))['order_sum__sum']
 
         if total_order_value is None:
             total_order_value = 0
 
-
         income_transactions = Transaction.objects.filter(transaction_type='Income', user_account=user_account,
-                                                         transaction_date__range=date_range).order_by('transaction_date')
+                                                         transaction_date__range=date_range).order_by(
+            'transaction_date')
         expenses_transactions = Transaction.objects.filter(transaction_type='Expenses', user_account=user_account,
-                                                                                        transaction_date__range=date_range).order_by('transaction_date')
-
+                                                           transaction_date__range=date_range).order_by(
+            'transaction_date')
         for index in income_transactions:
             transaction_date = index.transaction_date.strftime('%m.%d')
-
             if income_val_dict[transaction_date]:
                 income_val_dict[transaction_date] += index.sum_of_transactions
             else:
@@ -202,7 +201,6 @@ def dashboard(request):
         except TypeError:
             amount_of_expenses = 0
 
-        matches = income_val_dict | expenses_val_dict
         balance = amount_of_income - amount_of_expenses
 
         if amount_of_income != 0:
@@ -210,7 +208,13 @@ def dashboard(request):
         else:
             balance_procent = 0
 
-        max_transaction = max(matches.values())
+        max1 = max(income_val_dict.values())
+        max2 = max(expenses_val_dict.values())
+
+        if max1 >= max2:
+            max_transaction = max1
+        else:
+            max_transaction = max2
 
         if max_transaction is None:
             max_transaction = 0
@@ -235,7 +239,3 @@ def dashboard(request):
         else:
             return JsonResponse({'income_transactionss': income_val_dict, 'expenses_transactionss': expenses_val_dict},
                                 status=200)
-    else:
-        return HttpResponseRedirect('/signin/')
-
-#
