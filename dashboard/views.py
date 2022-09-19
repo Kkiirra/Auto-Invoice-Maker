@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from transactions.models import Transaction
 from customuser.models import User_Account
 from django.db.models import Sum, Max
@@ -239,3 +239,5 @@ def dashboard(request):
         else:
             return JsonResponse({'income_transactionss': income_val_dict, 'expenses_transactionss': expenses_val_dict},
                                 status=200)
+    else:
+        return redirect('customuser:signin')
