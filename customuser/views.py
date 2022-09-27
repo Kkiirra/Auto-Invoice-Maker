@@ -75,6 +75,7 @@ def signout(request):
     return redirect('customuser:signin')
 
 
+@login_required(login_url='/signin/')
 def settings(request):
     if request.user.is_authenticated:
         user_account = User_Account.objects.filter(owner=request.user)

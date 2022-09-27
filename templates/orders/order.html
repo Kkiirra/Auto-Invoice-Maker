@@ -212,13 +212,13 @@ here
 
                                     <td>
                                         {% if order.order_status.status == 'Draft' %}
-                                            <div class="badge badge-light-warning" style="padding: 0">Draft</div>
+                                            <div class="badge badge-light-warning" style="padding: 5px 5px">Draft</div>
                                         {% elif order.order_status.status == 'Done' %}
-                                            <div class="badge badge-light-success" style="padding: 0">Done</div>
+                                            <div class="badge badge-light-success" style="padding: 5px 5px">Done</div>
                                         {% elif order.order_status.status == 'Canceled' %}
-                                            <div class="badge badge-light-danger" style="padding: 0">Canceled</div>
+                                            <div class="badge badge-light-danger" style="padding: 5px 5px">Canceled</div>
                                         {% else %}
-                                            <div class="badge badge-light-primary" style="padding: 0">In progress</div>
+                                            <div class="badge badge-light-primary" style="padding: 5px 5px">In progress</div>
                                         {% endif %}
                                     </td>
 

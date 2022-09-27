@@ -24,6 +24,7 @@ urlpatterns += i18n_patterns(
     path('', include('dashboard.urls', namespace='dashboard')),
     path('', include('products.urls', namespace='products')),
     path('', include('invoice.urls', namespace='invoice')),
+    path('', include('integrations.urls', namespace='integrations')),
 )
 
 if settings.DEBUG:

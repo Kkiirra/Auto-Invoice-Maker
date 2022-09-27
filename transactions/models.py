@@ -23,6 +23,7 @@ class Transaction_type(models.Model):
 class Transaction(models.Model):
 
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    transaction_id = models.CharField(max_length=28, blank=True, null=True)
     user_account = models.ForeignKey(User_Account, on_delete=models.CASCADE)
     account = ForeignKey(Account, related_name='accounts', on_delete=models.CASCADE)
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)

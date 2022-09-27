@@ -230,14 +230,14 @@
 							name: "Amount of  Income",
 							data: [
 							{% for income_transaction in income_transactions.values %}
-							{{ income_transaction }},
+							{{ income_transaction|safe }},
 							{% endfor %}
 							]
 						}, {
 							name: "Amount of Disposal",
 							data: [
 							{% for expenses_transaction in expenses_transactions.values %}
-							{{ expenses_transaction }},
+							{{ expenses_transaction|safe }},
 							{% endfor %}
 							]
 						}],
@@ -274,7 +274,7 @@
 						xaxis: {
 							categories: ["",
 							{% for income_transaction in income_transactions.keys %}
-							"{{income_transaction}}",
+							"{{income_transaction|safe}}",
 							{% endfor %}
 							],
 							axisBorder: {
@@ -310,7 +310,7 @@
 							}
 						},
 						yaxis: {
-							max: {{ max_transaction }},
+							max: {{ max_transaction|safe }},
 							min: 0,
 							tickAmount: 6,
 							labels: {

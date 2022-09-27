@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from transactions.models import Transaction
@@ -14,6 +15,7 @@ def daterange(date1, date2):
     return [date1 + timedelta(days=x) for x in range((date2-date1).days + 1)]
 
 
+@login_required(login_url='/signin/')
 def date_dashboard(request, date):
 
     try:
@@ -132,6 +134,7 @@ def date_dashboard(request, date):
                             status=200)
 
 
+@login_required(login_url='/signin/')
 def dashboard(request):
     if request.user.is_authenticated:
         date_range = ['2022-08-01', date.today().strftime('%Y-%m-%d')]
