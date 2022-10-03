@@ -193,12 +193,14 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px sorting">{% trans "Transaction Date" %}</th>
-                                    <th class="min-w-125px">{% trans "Contractor" %}</th>
-                                    <th class="min-w-125px">{% trans "Amount" %}</th>
-                                    <th class="min-w-125px">{% trans "Currency" %}</th>
-                                    <th class="min-w-125px">{% trans "Transaction type" %}</th>
-                                    <th class="min-w-125px">{% trans "Account" %}</th>
+                                    <th class="min-w-100px sorting">{% trans "Transaction Date" %}</th>
+                                    <th class="min-w-100px">{% trans "Company" %}</th>
+                                    <th class="min-w-30px">{% trans "Contractor" %}</th>
+                                    <th class="min-w-100px">{% trans "Amount" %}</th>
+                                    <th class="min-w-100px">{% trans "Currency" %}</th>
+                                    <th class="min-w-100px">{% trans "Transaction type" %}</th>
+                                    <th class="min-w-100px">{% trans "Account" %}</th>
+                                    <th class="min-w-100px">{% trans "Invoices" %}</th>
                                     <th class="text-end min-w-70px">{% trans "Actions" %}</th>
                                 </tr>
                                 <!--end::Table row-->
@@ -208,7 +210,9 @@
                             <tbody class="fw-semibold text-gray-600">
                                 {% for transaction in transactions %}
                                     <tr>
-                                        <td> {{ transaction.transaction_date|date:"d.m.Y"  }}</td>
+                                    <td> {{ transaction.transaction_date|date:"d.m.Y"  }}</td>
+                                    <td>{{ transaction.company }}</td>
+
                                     <!--end::Name=-->
                                     <!--begin::Email=-->
                                     <td>
@@ -228,6 +232,19 @@
                                     <td>
                                         <a href="{% url 'accounts:account_edit' ac_uid=transaction.account.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ transaction.account }}</a>
                                     </td>
+                                    <td>
+                                        {% if transaction.invoice.all %}
+                                        {% for invoice in transaction.invoice.all %}
+                                        <a href="{% url 'invoice:invoice_edit' inv_uid=invoice.uid %}" class="link-info ">
+                                            {{ invoice }}
+                                        </a>
+                                        {% endfor %}
+                                        {% else %}
+                                        <a href="{% url 'transactions:transaction_edit' tr_uid=transaction.uid %}" class="link-success px-3">{% trans "Add Invoice" %}</a>
+                                        {% endif %}
+
+                                    </td>
+
                                     <!--end::Date=-->
                                     <!--begin::Action=-->
                                     <td class="text-end">
@@ -261,6 +278,50 @@
                             <!--end::Table body-->
                         </table>
                         <!--end::Table-->
+                        <ul class="pagination">
+                            <li class="page-item first m-1">
+                            {% if transactions.has_previous %}
+
+                                <a href="?page=1" class="page-link">
+                                    <span class="svg-icon svg-icon-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor"></path>
+																	<path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor"></path>
+																</svg>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="page-item first m-1">
+                                <a href="?page= {{ transactions.previous_page_number }}" class="page-link"><i class="previous"></i></a>
+                            </li>
+                            {% endif %}
+                            {% for page_num in transactions.paginator.page_range %}
+                            {% if transactions.number == page_num %}
+                                <li class="page-item active m-1"><a href="?page={{ page_num }}" class="page-link">
+                                    {{page_num}}</a></li>
+                            {% elif page_num > transactions.number|add:'-3' and page_num < transactions.number|add:'3' %}
+                                <li class="page-item m-1"><a href="?page={{ page_num }}" class="page-link">{{page_num}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if transactions.has_next %}
+                            <li class="page-item next m-1">
+                                <a class="page-link" href="?page={{ transactions.next_page_number }}"><i class="next"></i></a>
+                            </li>
+                            <li class="page-item last m-1">
+                                  <a class="page-link" href="?page={{ transactions.paginator.num_pages }}">
+                                      <span class="svg-icon svg-icon-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.5" d="M9.63433 11.4343L5.45001 7.25C5.0358 6.83579 5.0358 6.16421 5.45001 5.75C5.86423 5.33579 6.5358 5.33579 6.95001 5.75L12.4929 11.2929C12.8834 11.6834 12.8834 12.3166 12.4929 12.7071L6.95001 18.25C6.5358 18.6642 5.86423 18.6642 5.45001 18.25C5.0358 17.8358 5.0358 17.1642 5.45001 16.75L9.63433 12.5657C9.94675 12.2533 9.94675 11.7467 9.63433 11.4343Z" fill="currentColor"></path>
+                                            <path d="M15.6343 11.4343L11.45 7.25C11.0358 6.83579 11.0358 6.16421 11.45 5.75C11.8642 5.33579 12.5358 5.33579 12.95 5.75L18.4929 11.2929C18.8834 11.6834 18.8834 12.3166 18.4929 12.7071L12.95 18.25C12.5358 18.6642 11.8642 18.6642 11.45 18.25C11.0358 17.8358 11.0358 17.1642 11.45 16.75L15.6343 12.5657C15.9467 12.2533 15.9467 11.7467 15.6343 11.4343Z" fill="currentColor"></path>
+                                        </svg>
+                                      </span>
+                                  </a>
+                            </li>
+                              {% endif %}
+                            <li class="page-item m-1">
+                                <a class="page-link" href="?page=all">ALL</a>
+                            </li>
+                          </ul>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -310,12 +371,27 @@
                                             </div>
                                             </div>
                                         <div class="fv-row mb-7">
+                                            <label class="required fs-6 fw-semibold mb-2">{% trans "Companies" %}</label>
+                                            <div class="input-group input-group-solid flex-nowrap">
+                                                <span class="input-group-text"><i class="bi bi-bank fs-4"></i></span>
+                                                <div class="overflow-hidden flex-grow-1">
+                                                        <select class="js-example-basic-multiple form-select form-select form-select-solid rounded-start-0 border-start" id="select_company" name="company_uid" data-placeholder="Company">
+                                                            <option></option>
+                                                            {% for company in companies %}
+															<option value="{{ company.uid }}">{{ company }}</option>
+															{% endfor %}
+														</select>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        <div class="fv-row mb-7">
                                             <label class="required fs-6 fw-semibold mb-2">{% trans "Account" %}</label>
                                             <div class="input-group input-group-solid flex-nowrap">
                                                 <span class="input-group-text"><i class="bi bi-wallet fs-4"></i></span>
                                                 <div class="overflow-hidden flex-grow-1">
-                                                    <select class="js-example-basic-multiple form-select form-select form-select-solid rounded-start-0 border-start" id="select_account" name="account_uid" >
-															{% for account in accounts %}
+                                                    <select class="js-example-basic-multiple form-select form-select form-select-solid rounded-start-0 border-start" id="select_account" name="account_uid" data-placeholder="For first select Company">
+                                                        <option></option>
+                                                        {% for account in accounts %}
 															<option value="{{ account.uid }}">{{ account }}</option>
 															{% endfor %}
 														</select>
@@ -478,6 +554,7 @@ $(function() {
 <script>
     $(document).ready(function() {
     $('#select_contractor').select2({tags: true, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
+    $('#select_company').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
     $('#select_account').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
     $('#select_transaction_type').select2({tags: true, minimumResultsForSearch: -1});
     $('#currency_filter_select').select2({tags: false, minimumResultsForSearch: -1 ,dropdownParent: $("#kt-toolbar-filter").parent()});
@@ -605,5 +682,30 @@ $('#apply_filter').on('click',function(){
 	 $('#datetimefilter').val('');
 });
 </script>
+<script>
+    $(document).on('change','#select_company', function(){
+		$.ajax({
+			type: "POST",
+			url: '{% url 'transactions:get_transaction_company' %}',
+			data: {
+						company: $('#select_company option:selected').val(),
+						csrfmiddlewaretoken: "{{csrf_token}}"
+					},
+			success: function(data) {
+			 $("#select_account").empty();
+			 var keys = Object.keys(data);
 
+			 for (var i = 0, l = keys.length; i < l; i++) {
+			    var newState = new Option(keys[i], data[keys[i]], true, true);
+
+			          if ($("#select_account").find("option[value=" + data[keys[i]] + "]").length) {
+                        $("#select_invoice").val(data[keys[i]]).trigger("change");
+                      } else {
+
+			    $("#select_account").append(newState).trigger('change');}
+			 }
+			 },
+		  });
+});
+</script>
 {% endblock scripts %}

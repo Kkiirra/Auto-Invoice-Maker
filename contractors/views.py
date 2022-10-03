@@ -12,13 +12,17 @@ def contractors_list(request):
 
     if request.method == 'POST':
         contractor_name = request.POST.get('contractor_name')
-        new_contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
+        try:
+            new_contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
+        except Exception:
+            pass
         return redirect('contractors:contractors')
     else:
         contractors = Contractor.objects.filter(user_account=user_account)
         return render(request, 'contractors/contractors.html', {'contractors': contractors})
 
 
+@login_required(login_url='/signin/')
 def delete_contractor(request):
     if request.method == 'POST':
         contractor_uid = request.POST.get('uid')
@@ -33,6 +37,7 @@ def delete_contractor(request):
             return HttpResponseRedirect('/bad_request/')
 
 
+@login_required(login_url='/signin/')
 def contractor_edit(request, contr_uid):
 
     user_account = User_Account.objects.filter(owner=request.user)[0]

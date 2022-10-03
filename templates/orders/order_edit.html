@@ -156,7 +156,7 @@
 											<!--begin::Card-->
 											<div class="card">
 												<!--begin::Card body-->
-												<div class="card-body p-12">
+												<div class="card-body p-12" id="printarea">
 													<!--begin::Form-->
 														<!--begin::Wrapper-->
 														<div class="d-flex flex-column align-items-start flex-xxl-row">
@@ -206,6 +206,7 @@
 															</div>
 															<!--end::Input group-->
 														</div>
+													<div class="text-center errorlist">{{ order_name_error }}</div>
 														<!--end::Top-->
 														<!--begin::Separator-->
 														<div class="separator separator-dashed my-10"></div>
@@ -347,7 +348,7 @@
 																	{% for item in order.items.all %}
 																	<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																			<td class="pe-7">
-																<select class="form-select form-select-solid select_for_products" data-placeholder="Product" data-tags="true" data-control="select2" data-allow-clear="true" name="select_item">
+																<select class="form-select form-select-solid select_for_products product_filter_select" data-placeholder="Product" data-tags="true" data-control="select2" data-allow-clear="true" name="select_item">
                                                                     <option></option>
                                                                     {% for product in products %}
 																	{% if item.product == product %}
@@ -363,7 +364,7 @@
 																				<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="{{ item.quantity }}" data-kt-element="quantity">
 																			</td>
 																			<td>
-																				<input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0.00" value="{{ item.product.product_price }}" data-kt-element="price">
+																				<input type="text" class="form-control form-control-solid text-end price_input" name="price[]" placeholder="0.00" value="{{ item.price|safe }}" data-kt-element="price">
 																				<input type="text" style="display: none" value="{{ item.uid }}" name="item[]">
 																			</td>
 																			<td class="pt-8 text-end text-nowrap">$
@@ -416,8 +417,9 @@
 															<!--end::Table-->
 
 															<!--begin::Notes-->
-															<div class="card-footer d-flex justify-content-end py-6 px-9">
+															<div class="d-flex justify-content-end">
 																<input type="text" style="display: none" value="{{ order.uid }}" name="order_uid">
+																<a href="{% url 'invoice:invoice_byOrder' ord_uid=order.uid %}" class="btn btn-light btn-active-light-primary me-6">{% trans "Add Invoice" %}</a>
 																<button type="reset" class="btn btn-light btn-active-light-primary me-2">{% trans "Discard" %}</button>
 																<button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">{% trans "Save Changes" %}</button>
 															</div>
@@ -438,9 +440,9 @@
 												<!--begin::Card body-->
 												<div class="card-body p-10">
 													<!--begin::Input group-->
-													<div class="mb-10">
+													<div class="mb-10 text-center">
 														<!--begin::Label-->
-
+														<h2 class="">Statuses</h2>
 														<!--end::Select-->
 													</div>
 													<!--end::Input group-->
@@ -451,7 +453,10 @@
 													<div class="mb-8">
 														<!--begin::Option-->
 														<div class="funkyradio">
-
+        <div class="funkyradio-warning">
+            <input type="radio" name="radio" {% if order.order_status.status == 'Draft' %} checked="" {% endif %} id="radio5" value="Draft">
+            <label for="radio5">Draft</label>
+        </div>
         <div class="funkyradio-primary">
             <input type="radio" name="radio" id="radio2" {% if order.order_status.status == 'In progress' %} checked="" {% endif %} value="In progress">
             <label for="radio2">In progress</label>
@@ -464,10 +469,7 @@
             <input type="radio" name="radio" {% if order.order_status.status == 'Canceled' %} checked="" {% endif %} id="radio4" value="Canceled">
             <label for="radio4">Canceled</label>
         </div>
-        <div class="funkyradio-warning">
-            <input type="radio" name="radio" {% if order.order_status.status == 'Draft' %} checked="" {% endif %} id="radio5" value="Draft">
-            <label for="radio5">Draft</label>
-        </div>
+
 
     </div>
 
@@ -495,13 +497,13 @@
 														<div class="row mb-5">
 															<!--begin::Col-->
 															<div class="col">
-																<a href="#" class="btn btn-light btn-active-light-primary w-100" id="preview_order">Preview</a>
+																<button class="btn btn-light btn-active-light-primary w-100" id="btn" onclick="printDiv('printarea')">Preview</button>
 															</div>
 															<!--end::Col-->
 															<!--begin::Col-->
-															<div class="col">
-																<a href="#" class="btn btn-light btn-active-light-primary w-100" id="cmd">Download</a>
-															</div>
+<!--															<div class="col">-->
+<!--																<a href="#" class="btn btn-light btn-active-light-primary w-100" id="cmd">Download</a>-->
+<!--															</div>-->
 															<!--end::Col-->
 														</div>
 														<!--end::Row-->
@@ -538,6 +540,21 @@
 {% block scripts %}
  		<script src="{% static 'js/custom/apps/invoices/create.js' %}"></script>
 <script>
+$(document).on("change", "input[name='radio']", function () {
+  $.ajax({
+	type: "POST",
+	url: '{% url 'orders:change_status' %}',
+	data: {
+				order: "{{ order.uid }}",
+				status: $(this).val(),
+				csrfmiddlewaretoken: "{{csrf_token}}"
+			},
+	success: function(data) {
+	 },
+    });
+});
+</script>
+<script>
     $(document).ready(function() {
     $('#select_contractor').select2({tags: true, dropdownParent: $("#select_contractor").parent()});
     $('#product_filter_select').select2({tags: true, dropdownParent: $("#select_contractor").parent()});
@@ -554,7 +571,7 @@ $(function() {
     timePickerSeconds: true,
     drops: "down",
     locale: {
-      format: 'DD.MM.YYYY HH:mm',
+      format: 'DD.MM.YYYY',
     },
     singleDatePicker: true
   });
@@ -562,7 +579,7 @@ $(function() {
 </script>
 <script>
   $('body').on('click', '#add_product', function () {
- var newselect = $("<tr class='border-bottom border-bottom-dashed' data-kt-element='item'><td class='pe-7'><select class='form-select form-select-solid' name='select_item_new' data-placeholder='Product'><option></option>{% for product in products %}<option value='{{product.uid}}'>{{ product }}</option>{% endfor %}</select></td><td class='ps-0'><input class='form-control form-control-solid' type='number' min='1' name='quantity_new' placeholder='1' value='1' data-kt-element='quantity'></td><td><input type='text' class='form-control form-control-solid text-end' name='price_new' placeholder='0.00' value='0.00' data-kt-element='price'></td><td class='pt-8 text-end text-nowrap'>$<span data-kt-element='total'>0.00</span></td><td class='pt-5 text-end'><button type='button' class='btn btn-sm btn-icon btn-active-color-primary' data-kt-element='remove-item'><span class='svg-icon svg-icon-3'><svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path><path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path><path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path></svg></span></button></td></tr>");
+ var newselect = $("<tr class='border-bottom border-bottom-dashed' data-kt-element='item'><td class='pe-7'><select class='form-select form-select-solid product_filter_select' name='select_item_new' data-placeholder='Product'><option></option>{% for product in products %}<option value='{{product.uid}}'>{{ product }}</option>{% endfor %}</select></td><td class='ps-0'><input class='form-control form-control-solid' type='number' min='1' name='quantity_new' placeholder='1' value='1' data-kt-element='quantity'></td><td><input type='text' class='form-control form-control-solid text-end price_input' name='price_new' placeholder='0.00' value='0.00' data-kt-element='price'></td><td class='pt-8 text-end text-nowrap'>$<span data-kt-element='total'>0.00</span></td><td class='pt-5 text-end'><button type='button' class='btn btn-sm btn-icon btn-active-color-primary' data-kt-element='remove-item'><span class='svg-icon svg-icon-3'><svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path><path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path><path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path></svg></span></button></td></tr>");
  $("tbody").append(newselect);
   $("tr:last-child td:first-child select").select2({tags: 'true'});
 });
@@ -581,6 +598,7 @@ $(".remove_item_button").click(function(e) {
         url: "{% url 'products:delete_item' %}",
         data: {
             id: $(this).val(),
+            order_uid: "{{ order.uid }}",
             csrfmiddlewaretoken: "{{csrf_token}}"
         },
         success: function(result) {
@@ -591,20 +609,31 @@ $(".remove_item_button").click(function(e) {
 });
 </script>
 <script>
-	$(document).on("change", "input[name='radio']", function () {
-
-      $.ajax({
-        type: "POST",
-        url: '{% url 'orders:change_status' %}',
-        data: {
-        			order: "{{ order.uid }}",
-        			status: $(this).val(),
-        			csrfmiddlewaretoken: "{{csrf_token}}"
-				},
-        success: function(data) {
-            $("#result").load(result);
-         },
-      });
+$(document).on('change','.product_filter_select', function(){
+		var row_input = $(this).closest('tr').find('.price_input');
+		$.ajax({
+			type: "POST",
+			url: '{% url 'orders:get_product' %}',
+			data: {
+						product: $(this).val(),
+						csrfmiddlewaretoken: "{{csrf_token}}"
+					},
+			success: function(data) {
+				row_input.val(data.product_price)
+			 },
+		  });
 });
+</script>
+<script>
+function printDiv(divName) {
+     var printContents = document.getElementById(divName).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+
+     window.print();
+
+     document.body.innerHTML = originalContents;
+}
 </script>
 {% endblock scripts %}

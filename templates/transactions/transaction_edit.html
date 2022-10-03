@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 {% load static i18n %}
 
 {% block navprofiletran %}
@@ -136,6 +137,36 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Input group-->
+                                <div class="row mb-6">
+														<!--begin::Label-->
+                                    <label class="col-lg-4 col-form-label fw-semibold fs-">{% trans "Company" %}</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <div class="col-lg-8 fv-row ">
+                                        <select class="ajax_send_value js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company_uid">
+                                        {% for company in companies %}
+                                            {% if transaction.company == company %}
+                                                <option value="{{ company.uid }}" selected>{{ company }}</option>
+                                            {% else %}
+                                                <option value="{{ company.uid }}">{{ company }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+												</div>
+														<!--end::Input-->
+													</div>
+							    <div class="row mb-6">
+								<!--begin::Label-->
+								<label class="col-lg-4 col-form-label fw-semibold fs-6">
+									<span>{% trans "Currency" %}</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Col-->
+								<div class="col-lg-8 fv-row">
+									<input class="form-control form-control-lg form-control-solid" type="text" value="{{ transaction.account.currency }}" disabled/>
+								</div>
+								<!--end::Col-->
+							</div>
 
                                 <div class="row mb-6">
 														<!--begin::Label-->
@@ -143,7 +174,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <div class="col-lg-8 fv-row ">
-                                        <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_account" name="account_uid">
+                                        <select required class="ajax_send_value js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_account" name="account_uid" data-placeholder="No one Account">
                                         {% for account in accounts %}
                                             {% if transaction.account == account %}
                                                 <option value="{{ account.uid }}" selected>{{ account }}</option>
@@ -162,7 +193,7 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor_uid">
+                                        <select class="ajax_send_value js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor_uid">
                                         {% for contractor in contractors %}
                                             {% if transaction.contractor == contractor %}
                                                 <option value="{{ contractor.uid }}" selected>{{ contractor }}</option>
@@ -185,26 +216,33 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <input type="number" min=0 name="transaction_amount" class="form-control form-control-lg form-control-solid" placeholder="Transaction amount" value="{{ transaction.sum_of_transactions }}"/>
+                                        <input name="transaction_amount" class="form-control form-control-lg form-control-solid" placeholder="Transaction amount" value="{{ transaction.sum_of_transactions|unlocalize }}" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;"/>
                                     </div>
                                     <!--end::Col-->
 
                                 </div>
+                                <div class="row mb-6">
+                                    <label class="col-lg-4 col-form-label fw-semibold fs-">{% trans "Invoices" %}</label>
+
+                                    <!--end::Label-->
+                                    <!--begin::Col-->
+                                    <div class="col-lg-8 fv-row">
+                                        <select class="form-control form-control-lg form-control-solid js-example-basic-multiple" name="invoices[]" multiple="multiple" id="select_invoice" data-placeholder="Invoices">
+                                            <option></option>
+                                            {% for invoice in user_invoices %}
+                                            {% if invoice in selected_invoice %}
+                                            <option value="{{ invoice.uid }}" selected>{{ invoice }}</option>
+                                            {% else %}
+                                            <option value="{{ invoice.uid }}">{{ invoice }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                    </select>
+                                        </div>
+                                    <!--end::Col-->
+                                </div>
 
                                 <!--end::Input group-->
                                 <!--begin::Input group-->
-							<div class="row mb-6">
-								<!--begin::Label-->
-								<label class="col-lg-4 col-form-label fw-semibold fs-6">
-									<span>{% trans "Creation Date" %}</span>
-								</label>
-								<!--end::Label-->
-								<!--begin::Col-->
-								<div class="col-lg-8 fv-row">
-									<input class="form-control form-control-lg form-control-solid" type="text" value="{{ transaction.creation_date|date:'d.m.Y G:i:s' }}"/>
-								</div>
-								<!--end::Col-->
-							</div>
 							<!--end::Input group-->
                             </div>
                             <!--end::Card body-->
@@ -232,10 +270,28 @@
 {% endblock content %}
 {% block scripts %}
 <script>
+$('#select_invoice').on("select2:unselecting", function(e){
+         var unselected_value = $('#select_invoice').val();
+         $.ajax({
+			type: "POST",
+			url: '{% url 'transactions:delete_invoice' %}',
+			data: {
+						invoice_uid: "" + unselected_value,
+						transaction_uid: "{{ transaction.uid }}",
+						csrfmiddlewaretoken: "{{csrf_token}}"
+					},
+			success: function(data) {
+			 },
+		  });
+    }).trigger('change');
+</script>
+<script>
     $(document).ready(function() {
     $('#select_contractor').select2({tags: false, dropdownParent: $("#select_contractor").parent()});
     $('#select_transaction_type').select2({tags: true, minimumResultsForSearch: -1});
     $('#select_account').select2({tags: false, dropdownParent: $("#select_account").parent()});
+    $('#select_company').select2({tags: false, dropdownParent: $("#select_account").parent()});
+    $('#select_invoice').select2({tags: false, dropdownParent: $("#select_account").parent()});
 });
 </script>
 <script>
@@ -250,6 +306,60 @@ $(function() {
     },
     singleDatePicker: true
   });
+});
+</script>
+<script>
+    $(document).on('change','.ajax_send_value', function(){
+		$.ajax({
+			type: "POST",
+			url: '{% url 'transactions:get_invoice_val' %}',
+			data: {
+			            company: $('#select_company option:selected').val(),
+						contractor: $('#select_contractor option:selected').val(),
+						account: $('#select_account option:selected').val(),
+						csrfmiddlewaretoken: "{{csrf_token}}"
+					},
+			success: function(data) {
+			 $("#select_invoice").empty();
+			 var keys = Object.keys(data);
+			 for (var i = 0, l = keys.length; i < l; i++) {
+			    var newState = new Option(keys[i], data[keys[i]], false, false);
+
+                  if ($("#select_invoice").find("option[value=" + data[keys[i]] + "]").length) {
+                    $("#select_invoice").val(data[keys[i]]).trigger("change");
+                    alert('fff')
+                  } else {
+                    $("#select_invoice").append(newState);
+                    }
+			 }
+			 },
+		  });
+});
+</script>
+<script>
+    $(document).on('change','#select_company', function(){
+		$.ajax({
+			type: "POST",
+			url: '{% url 'transactions:get_transaction_company' %}',
+			data: {
+						company: $('#select_company option:selected').val(),
+						csrfmiddlewaretoken: "{{csrf_token}}"
+					},
+			success: function(data) {
+			 $("#select_account").empty();
+			 var keys = Object.keys(data);
+
+			 for (var i = 0, l = keys.length; i < l; i++) {
+			    var newState = new Option(keys[i], data[keys[i]], true, true);
+
+			          if ($("#select_account").find("option[value=" + data[keys[i]] + "]").length) {
+                        $("#select_invoice").val(data[keys[i]]).trigger("change");
+                      } else {
+
+			    $("#select_account").append(newState).trigger('change');}
+			 }
+			 },
+		  });
 });
 </script>
 

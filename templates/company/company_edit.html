@@ -449,8 +449,8 @@
 											<label class="required fs-6 fw-semibold mb-2">{% trans "Account ID" %}</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input type="text" class="form-control form-control-solid" placeholder="{% trans 'Account ID' %}" name="account_id" id="kt_docs_maxlength_basic" minlength="11" maxlength="11"/>
-											<span class="fs-6 text-muted">Enter your Account ID number, example: PL534355363</span>
+											<input type="text" class="form-control form-control-solid" placeholder="{% trans 'Account ID' %}" name="account_id" id="kt_docs_maxlength_basic" minlength="28" maxlength="28"/>
+											<span class="fs-6 text-muted">Enter your Account ID number, example: PL62309023400000004646852541</span>
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -679,7 +679,7 @@ $('#apply_filter').on('click',function(){
 <script>
 $('#kt_docs_maxlength_basic').maxlength({
     alwaysShow: true,
-    threshold: 20,
+    threshold: 28,
     warningClass: "badge badge-danger",
     limitReachedClass: "badge badge-success"
 });

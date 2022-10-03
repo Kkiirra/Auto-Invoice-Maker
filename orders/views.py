@@ -42,55 +42,21 @@ def delete_order(request):
 
 
 @login_required(login_url='/signin/')
-def add_order(request):
-    if request.method == 'POST':
-
-        order_name = request.POST.get('order_name')
-        company_uid = request.POST.get('company_uid')
-        contractor_uid = request.POST.get('contractor_uid')
-        order_amount = request.POST.get('order_amount')
-        currency = request.POST.get('currency_name')
-        contractor_name = request.POST.get('contractor_name')
-        order_date = parse(request.POST.get('datetimes'), dayfirst=True)
-
-        user_account = User_Account.objects.get(owner=request.user)
-        company = Company.objects.get(uid=company_uid, user_account=user_account)
-
-        if contractor_name:
-            contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_name)
-        else:
-            try:
-                contractor = Contractor.objects.get(uid=contractor_uid)
-            except ValidationError:
-                contractor = Contractor.objects.create(contractor_name=contractor_uid, user_account=user_account)
-
-        new_order = Order.objects.create(order_name=order_name,
-                                        company=company, contractor=contractor, order_sum=order_amount,
-                                        currency=currency, user_account=user_account, order_date=order_date)
-        return HttpResponseRedirect('/orders/')
-
-
-@login_required(login_url='/signin/')
 def order_edit(request, ord_uid):
     user_account = User_Account.objects.get(owner=request.user)
 
-    if request.method == 'GET':
+    products = Product.objects.filter(user_account=user_account)
+    order = Order.objects.get(uid=ord_uid, user_account=user_account)
+    companies = Company.objects.filter(user_account=user_account)
+    contractors = Contractor.objects.filter(user_account=user_account)
+    currencies = Currency.objects.all()
 
-        products = Product.objects.filter(user_account=user_account)
-        order = Order.objects.get(uid=ord_uid, user_account=user_account)
-        companies = Company.objects.filter(user_account=user_account)
-        contractors = Contractor.objects.all()
-        currencies = Currency.objects.all()
-        # for index in order.items.all():
-        #     print(index)
-        context = {'order': order, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
-                   'products': products}
+    context = {'order': order, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
+               'products': products}
 
-        return render(request, 'orders/order_edit.html', context)
-    else:
+    if request.method == 'POST':
         order_total = float(request.POST.get('order_total'))
         items = request.POST.getlist('item[]')
-        order_status = request.POST.get('radio')
         currency = request.POST.get('currency_name')
         contractor_uid = request.POST.get('contractor_uid')
         order_number = request.POST.get('order_number')
@@ -107,6 +73,7 @@ def order_edit(request, ord_uid):
         prices_new = request.POST.getlist('price_new')
 
         company = Company.objects.get(user_account=user_account, uid=company_uid)
+
 
         try:
             contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
@@ -125,12 +92,11 @@ def order_edit(request, ord_uid):
 
             try:
                 product = Product.objects.filter(uid=product)
-                product.update(product_price=price)
                 product = product[0]
             except ValidationError:
                 product = Product.objects.create(user_account=user_account, product_name=product,
                                                      product_price=price, currency=currency)
-            order_item.update(product=product, quantity=quantity)
+            order_item.update(product=product, quantity=quantity, price=price)
 
         if quantities_new is not None and prices_new is not None and products_new is not None:
             for product, price, quantity in zip(products_new, prices_new, quantities_new):
@@ -141,25 +107,28 @@ def order_edit(request, ord_uid):
                                                      product_price=price, currency=currency)
 
                 order_item = OrderItem.objects.create(user_account=user_account, product=product, order=order[0],
-                                                      quantity=int(quantity))
+                                                      quantity=int(quantity), price=price)
         return HttpResponseRedirect(f'/orders/{ord_uid}/')
 
+    else:
+        return render(request, 'orders/order_edit.html', context)
 
+
+@login_required(login_url='/signin/')
 def order_add(request):
 
     user_account = User_Account.objects.get(owner=request.user)
 
-    if request.method == 'GET':
+    products = Product.objects.filter(user_account=user_account)
+    companies = Company.objects.filter(user_account=user_account)
+    contractors = Contractor.objects.filter(user_account=user_account)
+    currencies = Currency.objects.all()
 
-        products = Product.objects.filter(user_account=user_account)
-        companies = Company.objects.filter(user_account=user_account)
-        contractors = Contractor.objects.all()
-        currencies = Currency.objects.all()
-        context = {'currencies': currencies, 'companies': companies, 'contractors': contractors,
-                   'products': products}
+    context = {'currencies': currencies, 'companies': companies, 'contractors': contractors,
+               'products': products}
 
-        return render(request, 'orders/order_add.html', context)
-    else:
+    if request.method == 'POST':
+
         order_total = float(request.POST.get('order_total'))
         order_status = request.POST.get('radio')
         currency = request.POST.get('currency_name')
@@ -168,42 +137,69 @@ def order_add(request):
         company_uid = request.POST.get('company_uid')
         order_date = parse(request.POST.get('datetimes'), dayfirst=True)
 
-        quantities = request.POST.getlist('quantity[]')
-        products = request.POST.getlist('select_item')
-        prices = request.POST.getlist('price[]')
-
-        company = Company.objects.get(user_account=user_account, uid=company_uid)
-
         try:
-            contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
-        except ValidationError:
-            contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
+            order_flag = Order.objects.get(user_account=user_account, order_name=order_number)
+        except Exception:
+            order_flag = False
 
-        order_status = Order_status.objects.get(status=order_status)
+        if order_flag:
+            context['order_name_error'] = 'The same number is exist, please, enter the new'
+        else:
+            quantities = request.POST.getlist('quantity[]')
+            products = request.POST.getlist('select_item')
+            prices = request.POST.getlist('price[]')
 
+            company = Company.objects.get(user_account=user_account, uid=company_uid)
 
-        new_order = Order.objects.create(user_account=user_account, company=company, currency=currency,
-                                         contractor=contractor, order_name=order_number, order_sum=order_total,
-                                         order_status=order_status, order_date=order_date)
-
-        for product, price, quantity in zip(products, prices, quantities):
             try:
-                product = Product.objects.get(uid=product)
+                contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
             except ValidationError:
-                product = Product.objects.create(user_account=user_account, product_name=product,
-                                                     product_price=price, currency=currency)
-            order_item = OrderItem.objects.create(user_account=user_account, product=product, order=new_order,
-                                                  quantity=int(quantity))
-        return HttpResponseRedirect(f'/orders/')
+                contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
+
+            order_status = Order_status.objects.get(status=order_status)
 
 
+            new_order = Order.objects.create(user_account=user_account, company=company, currency=currency,
+                                             contractor=contractor, order_name=order_number, order_sum=order_total,
+                                             order_status=order_status, order_date=order_date)
+
+
+            for product, price, quantity in zip(products, prices, quantities):
+                try:
+                    product = Product.objects.get(uid=product)
+                except ValidationError:
+                    product = Product.objects.create(user_account=user_account, product_name=product,
+                                                         product_price=price, currency=currency)
+
+                order_item = OrderItem.objects.create(user_account=user_account, product=product, order=new_order,
+                                                      quantity=int(quantity), price=price)
+            return HttpResponseRedirect(f'/orders/')
+
+    return render(request, 'orders/order_add.html', context)
+
+
+@login_required(login_url='/signin/')
 def change_status(request):
     status = request.POST.get('status')
     order_uid = request.POST.get('order')
-
     new_status = Order_status.objects.get(status=status)
 
     order = Order.objects.filter(uid=order_uid).update(order_status=new_status)
 
 
     return JsonResponse({}, status=200)
+
+
+@login_required(login_url='/signin/')
+def get_product(request):
+
+    user_account = User_Account.objects.get(owner=request.user)
+
+    try:
+        uid_product = request.POST.get('product')
+        product = Product.objects.get(uid=uid_product, user_account=user_account)
+        return JsonResponse(data={'product_price': product.product_price}, status=200)
+
+    except Exception:
+        print('saggdsgasdg')
+

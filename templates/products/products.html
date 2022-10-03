@@ -149,7 +149,7 @@
 								<!--begin::Table row-->
 								<tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
 									<th class="min-w-125px">{% trans "Product name" %}</th>
-									<th class="min-w-125px">{% trans "Product cost" %}</th>
+									<th class="min-w-125px">{% trans "Product price" %}</th>
 									<th class="min-w-125px">{% trans "Currency" %}</th>
 									<th class="text-end min-w-70px">{% trans "Actions" %}</th>
 								</tr>
@@ -253,10 +253,10 @@
 										<!--begin::Input group-->
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
-											<label class="required fs-6 fw-semibold mb-2">{% trans "Product cost" %}</label>
+											<label class="required fs-6 fw-semibold mb-2">{% trans "Product price" %}</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input required type="text" class="form-control form-control-solid" placeholder="{% trans 'Product cost' %}" name="product_cost"/>
+											<input required type="number" min="0" step="0.01" class="form-control form-control-solid" placeholder="{% trans 'Product cost' %}" name="product_cost"/>
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->

@@ -59,7 +59,6 @@
 												<h3 class="fw-bold m-0">Connected Accounts</h3>
 											</div>												<!--end::Notice-->
 
-												<!--begin::Items-->
 												<div class="py-2">
 													<div class="separator separator-dashed my-5"></div>
 													<!--begin::Item-->
@@ -74,9 +73,11 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if SANTANDER_PL_WBKPPLPP %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																<a class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="SANTANDER_PL_WBKPPLPP/720">
+																	Refresh
+																</a>
 																{% else %}
-																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank" value="SANTANDER_PL_WBKPPLPP">
+																	<a class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="SANTANDER_PL_WBKPPLPP/720">
 																	Connect
 																</a>
 																{% endif %}
@@ -87,8 +88,6 @@
 													<!--end::Item-->
 
 												</div>
-												<!--end::Items-->
-												<!--begin::Items-->
 												<div class="py-2">
 													<div class="separator separator-dashed my-5"></div>
 													<!--begin::Item-->
@@ -103,9 +102,11 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if BANK_MILLENNIUM_BIGBPLPW %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																	<a class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="BANK_MILLENNIUM_BIGBPLPW/90">
+																	Refresh
+																</a>
 																{% else %}
-																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank" value="BANK_MILLENNIUM_BIGBPLPW">
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="BANK_MILLENNIUM_BIGBPLPW/90">
 																	Connect
 																</a>
 																{% endif %}
@@ -115,6 +116,169 @@
 													<!--end::Item-->
 
 												</div>
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/SANTANDER_PL_CORP_WBKPPLPP.png" class="w-40px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Santander Bank Corporate</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from Santander Bank Corporate</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if SANTANDER_PL_CORP_WBKPPLPP %}
+																<a class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="SANTANDER_PL_CORP_WBKPPLPP/720">
+																	Refresh
+																</a>
+																{% else %}
+																	<a class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="SANTANDER_PL_CORP_WBKPPLPP/720">
+																	Connect
+																</a>
+																{% endif %}
+
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/ING_PL_INGBPLPW.png" class="w-40px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">ING</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from ING</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if ING_PL_INGBPLPW %}
+																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																{% else %}
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="ING_PL_INGBPLPW/365">
+																	Connect
+																</a>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/PKO_BPKOPLPW.png" class="w-40px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">PKO Bank Polski</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from PKO Bank Polski</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if PKO_BPKOPLPW %}
+																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																{% else %}
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="PKO_BPKOPLPW/730">
+																	Connect
+																</a>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/MBANK_RETAIL_BREXCZPP.png" class="w-40px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">mBank Retail</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from mBank Retail</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if MBANK_RETAIL_BREXPLPW %}
+																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																{% else %}
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="MBANK_RETAIL_BREXPLPW/90">
+																	Connect
+																</a>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/IKANO_IKANSE21.png" class="w-40px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Ikano Bank</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from Ikano Bank</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if IKANO_HANDPLPW %}
+																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																{% else %}
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="IKANO_HANDPLPW/90">
+																	Connect
+																</a>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/BNP_PL_PPABPLPK.png" class="w-40px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">BNP Paribas</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from BNP Paribas</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if BNP_PL_PPABPLPK %}
+																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																{% else %}
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="BNP_PL_PPABPLPK/730">
+																	Connect
+																</a>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+
 												<!--end::Items-->
 											</div>
 											<!--end::Card body-->

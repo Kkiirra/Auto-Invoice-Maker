@@ -138,12 +138,13 @@
 							<div class="row mb-6">
 								<!--begin::Label-->
 								<label class="col-lg-4 col-form-label fw-semibold fs-6">
-									<span>{% trans "Product cost" %}</span>
+									<span>{% trans "Product price" %}</span>
 								</label>
 								<!--end::Label-->
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
-									<input type="number" min="0" step="0.01" name="product_cost" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Contractor name' %}" value="{{ product.product_price }}"/>
+									<div class="errorlist">{{ price_error }}</div>
+									<input name="product_cost" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Product price' %}" value="{{ product.product_price|safe }}" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;"/>
 								</div>
 								<!--end::Col-->
 							</div>

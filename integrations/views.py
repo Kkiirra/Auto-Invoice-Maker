@@ -33,8 +33,9 @@ def integrations_view(request):
 
 
     if request.method == 'POST':
-
-        bank = request.POST.get('bank')
+        this_banks = request.POST.get('bank').split('/')
+        bank = this_banks[0]
+        max_days = this_banks[1]
         access_token = request.session.get('access_token')
 
         if access_token is None:
@@ -50,7 +51,7 @@ def integrations_view(request):
         r = requests.post(url='https://ob.nordigen.com/api/v2/agreements/enduser/',
                           headers={'accept': 'application/json', 'Content-Type': 'application/json',
                                    'Authorization': f'Bearer {access_token}'},
-                          json={'institution_id': bank, 'max_historical_days': 20, 'access_valid_for_days': 90,
+                          json={'institution_id': bank, 'max_historical_days': max_days, 'access_valid_for_days': 90,
                                 'access_scope': ['transactions']})
         print(r.json())
         agreement = r.json()['id']
@@ -124,6 +125,7 @@ def integrations_response(request):
     return HttpResponseRedirect('/integrations/')
 
 
+@login_required(login_url='/signin/')
 def integrate_account(request):
     if request.method == 'POST':
         user_account = User_Account.objects.get(owner=request.user)
@@ -136,7 +138,8 @@ def integrate_account(request):
         company_name = request.POST.get('company')
         bank_name = request.POST.get('bank').strip()
         account_number = request.POST.get('account_iban').strip()
-        company = Company.objects.create(user_account=user_account, company_name=company_name, user=request.user)
+
+        company, status = Company.objects.get_or_create(user_account=user_account, company_name=company_name, user=request.user)
 
         user_transactions = requests.get(url=f'https://ob.nordigen.com/api/v2/accounts/{bank_account_uid}/transactions/',
                                          headers={'accept': 'application/json',
@@ -157,9 +160,16 @@ def integrate_account(request):
 
             if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
                 transaction_type = 'Expenses'
-                contractor_name = transaction_info['creditorName']
+                try:
+                    contractor_name = transaction_info['creditorName']
+                except Exception:
+                    contractor_name = transaction_info['debtorName']
             else:
-                contractor_name = transaction_info['debtorName']
+                try:
+                    contractor_name = transaction_info['debtorName']
+                except Exception:
+                    contractor_name = transaction_info['creditorName']
+
                 transaction_type = 'Income'
 
             try:
@@ -172,7 +182,7 @@ def integrate_account(request):
                                                          sum_of_transactions=abs(float(transaction_amount)),
                                                          transaction_type=transaction_type,
                                                          transaction_date=transaction_date,
-                                                         creation_date=creation_date)
+                                                         creation_date=creation_date, company=company)
 
         return JsonResponse(data={'company_name': company_name}, status=200)
 

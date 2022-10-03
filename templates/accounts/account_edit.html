@@ -150,7 +150,7 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <input type="tel" name="new_account_id" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Account ID' %}" value="{{ account.account_id }}" minlength="11" maxlength="11"/>
+                                        <input type="tel" name="new_account_id" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Account ID' %}" value="{{ account.account_id }}" minlength="28" maxlength="28"/>
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -173,13 +173,20 @@
                                     <!--end::Col-->
                                     <!--begin::Label-->
                                 <div class="row mb-6">
-                                    <label class="col-lg-4 col-form-label fw-semibold fs-">{% trans "Company" %}</label>
+                                    <label class="col-lg-4 col-form-label fw-semibold fs-">{% trans "Companies" %}</label>
 
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company_id" >
-															<option value="{{ company.uid }}">{{ company }}</option>
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company_id" data-placeholder="Companies">
+                                                            <option></option>
+                                                            {% for company in companies %}
+                                                            {% if account.company == company %}
+                                                            <option value="{{ company.uid }}" selected>{{ company }}</option>
+                                                            {% else %}
+                                                            <option value="{{ company.uid }}">{{ company }}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
 														</select>
                                     </div>
                                     <!--end::Col-->

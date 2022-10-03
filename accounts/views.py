@@ -102,27 +102,28 @@ def delete_this_account(request, com_uid, ac_uid):
         return redirect('customuser:bad_request')
 
 
+@login_required(login_url='/signin/')
 def account_edit(request, ac_uid):
+    user_account = User_Account.objects.get(owner=request.user)
 
-    account = Account.objects.filter(uid=ac_uid)
+    account = Account.objects.get(user_account=user_account, uid=ac_uid)
+    companies = Company.objects.filter(user_account=user_account)
     currencies = Currency.objects.all()
     banks = Bank.objects.all()
 
-    if account[0].company.user == request.user:
-
-        if request.method == 'GET':
-            if account:
-                return render(request, 'accounts/account_edit.html', {'account': account[0],
-                                                                      'company': account[0].company,
-                                                                      'currencies': currencies,
-                                                                      'banks': banks})
-            else:
-                return redirect('customuser:bad_request')
+    if request.method == 'GET':
+        if account:
+            return render(request, 'accounts/account_edit.html', {'account': account,
+                                                                  'companies': companies,
+                                                                  'currencies': currencies,
+                                                                  'banks': banks})
         else:
-            account_id = request.POST.get('new_account_id')
-            account_description = request.POST.get('account_description')
-            new_bank = request.POST.get('bank_name')
-            currency_name = request.POST.get('currency_name')
-            account.update(account_id=account_id, bank=new_bank, currency=currency_name,
-                           account_description=account_description)
-            return HttpResponseRedirect(f'/profile/accounts/{ac_uid}/')
+            return redirect('customuser:bad_request')
+    else:
+        account_id = request.POST.get('new_account_id')
+        account_description = request.POST.get('account_description')
+        new_bank = request.POST.get('bank_name')
+        currency_name = request.POST.get('currency_name')
+        account.update(account_id=account_id, bank=new_bank, currency=currency_name,
+                       account_description=account_description)
+        return HttpResponseRedirect(f'/profile/accounts/{ac_uid}/')

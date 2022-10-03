@@ -64,7 +64,7 @@
 												<!--begin::Header-->
 												<div class="card-header py-5">
 													<!--begin::Title-->
-													<h3 class="card-title fw-bold text-gray-800">Sales Analytics</h3>
+													<h3 class="card-title fw-bold text-gray-800">Cashflow analytics</h3>
 													<!--end::Title-->
 
 												</div>
@@ -77,7 +77,7 @@
 														<div class="me-md-2">
 															<!--begin::Statistics-->
 															<div class="d-flex mb-2">
-																<span class="fs-4 fw-semibold text-gray-400 me-1">$</span>
+																<span class="fs-4 fw-semibold text-gray-400 me-2">zł</span>
 																<span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{ amount_of_income }}</span>
 															</div>
 															<!--end::Statistics-->
@@ -90,7 +90,7 @@
 														<div class="border-start-dashed border-end-dashed border-1 border-gray-300 px-5 ps-md-10 pe-md-7 me-md-5">
 															<!--begin::Statistics-->
 															<div class="d-flex mb-2">
-																<span class="fs-4 fw-semibold text-gray-400 me-1">$</span>
+																<span class="fs-4 fw-semibold text-gray-400 me-1">zł</span>
 																<span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{ amount_of_expenses }}</span>
 															</div>
 															<!--end::Statistics-->
@@ -104,7 +104,7 @@
 															<!--begin::Statistics-->
 															<div class="d-flex align-items-center mb-2">
 																<!--begin::Currency-->
-																<span class="fs-4 fw-semibold text-gray-400 align-self-start me-1">$</span>
+																<span class="fs-4 fw-semibold text-gray-400 align-self-start me-1">zł</span>
 																<!--end::Currency-->
 																<!--begin::Value-->
 																<span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{ gap }}</span>
@@ -154,7 +154,7 @@
 												<!--begin::Header-->
 												<div class="card-header py-5">
 													<!--begin::Title-->
-													<h3 class="card-title fw-bold text-gray-800">Cashflow analytics</h3>
+													<h3 class="card-title fw-bold text-gray-800">Sales AnalyticsS</h3>
 													<!--end::Title-->
 												</div>
 												<!--end::Header-->
@@ -166,7 +166,7 @@
 														<div class="me-md-2">
 															<!--begin::Statistics-->
 															<div class="d-flex mb-2">
-																<span class="fs-4 fw-semibold text-gray-400 me-1">$</span>
+																<span class="fs-4 fw-semibold text-gray-400 me-1">zł</span>
 																<span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{ total_order_value|floatformat:2 }}</span>
 															</div>
 															<!--end::Statistics-->
@@ -179,7 +179,7 @@
 														<div class="border-start-dashed border-end-dashed border-1 border-gray-300 px-5 ps-md-10 pe-md-7 me-md-5">
 															<!--begin::Statistics-->
 															<div class="d-flex mb-2">
-																<span class="fs-4 fw-semibold text-gray-400 me-1">$</span>
+																<span class="fs-4 fw-semibold text-gray-400 me-1">zł</span>
 																<span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{ average_order_value|floatformat:2 }}</span>
 															</div>
 															<!--end::Statistics-->
@@ -432,7 +432,7 @@ KTChartsWidget36.init()
 						xaxis: {
 							categories: ["",
 							{% for order_date in order_val_dict.keys %}
-							"{{ order_date }}",
+							"{{ order_date|safe }}",
 							{% endfor %}
 							 ""],
 							axisBorder: {
@@ -468,7 +468,7 @@ KTChartsWidget36.init()
 							}
 						},
 						yaxis: {
-							max: {{ max_order }},
+							max: {{ max_order|safe }},
 							min: 0,
 							tickAmount: 6,
 							labels: {

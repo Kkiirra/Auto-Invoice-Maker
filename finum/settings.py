@@ -108,9 +108,9 @@ LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 LANGUAGES = (
     ('en', _("English")),
-    ('ru', _('Russian')),
-    ('uk', _('Ukrainian')),
-    ('pl', _("Polish")),
+    # ('ru', _('Russian')),
+    # ('uk', _('Ukrainian')),
+    # ('pl', _("Polish")),
 )
 
 TIME_ZONE = 'UTC'

@@ -3,529 +3,720 @@
 {% load i18n %}
 {% load static i18n %}
 
-
 {% block nav_invoice %}
-    here
+here
 {% endblock nav_invoice %}
 
+{% block head %}
+<link href="{% static 'plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" />
+{% endblock head %}
 
 {% block content %}
+<!--begin::Main-->
 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-						<!--begin::Content wrapper-->
-						<div class="d-flex flex-column flex-column-fluid">
-							<!--begin::Toolbar-->
-							<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-								<!--begin::Toolbar container-->
-								<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
-									<!--begin::Page title-->
-									<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-										<!--begin::Title-->
-										<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Create</h1>
-										<!--end::Title-->
-										<!--begin::Breadcrumb-->
-										<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-											<!--begin::Item-->
-											<li class="breadcrumb-item text-muted">
-												<a href="/metronic8/demo1/../demo1/index.html" class="text-muted text-hover-primary">Invoices</a>
-											</li>
-											<!--end::Item-->
-											<!--begin::Item-->
-											<li class="breadcrumb-item">
-												<span class="bullet bg-gray-400 w-5px h-2px"></span>
-											</li>
-											<!--end::Item-->
-											<!--begin::Item-->
-											<li class="breadcrumb-item text-muted">Invoice Manager</li>
-											<!--end::Item-->
-										</ul>
-										<!--end::Breadcrumb-->
-									</div>
-									<!--end::Page title-->
-									<!--begin::Actions-->
-<!--									<div class="d-flex align-items-center gap-2 gap-lg-3">-->
-<!--										&lt;!&ndash;begin::Filter menu&ndash;&gt;-->
-<!--										<div class="m-0">-->
-<!--											&lt;!&ndash;begin::Menu toggle&ndash;&gt;-->
-<!--											<a href="#" class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-color-primary fw-bold" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">-->
-<!--											&lt;!&ndash;begin::Svg Icon | path: icons/duotune/general/gen031.svg&ndash;&gt;-->
-<!--											<span class="svg-icon svg-icon-6 svg-icon-muted me-1">-->
-<!--												<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-<!--													<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor"></path>-->
-<!--												</svg>-->
-<!--											</span>-->
-<!--											&lt;!&ndash;end::Svg Icon&ndash;&gt;Filter</a>-->
-<!--											&lt;!&ndash;end::Menu toggle&ndash;&gt;-->
-<!--											&lt;!&ndash;begin::Menu 1&ndash;&gt;-->
-<!--											<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6320f4f302444">-->
-<!--												&lt;!&ndash;begin::Header&ndash;&gt;-->
-<!--												<div class="px-7 py-5">-->
-<!--													<div class="fs-5 text-dark fw-bold">Filter Options</div>-->
-<!--												</div>-->
-<!--												&lt;!&ndash;end::Header&ndash;&gt;-->
-<!--												&lt;!&ndash;begin::Menu separator&ndash;&gt;-->
-<!--												<div class="separator border-gray-200"></div>-->
-<!--												&lt;!&ndash;end::Menu separator&ndash;&gt;-->
-<!--												&lt;!&ndash;begin::Form&ndash;&gt;-->
-<!--												<div class="px-7 py-5">-->
-<!--													&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--													<div class="mb-10">-->
-<!--														&lt;!&ndash;begin::Label&ndash;&gt;-->
-<!--														<label class="form-label fw-semibold">Status:</label>-->
-<!--														&lt;!&ndash;end::Label&ndash;&gt;-->
-<!--														&lt;!&ndash;begin::Input&ndash;&gt;-->
-<!--														<div>-->
-<!--															<select class="form-select form-select-solid select2-hidden-accessible" data-kt-select2="true" data-placeholder="Select option" data-dropdown-parent="#kt_menu_6320f4f302444" data-allow-clear="true" data-select2-id="select2-data-7-1jb8" tabindex="-1" aria-hidden="true" data-kt-initialized="1">-->
-<!--																<option data-select2-id="select2-data-9-gagm"></option>-->
-<!--																<option value="1">Approved</option>-->
-<!--																<option value="2">Pending</option>-->
-<!--																<option value="2">In Process</option>-->
-<!--																<option value="2">Rejected</option>-->
-<!--															</select><span class="select2 select2-container select2-container&#45;&#45;bootstrap5" dir="ltr" data-select2-id="select2-data-8-hde6" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection&#45;&#45;single form-select form-select-solid" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-drji-container" aria-controls="select2-drji-container"><span class="select2-selection__rendered" id="select2-drji-container" role="textbox" aria-readonly="true" title="Select option"><span class="select2-selection__placeholder">Select option</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
-<!--														</div>-->
-<!--														&lt;!&ndash;end::Input&ndash;&gt;-->
-<!--													</div>-->
-<!--													&lt;!&ndash;end::Input group&ndash;&gt;-->
-<!--													&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--													<div class="mb-10">-->
-<!--														&lt;!&ndash;begin::Label&ndash;&gt;-->
-<!--														<label class="form-label fw-semibold">Member Type:</label>-->
-<!--														&lt;!&ndash;end::Label&ndash;&gt;-->
-<!--														&lt;!&ndash;begin::Options&ndash;&gt;-->
-<!--														<div class="d-flex">-->
-<!--															&lt;!&ndash;begin::Options&ndash;&gt;-->
-<!--															<label class="form-check form-check-sm form-check-custom form-check-solid me-5">-->
-<!--																<input class="form-check-input" type="checkbox" value="1">-->
-<!--																<span class="form-check-label">Author</span>-->
-<!--															</label>-->
-<!--															&lt;!&ndash;end::Options&ndash;&gt;-->
-<!--															&lt;!&ndash;begin::Options&ndash;&gt;-->
-<!--															<label class="form-check form-check-sm form-check-custom form-check-solid">-->
-<!--																<input class="form-check-input" type="checkbox" value="2" checked="checked">-->
-<!--																<span class="form-check-label">Customer</span>-->
-<!--															</label>-->
-<!--															&lt;!&ndash;end::Options&ndash;&gt;-->
-<!--														</div>-->
-<!--														&lt;!&ndash;end::Options&ndash;&gt;-->
-<!--													</div>-->
-<!--													&lt;!&ndash;end::Input group&ndash;&gt;-->
-<!--													&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--													<div class="mb-10">-->
-<!--														&lt;!&ndash;begin::Label&ndash;&gt;-->
-<!--														<label class="form-label fw-semibold">Notifications:</label>-->
-<!--														&lt;!&ndash;end::Label&ndash;&gt;-->
-<!--														&lt;!&ndash;begin::Switch&ndash;&gt;-->
-<!--														<div class="form-check form-switch form-switch-sm form-check-custom form-check-solid">-->
-<!--															<input class="form-check-input" type="checkbox" value="" name="notifications" checked="checked">-->
-<!--															<label class="form-check-label">Enabled</label>-->
-<!--														</div>-->
-<!--														&lt;!&ndash;end::Switch&ndash;&gt;-->
-<!--													</div>-->
-<!--													&lt;!&ndash;end::Input group&ndash;&gt;-->
-<!--													&lt;!&ndash;begin::Actions&ndash;&gt;-->
-<!--													<div class="d-flex justify-content-end">-->
-<!--														<button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Reset</button>-->
-<!--														<button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>-->
-<!--													</div>-->
-<!--													&lt;!&ndash;end::Actions&ndash;&gt;-->
-<!--												</div>-->
-<!--												&lt;!&ndash;end::Form&ndash;&gt;-->
-<!--											</div>-->
-<!--											&lt;!&ndash;end::Menu 1&ndash;&gt;-->
-<!--										</div>-->
-<!--										&lt;!&ndash;end::Filter menu&ndash;&gt;-->
-<!--										&lt;!&ndash;begin::Secondary button&ndash;&gt;-->
-<!--										&lt;!&ndash;end::Secondary button&ndash;&gt;-->
-<!--										&lt;!&ndash;begin::Primary button&ndash;&gt;-->
-<!--										<a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>-->
-<!--										&lt;!&ndash;end::Primary button&ndash;&gt;-->
-<!--									</div>-->
-									<!--end::Actions-->
-								</div>
-								<!--end::Toolbar container-->
-							</div>
-							<!--end::Toolbar-->
-							<!--begin::Content-->
-							<div id="kt_app_content" class="app-content flex-column-fluid">
-								<!--begin::Content container-->
-								<div id="kt_app_content_container" class="app-container container-xxl">
-									<!--begin::Layout-->
-									<div class="d-flex flex-column flex-lg-row">
-										<!--begin::Content-->
-										<div class="flex-lg-row-fluid mb-10 mb-lg-0 me-lg-7 me-xl-10">
-											<!--begin::Card-->
-											<div class="card">
-												<!--begin::Card body-->
-												<div class="card-body p-12">
-													<!--begin::Form-->
-													<form action="" id="kt_invoice_form">
-														<!--begin::Wrapper-->
-														<div class="d-flex flex-column align-items-start flex-xxl-row">
-															<!--begin::Input group-->
-															<div class="d-flex align-items-center flex-equal fw-row me-4 order-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">
-																<!--begin::Date-->
-																<div class="fs-6 fw-bold text-gray-700 text-nowrap">Date:</div>
-																<!--end::Date-->
-																<!--begin::Input-->
-																<div class="position-relative d-flex align-items-center w-150px">
-																	<!--begin::Datepicker-->
-																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="invoice_date" type="text" readonly="readonly">
-																	<!--end::Datepicker-->
-																	<!--begin::Icon-->
-																	<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-																	<span class="svg-icon svg-icon-2 position-absolute ms-4 end-0">
-																		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																			<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
-																		</svg>
-																	</span>
-																	<!--end::Svg Icon-->
-																	<!--end::Icon-->
-																</div>
-																<!--end::Input-->
-															</div>
-															<!--end::Input group-->
-															<!--begin::Input group-->
-															<div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">
-																<span class="fs-2x fw-bold text-gray-800">Invoice #</span>
-																<input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-125px" value="2021001" placehoder="...">
-															</div>
-															<!--end::Input group-->
-															<!--begin::Input group-->
-															<div class="d-flex align-items-center justify-content-end flex-equal order-3 fw-row" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">
-																<!--begin::Date-->
-																<div class="fs-6 fw-bold text-gray-700 text-nowrap">Due Date:</div>
-																<!--end::Date-->
-																<!--begin::Input-->
-																<div class="position-relative d-flex align-items-center w-150px">
-																	<!--begin::Datepicker-->
-																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="invoice_due_date" type="text" readonly="readonly">
-																	<!--end::Datepicker-->
-																	<!--begin::Icon-->
-																	<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-																	<span class="svg-icon svg-icon-2 position-absolute end-0 ms-4">
-																		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																			<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
-																		</svg>
-																	</span>
-																	<!--end::Svg Icon-->
-																	<!--end::Icon-->
-																</div>
-																<!--end::Input-->
-															</div>
-															<!--end::Input group-->
+    <!--begin::Content wrapper-->
+    <div class="d-flex flex-column flex-column-fluid">
+        <!--begin::Toolbar-->
+        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+            <!--begin::Toolbar container-->
+            <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">{% trans "Invoices" %}</h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                        <!--begin::Item-->
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">{% trans "Invoices" %}</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar container-->
+        </div>
+        <!--end::Toolbar-->
+        <!--begin::Content-->
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <!--begin::Content container-->
+            <div id="kt_app_content_container" class="app-container container-xxl">
+                <!--begin::Card-->
+                <div class="card">
+                    <!--begin::Card header-->
+                    <div class="card-header border-0 pt-6">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <!--begin::Search-->
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                                <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="{% trans 'Search' %}" />
+                            </div>
+                            <!--end::Search-->
+                        </div>
+                        <!--begin::Card title-->
+                        <!--begin::Card toolbar-->
+                        <div class="card-toolbar">
+                            <!--begin::Toolbar-->
+                            <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                                <!--begin::Filter-->
+                                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg <Icon-->{% trans "Filter" %}</Icon--></button>
+                                <!--begin::Menu 1-->
+                                <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px kt-toolbar-filter" data-kt-menu="true" id="kt-toolbar-filter">
+														<!--begin::Header-->
+														<div class="px-7 py-5">
+															<div class="fs-4 text-dark fw-bold">Filter Options</div>
 														</div>
-														<!--end::Top-->
+														<!--end::Header-->
 														<!--begin::Separator-->
-														<div class="separator separator-dashed my-10"></div>
+														<div class="separator border-gray-200"></div>
 														<!--end::Separator-->
-														<!--begin::Wrapper-->
-														<div class="mb-0">
-															<!--begin::Row-->
-															<div class="row gx-10 mb-5">
-																<!--begin::Col-->
-																<div class="col-lg-6">
-																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Company</label>
-																	<!--begin::Input group-->
-																	<div class="mb-5">
-																		<input type="text" class="form-control form-control-solid" placeholder="Company">
-																	</div>
-																	<!--end::Input group-->
-<!--																	&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--																	<div class="mb-5">-->
-<!--																		<input type="text" class="form-control form-control-solid" placeholder="Email">-->
-<!--																	</div>-->
-<!--																	&lt;!&ndash;end::Input group&ndash;&gt;-->
-<!--																	&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--																	<div class="mb-5">-->
-<!--																		<textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="Who is this invoice from?"></textarea>-->
-<!--																	</div>-->
-<!--																	&lt;!&ndash;end::Input group&ndash;&gt;-->
-																</div>
-																<!--end::Col-->
-																<!--begin::Col-->
-																<div class="col-lg-6">
-																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Contractor</label>
-																	<!--begin::Input group-->
-																	<div class="mb-5">
-																		<input type="text" class="form-control form-control-solid" placeholder="Contractor">
-																	</div>
-																	<!--end::Input group-->
-<!--																	&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--																	<div class="mb-5">-->
-<!--																		<input type="text" class="form-control form-control-solid" placeholder="Email">-->
-<!--																	</div>-->
-<!--																	&lt;!&ndash;end::Input group&ndash;&gt;-->
-<!--																	&lt;!&ndash;begin::Input group&ndash;&gt;-->
-<!--																	<div class="mb-5">-->
-<!--																		<textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="What is this invoice for?"></textarea>-->
-<!--																	</div>-->
-<!--																	&lt;!&ndash;end::Input group&ndash;&gt;-->
-																</div>
-																<!--end::Col-->
+														<!--begin::Content-->
+														<div class="px-7 py-5">
+
+                                                            <div class="mb-10">
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Date:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+                                                                <input placeholder="Date from - to" class="form-control form-control-lg form-control-solid" type="text" name="datetimefilter" id="datetimefilter"/>
+
+																<!--end::Input-->
+
 															</div>
-															<!--end::Row-->
-															<!--begin::Table wrapper-->
-															<div class="table-responsive mb-10">
-																<!--begin::Table-->
-																<table class="table g-5 gs-0 mb-0 fw-bold text-gray-700" data-kt-element="items">
-																	<!--begin::Table head-->
-																	<thead>
-																		<tr class="border-bottom fs-7 fw-bold text-gray-700 text-uppercase">
-																			<th class="min-w-300px w-475px">Item</th>
-																			<th class="min-w-100px w-100px">QTY</th>
-																			<th class="min-w-150px w-150px">Price</th>
-																			<th class="min-w-100px w-150px text-end">Total</th>
-																			<th class="min-w-75px w-75px text-end">Action</th>
-																		</tr>
-																	</thead>
-																	<!--end::Table head-->
-																	<!--begin::Table body-->
-																	<tbody>
-																		<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-																			<td class="pe-7">
-																				<input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name">
-																				<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description">
-																			</td>
-																			<td class="ps-0">
-																				<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="1" data-kt-element="quantity">
-																			</td>
-																			<td>
-																				<input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0.00" value="0.00" data-kt-element="price">
-																			</td>
-																			<td class="pt-8 text-end text-nowrap">$
-																			<span data-kt-element="total">0.00</span></td>
-																			<td class="pt-5 text-end">
-																				<button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
-																					<!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-																					<span class="svg-icon svg-icon-3">
-																						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																							<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"></path>
-																							<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"></path>
-																							<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"></path>
-																						</svg>
-																					</span>
-																					<!--end::Svg Icon-->
-																				</button>
-																			</td>
-																		</tr>
-																	</tbody>
-																	<!--end::Table body-->
-																	<!--begin::Table foot-->
-																	<tfoot>
-																		<tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
-																			<th class="text-primary">
-																				<button class="btn btn-link py-1" data-kt-element="add-item">Add item</button>
-																			</th>
-																			<th colspan="2" class="border-bottom border-bottom-dashed ps-0">
-																				<div class="d-flex flex-column align-items-start">
-																					<div class="fs-5">Subtotal</div>
-<!--																					<button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">Add tax</button>-->
-<!--																					<button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">Add discount</button>-->
-																				</div>
-																			</th>
-																			<th colspan="2" class="border-bottom border-bottom-dashed text-end">$
-																			<span data-kt-element="sub-total">0.00</span></th>
-																		</tr>
-																		<tr class="align-top fw-bold text-gray-700">
-																			<th></th>
-																			<th colspan="2" class="fs-4 ps-0">Total</th>
-																			<th colspan="2" class="text-end fs-4 text-nowrap">$
-																			<span data-kt-element="grand-total">0.00</span></th>
-																		</tr>
-																	</tfoot>
-																	<!--end::Table foot-->
-																</table>
+                                                            <div class="mb-10">
+
+                                                                <label class="form-label fs-5 fw-semibold mb-3">Order Amount: <span id="kt_slider_basic_min"></span>  -  <span id="kt_slider_basic_max"></span></label>
+                                                                <div id="kt_slider_basic"></div>
+
+
+                                                            </div>
+
+                                                            <div class="mb-10">
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Companies:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Companies" data-dropdown-parent="#kt-toolbar-filter" id="company_filter_select" data-allow-clear="true">
+                                                                    <option></option>
+                                                                    {% for company in companies %}
+                                                                    <option value="{{company}}">{{ company }}</option>
+                                                                    {% endfor %}
+																</select>
+																<!--end::Input-->
 															</div>
-															<!--end::Table-->
-															<!--begin::Item template-->
-															<table class="table d-none" data-kt-element="item-template">
-																<tbody><tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-																	<td class="pe-7">
-																		<input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name">
-																		<input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description">
-																	</td>
-																	<td class="ps-0">
-																		<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" data-kt-element="quantity">
-																	</td>
-																	<td>
-																		<input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0.00" data-kt-element="price">
-																	</td>
-																	<td class="pt-8 text-end">$
-																	<span data-kt-element="total">0.00</span></td>
-																	<td class="pt-5 text-end">
-																		<button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
-																			<!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-																			<span class="svg-icon svg-icon-3">
-																				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																					<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor"></path>
-																					<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor"></path>
-																					<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor"></path>
-																				</svg>
-																			</span>
-																			<!--end::Svg Icon-->
-																		</button>
-																	</td>
-																</tr>
-															</tbody></table>
-															<table class="table d-none" data-kt-element="empty-template">
-																<tbody><tr data-kt-element="empty">
-																	<th colspan="5" class="text-muted text-center py-10">No items</th>
-																</tr>
-															</tbody></table>
-															<!--end::Item template-->
-															<!--begin::Notes-->
-															<div class="mb-0">
-																<label class="form-label fs-6 fw-bold text-gray-700">Notes</label>
-																<textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="Thanks for your business"></textarea>
+                                                            <div class="mb-10">
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Contractors:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Contractor" data-dropdown-parent="#kt-toolbar-filter" id="contractor_filter_select" data-allow-clear="true">
+                                                                    <option></option>
+                                                                    {% for contractor in contractors %}
+                                                                    <option value="{{contractor.contractor_name}}">{{ contractor.contractor_name }}</option>
+                                                                    {% endfor %}
+																</select>
+																<!--end::Input-->
 															</div>
-															<!--end::Notes-->
+															<div class="mb-10">
+																<!--begin::Label-->
+																<label class="form-label fs-5 fw-semibold mb-3">Currency:</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<select class="form-select form-select-solid" data-placeholder="Currency" id="currency_filter_select" data-allow-clear="true">
+                                                                    <option></option>
+                                                                    {% for currency in currencies %}
+                                                                    <option value="{{ currency }}">{{ currency }}</option>
+                                                                    {% endfor %}
+																</select>
+																<!--end::Input-->
+
+															</div>
+															<!--end::Input group-->
+
+															<!--begin::Actions-->
+															<div class="d-flex justify-content-end">
+																<button type="reset" class="btn btn-light btn-active-light-primary me-2" id="reset_options">Reset</button>
+																<button type="click" class="btn btn-primary" id="apply_filter" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Apply</button>
+															</div>
+															<!--end::Actions-->
 														</div>
-														<!--end::Wrapper-->
-													</form>
-													<!--end::Form-->
-												</div>
-												<!--end::Card body-->
-											</div>
-											<!--end::Card-->
-										</div>
-										<!--end::Content-->
-										<!--begin::Sidebar-->
-										<div class="flex-lg-auto min-w-lg-300px">
-											<!--begin::Card-->
-											<div class="card" data-kt-sticky="true" data-kt-sticky-name="invoice" data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{lg: '250px', lg: '300px'}" data-kt-sticky-left="auto" data-kt-sticky-top="150px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
-												<!--begin::Card body-->
-												<div class="card-body p-10">
-													<!--begin::Input group-->
-													<div class="mb-10">
-														<!--begin::Label-->
-														<label class="form-label fw-bold fs-6 text-gray-700">Currency</label>
-														<!--end::Label-->
-														<!--begin::Select-->
-														<select name="currnecy" aria-label="Select a Timezone" data-control="select2" data-placeholder="Select currency" class="form-select form-select-solid select2-hidden-accessible" data-select2-id="select2-data-10-wqpm" tabindex="-1" aria-hidden="true" data-kt-initialized="1">
-															<option value="" data-select2-id="select2-data-12-rox1"></option>
-															<option data-kt-flag="flags/united-states.svg" value="USD">
-															USD&nbsp;-&nbsp;USA dollar</option>
-															<option data-kt-flag="flags/united-kingdom.svg" value="GBP">
-															GBP&nbsp;-&nbsp;British pound</option>
-															<option data-kt-flag="flags/australia.svg" value="AUD">
-															AUD&nbsp;-&nbsp;Australian dollar</option>
-															<option data-kt-flag="flags/japan.svg" value="JPY">
-															JPY&nbsp;-&nbsp;Japanese yen</option>
-															<option data-kt-flag="flags/sweden.svg" value="SEK">
-															SEK&nbsp;-&nbsp;Swedish krona</option>
-															<option data-kt-flag="flags/canada.svg" value="CAD">
-															CAD&nbsp;-&nbsp;Canadian dollar</option>
-															<option data-kt-flag="flags/switzerland.svg" value="CHF">
-															CHF&nbsp;-&nbsp;Swiss franc</option>
-														</select><span class="select2 select2-container select2-container--bootstrap5" dir="ltr" data-select2-id="select2-data-11-2jk2" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single form-select form-select-solid" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-currnecy-zn-container" aria-controls="select2-currnecy-zn-container"><span class="select2-selection__rendered" id="select2-currnecy-zn-container" role="textbox" aria-readonly="true" title="Select currency"><span class="select2-selection__placeholder">Select currency</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-														<!--end::Select-->
+														<!--end::Content-->
 													</div>
-													<!--end::Input group-->
-													<!--begin::Separator-->
-													<div class="separator separator-dashed mb-8"></div>
-													<!--end::Separator-->
-													<!--begin::Input group-->
-													<div class="mb-8">
-														<!--begin::Option-->
-														<label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
-															<span class="form-check-label ms-0 fw-bold fs-6 text-gray-700">Payment method</span>
-															<input class="form-check-input" type="checkbox" checked="checked" value="">
-														</label>
-														<!--end::Option-->
-<!--														&lt;!&ndash;begin::Option&ndash;&gt;-->
-<!--														<label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">-->
-<!--															<span class="form-check-label ms-0 fw-bold fs-6 text-gray-700">Late fees</span>-->
-<!--															<input class="form-check-input" type="checkbox" value="">-->
-<!--														</label>-->
-<!--														&lt;!&ndash;end::Option&ndash;&gt;-->
-<!--														&lt;!&ndash;begin::Option&ndash;&gt;-->
-<!--														<label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack">-->
-<!--															<span class="form-check-label ms-0 fw-bold fs-6 text-gray-700">Notes</span>-->
-<!--															<input class="form-check-input" type="checkbox" value="">-->
-<!--														</label>-->
-<!--														&lt;!&ndash;end::Option&ndash;&gt;-->
-													</div>
-													<!--end::Input group-->
-													<!--begin::Separator-->
-													<div class="separator separator-dashed mb-8"></div>
-													<!--end::Separator-->
-													<!--begin::Actions-->
-													<div class="mb-0">
-														<!--begin::Row-->
-														<div class="row mb-5">
-															<!--begin::Col-->
-															<div class="col">
-																<a href="#" class="btn btn-light btn-active-light-primary w-100">Preview</a>
-															</div>
-															<!--end::Col-->
-															<!--begin::Col-->
-															<div class="col">
-																<a href="#" class="btn btn-light btn-active-light-primary w-100">Download</a>
-															</div>
-															<!--end::Col-->
-														</div>
-														<!--end::Row-->
-														<button type="submit" href="#" class="btn btn-primary w-100" id="kt_invoice_submit_button">
-														<!--begin::Svg Icon | path: icons/duotune/general/gen016.svg-->
-														<span class="svg-icon svg-icon-3">
-															<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M15.43 8.56949L10.744 15.1395C10.6422 15.282 10.5804 15.4492 10.5651 15.6236C10.5498 15.7981 10.5815 15.9734 10.657 16.1315L13.194 21.4425C13.2737 21.6097 13.3991 21.751 13.5557 21.8499C13.7123 21.9488 13.8938 22.0014 14.079 22.0015H14.117C14.3087 21.9941 14.4941 21.9307 14.6502 21.8191C14.8062 21.7075 14.9261 21.5526 14.995 21.3735L21.933 3.33649C22.0011 3.15918 22.0164 2.96594 21.977 2.78013C21.9376 2.59432 21.8452 2.4239 21.711 2.28949L15.43 8.56949Z" fill="currentColor"></path>
-																<path opacity="0.3" d="M20.664 2.06648L2.62602 9.00148C2.44768 9.07085 2.29348 9.19082 2.1824 9.34663C2.07131 9.50244 2.00818 9.68731 2.00074 9.87853C1.99331 10.0697 2.04189 10.259 2.14054 10.4229C2.23919 10.5869 2.38359 10.7185 2.55601 10.8015L7.86601 13.3365C8.02383 13.4126 8.19925 13.4448 8.37382 13.4297C8.54839 13.4145 8.71565 13.3526 8.85801 13.2505L15.43 8.56548L21.711 2.28448C21.5762 2.15096 21.4055 2.05932 21.2198 2.02064C21.034 1.98196 20.8409 1.99788 20.664 2.06648Z" fill="currentColor"></path>
-															</svg>
-														</span>
-														<!--end::Svg Icon-->Send Invoice</button>
-													</div>
-													<!--end::Actions-->
-												</div>
-												<!--end::Card body-->
-											</div>
-											<!--end::Card-->
-										</div>
-										<!--end::Sidebar-->
+                                <!--begin::Add customer-->
+                                <a type="button" class="btn btn-primary" href="{% url 'invoice:invoice_add' %}">{% trans "Add Invoice" %}</a>
+                                <!--end::Add customer-->
+                            </div>
+                            <!--end::Toolbar-->
+                            <!--begin::Group actions-->
+                            <div class="d-flex justify-content-end align-items-center d-none" data-kt-customer-table-toolbar="selected">
+                                <div class="fw-bold me-5">
+                                <span class="me-2" data-kt-customer-table-select="selected_count"></span>Selected</div>
+                                <button type="button" class="btn btn-danger" data-kt-customer-table-select="delete_selected">Delete Selected</button>
+                            </div>
+                            <!--end::Group actions-->
+                        </div>
+                        <!--end::Card toolbar-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <!--begin::Table-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px sorting">{% trans "Invoice Date" %}</th>
+                                    <th class="min-w-125px sorting">{% trans "Invoice Total" %}</th>
+                                    <th class="min-w-125px ">{% trans "Contractor" %}</th>
+                                    <th class="min-w-125px ">{% trans "Company" %}</th>
+                                    <th class="min-w-125px ">{% trans "Account" %}</th>
+                                    <th class="min-w-125px ">{% trans "Stats" %}</th>
+                                    <th class="min-w-125px ">{% trans "Orders" %}</th>
+                                    <th class="text-end min-w-70px">{% trans "Actions" %}</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-semibold text-gray-600">
+                                {% for invoice in invoices %}
+                                    <tr>
+                                    <td> {{ invoice.invoice_date|date:"d.m.Y" }}</td>
+                                    <td>{{ invoice.invoice_sum }}</td>
+                                    <td>
+                                        <a href="{% url 'contractors:contractor_edit' contr_uid=invoice.contractor.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ invoice.contractor }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'company:this_company' com_uid=invoice.company.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ invoice.company }}</a>
+                                    </td>
+                                        <td>{{ invoice.account }}</td>
+                                    <td>
+                                        {% if invoice.invoice_status.status == 'Draft' %}
+                                            <div class="badge badge-light-warning" style="padding: 5px 5px">Draft</div>
+                                        {% elif invoice.invoice_status.status == 'Paid' %}
+                                            <div class="badge badge-light-success" style="padding: 5px 5px">Paid</div>
+                                        {% elif invoice.invoice_status.status == 'Canceled' %}
+                                            <div class="badge badge-light-danger" style="padding: 5px 5px">Canceled</div>
+                                        {% else %}
+                                            <div class="badge badge-light-primary" style="padding: 5px 5px">Sent</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if invoice.order %}
+                                            <a href="{% url 'orders:order_edit' ord_uid=invoice.order.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ invoice.order.order_name }}</a>
+                                        {% else %}
+                                            Not selected
+                                        {% endif %}
+                                    </td>
+                                    <!--end::Name=-->
+                                    <!--begin::Email=-->
+                                    <!--end::Email=-->
+                                    <!--begin::Company=-->
+                                    <!--end::Company=-->
+                                    <!--begin::Payment method=-->
+                                    <!--end::Payment method=-->
+                                    <!--begin::Date=-->
+                                    <!--end::Date=-->
+                                    <!--begin::Action=-->
+                                    <td class="text-end">
+                                        <a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">{% trans "Actions" %}
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                        <span class="svg-icon svg-icon-5 m-0">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor" />
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon--></a>
+                                        <!--begin::Menu-->
+                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+                                            <!--begin::Menu item-->
+                                            <div class="menu-item px-3">
+                                                <a href="{% url 'invoice:invoice_edit' inv_uid=invoice.uid %}" class="menu-link px-3">{% trans "Edit" %}</a>
+                                            </div>
+                                            <!--end::Menu item-->
+                                            <!--begin::Menu item-->
+                                            <div class="menu-item px-3">
+                                                <a class="menu-link delete_data_element" value="{{ invoice.uid }}">{% trans "Delete" %}</a>
+                                            </div>
+                                            <!--end::Menu item-->
+                                            </div>
+                                        <!--end::Menu-->
+                                    </td>
+                                    <!--end::Action=-->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end::Table-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+                <!--begin::Modals-->
+                <!--begin::Modal - Customers - Add-->
+                <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-650px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Form-->
+							<form class="form" action="{% url 'invoice:invoice_add' %}" id="kt_modal_add_customer_form" method="POST" data-kt-redirect="{% url 'company:companies' %}">
+								{% csrf_token %}
+								<!--begin::Modal header-->
+								<div class="modal-header" id="kt_modal_add_customer_header">
+									<!--begin::Modal title-->
+									<h2 class="fw-bold">{% trans "Add new Order" %}</h2>
+									<!--end::Modal title-->
+									<!--begin::Close-->
+									<div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+										<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+										<span class="svg-icon svg-icon-1">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+												<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
 									</div>
-									<!--end::Layout-->
+									<!--end::Close-->
 								</div>
-								<!--end::Content container-->
-							</div>
-							<!--end::Content-->
-						</div>
-						<!--end::Content wrapper-->
-						<!--begin::Footer-->
-						<div id="kt_app_footer" class="app-footer">
-							<!--begin::Footer container-->
-							<div class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
-								<!--begin::Copyright-->
-								<div class="text-dark order-2 order-md-1">
-									<span class="text-muted fw-semibold me-1">2022©</span>
-									<a href="https://keenthemes.com" target="_blank" class="text-gray-800 text-hover-primary">Keenthemes</a>
+								<!--end::Modal header-->
+								<!--begin::Modal body-->
+								<div class="modal-body py-10 px-lg-17">
+									<!--begin::Scroll-->
+									<div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px">
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-7">
+											<!--begin::Label-->
+											<label class="required fs-6 fw-semibold mb-2">{% trans "Order Date" %}</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+                                            <input class="form-control form-control-lg form-control-solid" id="datetimes" type="text" name="datetimes"/>
+											<!--end::Input-->
+										</div>
+										<div class="fv-row mb-7">
+											<!--begin::Label-->
+											<label class="required fs-6 fw-semibold mb-2">{% trans "Order Name" %}</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+											<input type="text" class="form-control form-control-solid" placeholder="{% trans 'Order name' %}" name="order_name" required />
+											<!--end::Input-->
+										</div>
+										<!--end::Input group-->
+                                        <div class="fv-row mb-7">
+														<!--begin::Label-->
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Select your Company" %}</label>
+														<!--end::Label-->
+														<!--begin::Input-->
+                                                        <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company_uid" >
+															{% for company in companies %}
+															<option value="{{ company.uid }}">{{ company }}</option>
+															{% endfor %}
+														</select>
+														<!--end::Input-->
+													</div>
+										<div class="fv-row mb-7">
+														<!--begin::Label-->
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Contractor" %}</label>
+														<!--end::Label-->
+														<!--begin::Input-->
+                                                    {% if contractors %}
+                                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor_uid" >
+                                                        {% for contractor in contractors %}
+															<option value="{{ contractor.uid }}">{{ contractor }}</option>
+														{% endfor %}
+                                                    </select>
+                                                    {% else %}
+                                                        <input type="text" class="form-control form-control-solid" placeholder="{% trans 'Contractor name' %}" name="contractor_name" required />
+                                                    {% endif %}
+
+														<!--end::Input-->
+													</div>
+										        <div class="fv-row mb-7">
+														<!--begin::Label-->
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Select your Currency" %}</label>
+														<!--end::Label-->
+														<!--begin::Input-->
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency_name" data-placeholder="Currency">
+															{% for currency in currencies %}
+															<option value="{{ currency }}">{{ currency.currency }}</option>
+															{% endfor %}
+														</select>
+														<!--end::Input-->
+													</div>
+                                        <!--begin::Input group-->
+										<div class="fv-row mb-7">
+											<!--begin::Label-->
+											<label class="required fs-6 fw-semibold mb-2">{% trans "Order Amount" %}</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+											<input type="number" min="0" step="0.01" class="form-control form-control-solid" placeholder="{% trans 'Order Amount' %}" name="order_amount" required />
+											<!--end::Input-->
+										</div>
+										<!--end::Input group-->
+									</div>
+									<!--end::Scroll-->
 								</div>
-								<!--end::Copyright-->
-								<!--begin::Menu-->
-								<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
-									<li class="menu-item">
-										<a href="https://keenthemes.com" target="_blank" class="menu-link px-2">About</a>
-									</li>
-									<li class="menu-item">
-										<a href="https://devs.keenthemes.com" target="_blank" class="menu-link px-2">Support</a>
-									</li>
-									<li class="menu-item">
-										<a href="https://1.envato.market/EA4JP" target="_blank" class="menu-link px-2">Purchase</a>
-									</li>
-								</ul>
-								<!--end::Menu-->
-							</div>
-							<!--end::Footer container-->
-						</div>
-						<!--end::Footer-->
-					</div>
+								<!--end::Modal body-->
+								<!--begin::Modal footer-->
+								<div class="modal-footer flex-center">
+									<!--begin::Button-->
+									<button type="reset" id="kt_modal_add_customer_cancel" class="btn btn-light me-3">{% trans "Discard" %}</button>
+									<!--end::Button-->
+									<!--begin::Button-->
+									<button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+										<span class="indicator-label">{% trans "Submit" %}</span>
+										<span class="indicator-progress">{% trans "Please wait" %}...
+										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+									</button>
+									<!--end::Button-->
+								</div>
+								<!--end::Modal footer-->
+							</form>
+                            <!--end::Form-->
+                        </div>
+                    </div>
+                </div>
+                <!--end::Modal - Customers - Add-->
+                <!--begin::Modal - Adjust Balance-->
+                <div class="modal fade" id="kt_customers_export_modal" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-650px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2 class="fw-bold">Export Customers</h2>
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div id="kt_customers_export_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
+                            </div>
+                            <!--end::Modal header-->
+                            <!--begin::Modal body-->
+<!--                            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">-->
+<!--                                &lt;!&ndash;begin::Form&ndash;&gt;-->
+<!--                                <form id="kt_customers_export_form" class="form" action="#">-->
+<!--                                    &lt;!&ndash;begin::Input group&ndash;&gt;-->
+<!--                                    <div class="fv-row mb-10">-->
+<!--                                        &lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--                                        <label class="fs-5 fw-semibold form-label mb-5">Select Export Format:</label>-->
+<!--                                        &lt;!&ndash;end::Label&ndash;&gt;-->
+<!--                                        &lt;!&ndash;begin::Input&ndash;&gt;-->
+<!--                                        <select data-control="select2" data-placeholder="Select a format" data-hide-search="true" name="format" class="form-select form-select-solid">-->
+<!--                                            <option value="excell">Excel</option>-->
+<!--                                            <option value="pdf">PDF</option>-->
+<!--                                            <option value="cvs">CVS</option>-->
+<!--                                            <option value="zip">ZIP</option>-->
+<!--                                        </select>-->
+<!--                                        &lt;!&ndash;end::Input&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash;end::Input group&ndash;&gt;-->
+<!--                                    &lt;!&ndash;begin::Input group&ndash;&gt;-->
+<!--                                    <div class="fv-row mb-10">-->
+<!--                                        &lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--                                        <label class="fs-5 fw-semibold form-label mb-5">Select Date Range:</label>-->
+<!--                                        &lt;!&ndash;end::Label&ndash;&gt;-->
+<!--                                        &lt;!&ndash;begin::Input&ndash;&gt;-->
+<!--                                        <input class="form-control form-control-solid" placeholder="Pick a date" name="date" />-->
+<!--                                        &lt;!&ndash;end::Input&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash;end::Input group&ndash;&gt;-->
+<!--                                    &lt;!&ndash;begin::Row&ndash;&gt;-->
+<!--                                    <div class="row fv-row mb-15">-->
+<!--                                        &lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--                                        <label class="fs-5 fw-semibold form-label mb-5">Payment Type:</label>-->
+<!--                                        &lt;!&ndash;end::Label&ndash;&gt;-->
+<!--                                        &lt;!&ndash;begin::Radio group&ndash;&gt;-->
+<!--                                        <div class="d-flex flex-column">-->
+<!--                                            &lt;!&ndash;begin::Radio button&ndash;&gt;-->
+<!--                                            <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">-->
+<!--                                                <input class="form-check-input" type="checkbox" value="1" checked="checked" name="payment_type" />-->
+<!--                                                <span class="form-check-label text-gray-600 fw-semibold">All</span>-->
+<!--                                            </label>-->
+<!--                                            &lt;!&ndash;end::Radio button&ndash;&gt;-->
+<!--                                            &lt;!&ndash;begin::Radio button&ndash;&gt;-->
+<!--                                            <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">-->
+<!--                                                <input class="form-check-input" type="checkbox" value="2" checked="checked" name="payment_type" />-->
+<!--                                                <span class="form-check-label text-gray-600 fw-semibold">Visa</span>-->
+<!--                                            </label>-->
+<!--                                            &lt;!&ndash;end::Radio button&ndash;&gt;-->
+<!--                                            &lt;!&ndash;begin::Radio button&ndash;&gt;-->
+<!--                                            <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">-->
+<!--                                                <input class="form-check-input" type="checkbox" value="3" name="payment_type" />-->
+<!--                                                <span class="form-check-label text-gray-600 fw-semibold">Mastercard</span>-->
+<!--                                            </label>-->
+<!--                                            &lt;!&ndash;end::Radio button&ndash;&gt;-->
+<!--                                            &lt;!&ndash;begin::Radio button&ndash;&gt;-->
+<!--                                            <label class="form-check form-check-custom form-check-sm form-check-solid">-->
+<!--                                                <input class="form-check-input" type="checkbox" value="4" name="payment_type" />-->
+<!--                                                <span class="form-check-label text-gray-600 fw-semibold">American Express</span>-->
+<!--                                            </label>-->
+<!--                                            &lt;!&ndash;end::Radio button&ndash;&gt;-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;end::Input group&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash;end::Row&ndash;&gt;-->
+<!--                                    &lt;!&ndash;begin::Actions&ndash;&gt;-->
+<!--                                    <div class="text-center">-->
+<!--                                        <button type="reset" id="kt_customers_export_cancel" class="btn btn-light me-3">Discard</button>-->
+<!--                                        <button type="submit" id="kt_customers_export_submit" class="btn btn-primary">-->
+<!--                                            <span class="indicator-label">Submit</span>-->
+<!--                                            <span class="indicator-progress">Please wait...-->
+<!--                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash;end::Actions&ndash;&gt;-->
+<!--                                </form>-->
+<!--                                &lt;!&ndash;end::Form&ndash;&gt;-->
+<!--                            </div>-->
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </div>
+                <!--end::Modal - New Card-->
+                <!--end::Modals-->
+            </div>
+            <!--end::Content container-->
+        </div>
+        <!--end::Content-->
+    </div>
+    <!--end::Content wrapper-->
+
+</div>
+<!--end:::Main-->
 {% endblock content %}
 
-
 {% block scripts %}
- 		<script src="{% static 'js/custom/apps/invoices/create.js' %}"></script>
-		<script src="{% static 'js/widgets.bundle.js' %}"></script>
-		<script src="{% static 'js/custom/widgets.js' %}"></script>
-		<script src="{% static 'js/custom/apps/chat/chat.js' %}"></script>
-		<script src="{% static 'js/custom/utilities/modals/upgrade-plan.js' %}"></script>
-		<script src="{% static 'js/custom/utilities/modals/create-app.js' %}"></script>
-		<script src="{% static 'js/custom/utilities/modals/users-search.js' %}"></script>
+		<script src="{% static 'js/custom/apps/customers/list/list.js'%}"></script>
+
+        <script>
+        $(".delete_data_element").click(function () {
+        var element= $(this).parents("tr");
+                            Swal.fire({
+                                text: "{% trans 'Are you sure you want to delete this order' %}?",
+                                icon: "warning",
+                                showCancelButton: !0,
+                                buttonsStyling: !1,
+                                confirmButtonText: "{% trans 'Yes, delete' %}!",
+                                cancelButtonText: "{% trans 'No, cancel' %}",
+                                customClass: {
+                                    confirmButton: "btn fw-bold btn-danger",
+                                    cancelButton: "btn fw-bold btn-active-light-primary"
+                                }
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "{% url 'invoice:delete_invoice' %}",
+                    method: "POST",
+                    data: {
+                            csrfmiddlewaretoken: "{{csrf_token}}",
+                            uid: $(this).attr("value")
+                           },
+                    success: function () {
+                                Swal.fire({
+                                    text: "{% trans 'You have deleted!' %}",
+                                    icon: "success",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "{% trans 'Ok, got it' %}!",
+                                    customClass: {
+                                        confirmButton: "btn fw-bold btn-primary"
+                                    }
+                                }).then(function () {
+                            $(element).remove();
+                        });
+                    },
+                })
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+                            Swal.fire({
+                                    text: "{% trans 'Order was not deleted.' %}",
+                                    icon: "error",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "{% trans 'Ok, got it' %}!",
+                                    customClass: {
+                                        confirmButton: "btn fw-bold btn-primary"
+                                    }
+                                })
+            }
+        })
+        });
+        </script>
+        <script>
+                    $(document).ready(function() {
+                    $('#select_currency').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
+                    $('#select_contractor').select2({tags: true, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
+                    $('#select_company').select2({tags: false, dropdownParent: $("#kt_modal_add_customer_scroll").parent()});
+                    $('#currency_filter_select').select2({tags: false, minimumResultsForSearch: -1 ,dropdownParent: $("#kt-toolbar-filter").parent()});
+                });
+                </script>
+        <script>
+        $(function() {
+          $('input[name="datetimes"]').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerSeconds: true,
+            drops: "down",
+            locale: {
+              format: 'DD.MM.YYYY HH:mm:ss',
+            },
+            singleDatePicker: true
+          });
+        });
+        </script>
+
+        <script>
+        var slider = document.querySelector("#kt_slider_basic");
+        var valueMin = document.querySelector("#kt_slider_basic_min");
+        var valueMax = document.querySelector("#kt_slider_basic_max");
+
+        noUiSlider.create(slider, {
+            start: [0, 5000],
+
+            connect: true,
+            range: {
+                "min": 0,
+                "max": 10000
+            }
+        });
+
+        slider.noUiSlider.on("update", function (values, handle) {
+            if (handle) {
+                valueMax.innerHTML = values[handle];
+            } else {
+                valueMin.innerHTML = values[handle];
+            }
+        });
+        </script>
+        <script>
+        $(document).on('click', 'body .kt-toolbar-filter', function (e) {
+            e.stopPropagation();
+        });
+
+          $('#datetimefilter').daterangepicker({
+            startDate: moment().subtract(2, 'month'),
+            endDate: moment(),
+            locale: {
+                format: 'DD.MM.YYYY'
+            },
+          }, function(start, end, label) {
+          });
+
+        // after daterangepicker
+        $("div.daterangepicker").click( function(e) {
+           e.stopPropagation();
+        });
+
+        </script>
+        <!--Filters-->
+        <script>
+            function FilterRange(from, to) {
+          var from = from;
+          var to = to;
+
+          from = from || '0';
+          to = to || '100000000';
+
+          $('#kt_customers_table tbody tr').each(function(i, tr) {
+            var amount = $(tr).find("td:visible:nth-child(2)").text();
+            var amount = Number(amount);
+            if (amount < from || amount > to) {
+            $(tr).css('display', 'none');
+            }
+          });
+        }
+        </script>
+        <script>
+            function filterRows(from, to) {
+          var from = from;
+          var to = to;
+
+          from = from || '1970/01/01'; // default from to a old date if it is not set
+          to = to || '2999/12/31';
+
+          var dateFrom = moment(from);
+          var dateTo = moment(to);
+
+          $('#kt_customers_table tbody tr').each(function(i, tr) {
+            var val = $(tr).find("td:visible:nth-child(1)").text();
+            var dateVal = moment(val, "DD.MM.YYYY");
+            var visible = (dateVal.isBetween(dateFrom, dateTo, null, [])) ? "" : "none"; // [] for inclusive
+            $(tr).css('display', visible);
+          });
+        }
+        </script>
+        <script>
+        var str=""
+        $('#apply_filter').on('click',function(){
+
+            var rows = $('#kt_customers_table tr:not(:first)');
+            rows.hide();
+
+            var sub = $("#currency_filter_select").val();
+            var select = $("#company_filter_select").val();
+            var contractor = $("#contractor_filter_select").val();
+            if (select==null) {
+                var select = "";
+            }
+
+            str = ":contains('" + sub + "'):contains('" + select + "'):contains('" + contractor + "')"
+            rows.filter(str).show();
+        });
+        </script>
+        <script>
+        $('#apply_filter').on('click',function(){
+            var drp = $('#datetimefilter').data('daterangepicker');
+            var start = drp.startDate.format('YYYY-MM-DD');
+            var end = drp.endDate.format('YYYY-MM-DD');
+
+            var min = $('#kt_slider_basic_min').text();
+            var max = $('#kt_slider_basic_max').text();
+            filterRows(start, end);
+            FilterRange(min, max);
+        });
+        </script>
+        <!--endFilters-->
+        <script>
+            $('#reset_options').click(function() {
+             $('tr').show();
+             $("#currency_filter_select").val('').trigger('change');
+             $("#contractor_filter_select").val('').trigger('change');
+             $("#company_filter_select").val('').trigger('change');
+             $("#kt_slider_basic")[0].noUiSlider.reset();
+             $('#datetimefilter').val('');
+        });
+        </script>
+
 {% endblock scripts %}
+
