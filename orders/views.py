@@ -1,5 +1,4 @@
 import random
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
@@ -141,10 +140,9 @@ def order_add(request):
 
         try:
             order_last = Order.objects.latest('creation_date')
-            order_number = int(order_last.invoice_name) + 1
+            order_number = int(order_last.order_name) + 1
         except Exception:
             order_number = random.randint(20000, 30000)
-
 
         try:
             order_flag = Order.objects.get(user_account=user_account, order_name=order_number)

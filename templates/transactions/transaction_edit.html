@@ -274,7 +274,6 @@ $('#select_invoice').on("select2:unselect", function(e){
          var data = e.params.data;
          var unselected_value = data.id;
 
-         alert(data.id)
          $.ajax({
 			type: "POST",
 			url: '{% url 'transactions:delete_invoice' %}',

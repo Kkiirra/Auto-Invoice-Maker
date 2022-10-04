@@ -137,13 +137,13 @@ here
 															</div>
 															<div class="mb-10">
 																<!--begin::Label-->
-																<label class="form-label fs-5 fw-semibold mb-3">Currency:</label>
+																<label class="form-label fs-5 fw-semibold mb-3">Status:</label>
 																<!--end::Label-->
 																<!--begin::Input-->
 																<select class="form-select form-select-solid" data-placeholder="Currency" id="currency_filter_select" data-allow-clear="true">
                                                                     <option></option>
-                                                                    {% for currency in currencies %}
-                                                                    <option value="{{ currency }}">{{ currency }}</option>
+                                                                    {% for status in invoice_stats %}
+                                                                    <option value="{{ status }}">{{ status }}</option>
                                                                     {% endfor %}
 																</select>
 																<!--end::Input-->
@@ -202,7 +202,7 @@ here
                                 {% for invoice in invoices %}
                                     <tr>
                                     <td> {{ invoice.invoice_date|date:"d.m.Y" }}</td>
-                                        <td>{{ invoice.invoice_name }}</td>
+                                        <td>#{{ invoice.invoice_name }}</td>
                                     <td>{{ invoice.invoice_sum }}</td>
                                     <td>
                                         <a href="{% url 'contractors:contractor_edit' contr_uid=invoice.contractor.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ invoice.contractor }}</a>
@@ -224,7 +224,7 @@ here
                                     </td>
                                     <td>
                                         {% if invoice.order %}
-                                            <a href="{% url 'orders:order_edit' ord_uid=invoice.order.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ invoice.order.order_name }}</a>
+                                            <a href="{% url 'orders:order_edit' ord_uid=invoice.order.uid %}" class="text-gray-800 text-hover-primary mb-1">#{{ invoice.order.order_name }}</a>
                                         {% else %}
                                             Not selected
                                         {% endif %}
@@ -692,7 +692,8 @@ here
                 var select = "";
             }
 
-            str = ":contains('" + sub + "'):contains('" + select + "'):contains('" + contractor + "')"
+            str = ":contains('" + contractor + "'):contains('" + select + "'):contains('" + sub + "')"
+            console.log(str)
             rows.filter(str).show();
         });
         </script>

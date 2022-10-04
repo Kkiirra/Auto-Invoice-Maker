@@ -17,12 +17,18 @@ from .models import Invoice, InvoiceItem, Invoice_status
 def invoice(request):
     user_account = User_Account.objects.get(owner=request.user)
     invoices = Invoice.objects.filter(user_account=user_account)
-    return render(request, 'invoice/invoice.html', {'invoices': invoices})
+    companies = Company.objects.filter(user_account=user_account)
+    contractors = Contractor.objects.filter(user_account=user_account)
+    invoice_stats = Invoice_status.objects.all()
+    currencies = Currency.objects.all()
+    return render(request, 'invoice/invoice.html', {'invoices': invoices, 'companies': companies, 'contractors': contractors,
+                                                    'currencies': currencies, 'invoice_stats': invoice_stats})
 
 
 @login_required(login_url='/signin/')
 def delete_invoice(request):
     user_account = User_Account.objects.filter(owner=request.user)
+
     inv_uid = request.POST.get('uid')
 
     try:
