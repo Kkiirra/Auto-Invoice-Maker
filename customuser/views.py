@@ -137,7 +137,7 @@ def activate_link(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return redirect('customuser:settings')
+        return redirect('integrations:integrations')
     else:
         return redirect('customuser:email_invalid')
 

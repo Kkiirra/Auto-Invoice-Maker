@@ -152,37 +152,38 @@ def integrate_account(request):
                                              bank=bank_name, currency=currency)
 
         for transaction_info in user_transactions_response['transactions']['booked']:
-            print(transaction_info)
-            transaction_id = transaction_info['transactionId']
-            transaction_amount = transaction_info['transactionAmount']['amount']
-            creation_date = transaction_info['bookingDate']
-            transaction_date = transaction_info['valueDate']
+            print(transaction_info, 'FFF')
+            if transaction_info:
+                transaction_id = transaction_info['transactionId']
+                transaction_amount = transaction_info['transactionAmount']['amount']
+                creation_date = transaction_info['bookingDate']
+                transaction_date = transaction_info['valueDate']
 
-            if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
-                transaction_type = 'Expenses'
+                if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
+                    transaction_type = 'Expenses'
+                    try:
+                        contractor_name = transaction_info['creditorName']
+                    except Exception:
+                        contractor_name = transaction_info['debtorName']
+                else:
+                    try:
+                        contractor_name = transaction_info['debtorName']
+                    except Exception:
+                        contractor_name = transaction_info['creditorName']
+
+                    transaction_type = 'Income'
+
                 try:
-                    contractor_name = transaction_info['creditorName']
+                    contractor = Contractor.objects.get(contractor_name=contractor_name, user_account=user_account)
                 except Exception:
-                    contractor_name = transaction_info['debtorName']
-            else:
-                try:
-                    contractor_name = transaction_info['debtorName']
-                except Exception:
-                    contractor_name = transaction_info['creditorName']
+                    contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
 
-                transaction_type = 'Income'
-
-            try:
-                contractor = Contractor.objects.get(contractor_name=contractor_name, user_account=user_account)
-            except Exception:
-                contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
-
-            new_transaction = Transaction.objects.create(transaction_id=transaction_id, user_account=user_account,
-                                                         account=new_account, contractor=contractor,
-                                                         sum_of_transactions=abs(float(transaction_amount)),
-                                                         transaction_type=transaction_type,
-                                                         transaction_date=transaction_date,
-                                                         creation_date=creation_date, company=company)
+                new_transaction = Transaction.objects.create(transaction_id=transaction_id, user_account=user_account,
+                                                             account=new_account, contractor=contractor,
+                                                             sum_of_transactions=abs(float(transaction_amount)),
+                                                             transaction_type=transaction_type,
+                                                             transaction_date=transaction_date,
+                                                             creation_date=creation_date, company=company)
 
         return JsonResponse(data={'company_name': company_name}, status=200)
 
