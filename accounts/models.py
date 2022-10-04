@@ -26,3 +26,4 @@ class Account(models.Model):
     class Meta:
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
+        unique_together = 'account_id', 'user_account'

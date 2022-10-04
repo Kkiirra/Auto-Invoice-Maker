@@ -388,6 +388,123 @@
 									<!--end::Action=-->
 								</tr>
 								{% endfor %}
+
+								{% for account in SANTANDER_PL_CORP_WBKPPLPP %}
+								<tr class="tr_element_row">
+									{% csrf_token %}
+									<td class="bank_name">
+										Santander Bank Corporate
+									</td>
+									<!--end::Name=-->
+									<td class="account_iban">
+										{{ account.account.iban }}
+									</td>
+									<!--begin::Accounts=-->
+									<td class="company_name">
+										{% if account.account.company %}
+										{{ account.account.company }}
+										{% else %}
+										<div class="errors_div"><ul class="errorlist"><li class="error_li"></li></ul></div>
+										<input type="text" class="form-control form-control-solid mw-200px" placeholder="Enter your company" name="company">
+										{% endif %}
+									</td>
+
+									<td class="company_status">{{ account.account.status }}</td>
+									<!--end::Date=-->
+									<!--begin::Action=-->
+									<td class="text-end">
+										<!--begin::Menu-->
+										{% if account.account.company %}
+										<div class="badge badge-light-success" style="padding: 15px 21px">Integrated</div>
+										{% else %}
+											<button class="btn btn-primary send_account" value="{{ account.account.account_id }}">
+												Integrate
+											</button>
+										{% endif %}
+
+										<!--end::Menu-->
+									</td>
+									<!--end::Action=-->
+								</tr>
+								{% endfor %}
+
+								{% for account in ING_PL_INGBPLPW %}
+								<tr class="tr_element_row">
+									{% csrf_token %}
+									<td class="bank_name">
+										ING Bank
+									</td>
+									<!--end::Name=-->
+									<td class="account_iban">
+										{{ account.account.iban }}
+									</td>
+									<!--begin::Accounts=-->
+									<td class="company_name">
+										{% if account.account.company %}
+										{{ account.account.company }}
+										{% else %}
+										<div class="errors_div"><ul class="errorlist"><li class="error_li"></li></ul></div>
+										<input type="text" class="form-control form-control-solid mw-200px" placeholder="Enter your company" name="company">
+										{% endif %}
+									</td>
+
+									<td class="company_status">{{ account.account.status }}</td>
+									<!--end::Date=-->
+									<!--begin::Action=-->
+									<td class="text-end">
+										<!--begin::Menu-->
+										{% if account.account.company %}
+										<div class="badge badge-light-success" style="padding: 15px 21px">Integrated</div>
+										{% else %}
+											<button class="btn btn-primary send_account" value="{{ account.account.account_id }}">
+												Integrate
+											</button>
+										{% endif %}
+
+										<!--end::Menu-->
+									</td>
+									<!--end::Action=-->
+								</tr>
+								{% endfor %}
+
+								{% for account in PKO_BPKOPLPW %}
+								<tr class="tr_element_row">
+									{% csrf_token %}
+									<td class="bank_name">
+										PKO Bank Polski
+									</td>
+									<!--end::Name=-->
+									<td class="account_iban">
+										{{ account.account.iban }}
+									</td>
+									<!--begin::Accounts=-->
+									<td class="company_name">
+										{% if account.account.company %}
+										{{ account.account.company }}
+										{% else %}
+										<div class="errors_div"><ul class="errorlist"><li class="error_li"></li></ul></div>
+										<input type="text" class="form-control form-control-solid mw-200px" placeholder="Enter your company" name="company">
+										{% endif %}
+									</td>
+
+									<td class="company_status">{{ account.account.status }}</td>
+									<!--end::Date=-->
+									<!--begin::Action=-->
+									<td class="text-end">
+										<!--begin::Menu-->
+										{% if account.account.company %}
+										<div class="badge badge-light-success" style="padding: 15px 21px">Integrated</div>
+										{% else %}
+											<button class="btn btn-primary send_account" value="{{ account.account.account_id }}">
+												Integrate
+											</button>
+										{% endif %}
+
+										<!--end::Menu-->
+									</td>
+									<!--end::Action=-->
+								</tr>
+								{% endfor %}
 							</tbody>
 							<!--end::Table body-->
 						</table>

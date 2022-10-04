@@ -34,14 +34,13 @@ def add_accounts(request, com_uid):
         account = request.POST.get('account_id')
         bank = request.POST.get('bank_name')
         currency_name = request.POST.get('currency_name')
-        print(account, bank, currency_name)
         user_account = User_Account.objects.get(owner=request.user)
-        this_company = Company.objects.filter(uid=com_uid, user=request.user)
-        new_account = Account.objects.create(account_id=account, bank=bank, company=this_company[0],
-                                          currency=currency_name, user_account=user_account)
+        account_check = Account.objects.filter(account_id=account, user_account=user_account)
+        if not account_check:
+            this_company = Company.objects.filter(uid=com_uid, user=request.user)
+            new_account = Account.objects.create(account_id=account, bank=bank, company=this_company[0],
+                                              currency=currency_name, user_account=user_account)
         return HttpResponseRedirect('/profile/companies/')
-    else:
-        print('DSAHFASFHDFHS')
 
 
 @login_required(login_url='/signin/')
@@ -63,19 +62,19 @@ def accounts(request):
             return redirect('company:start_company')
 
     else:
-        company_uid = request.POST.get('company_uid')
         account_id = request.POST.get('account_id')
         account_description = request.POST.get('account_description')
         bank = request.POST.get('bank_name')
         currency_name = request.POST.get('currency_name')
 
-
         user_account = User_Account.objects.get(owner=request.user)
-        this_company = Company.objects.filter(user=request.user)
 
-        new_account = Account.objects.create(account_id=account_id, bank=bank, company=this_company[0],
-                                              currency=currency_name, user_account=user_account,
-                                             account_description=account_description)
+        account_check = Account.objects.filter(account_id=account_id, user_account=user_account)
+        if not account_check:
+            this_company = Company.objects.filter(user_account=user_account)
+            new_account = Account.objects.create(account_id=account_id, bank=bank, company=this_company[0],
+                                                  currency=currency_name, user_account=user_account,
+                                                 account_description=account_description)
         return HttpResponseRedirect('/profile/accounts/')
 
 

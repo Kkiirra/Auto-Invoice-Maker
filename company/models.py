@@ -34,7 +34,7 @@ class Bank(models.Model):
 class Company(models.Model):
 
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    company_name = models.CharField(max_length=255, blank=False, unique=True)
+    company_name = models.CharField(max_length=255)
     user_account = models.ForeignKey(User_Account, on_delete=models.CASCADE)
     user = ForeignKey(get_user_model(), on_delete=models.CASCADE)
     date_joined = models.DateTimeField(
@@ -47,3 +47,4 @@ class Company(models.Model):
     class Meta:
         verbose_name = 'Company'
         verbose_name_plural = 'Companies'
+        unique_together = 'company_name', 'user_account'

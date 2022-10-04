@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
@@ -133,9 +135,16 @@ def order_add(request):
         order_status = request.POST.get('radio')
         currency = request.POST.get('currency_name')
         contractor_uid = request.POST.get('contractor_uid')
-        order_number = request.POST.get('order_number')
         company_uid = request.POST.get('company_uid')
         order_date = parse(request.POST.get('datetimes'), dayfirst=True)
+
+
+        try:
+            order_last = Order.objects.latest('creation_date')
+            order_number = int(order_last.invoice_name) + 1
+        except Exception:
+            order_number = random.randint(20000, 30000)
+
 
         try:
             order_flag = Order.objects.get(user_account=user_account, order_name=order_number)

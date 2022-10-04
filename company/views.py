@@ -11,7 +11,6 @@ def companies_list(request):
 
     currency = Currency.objects.all()
     banks = Bank.objects.all()
-    print(currency, banks)
 
     if request.method == 'GET':
         try:
@@ -25,7 +24,7 @@ def companies_list(request):
         user_account = User_Account.objects.get(owner=request.user)
         company = request.POST.get('company_name')
         try:
-            Company.objects.create(company_name=company, user=request.user, user_account=user_account)
+            Company.objects.create_or_create(company_name=company, user=request.user, user_account=user_account)
         except Exception:
             pass
         return HttpResponseRedirect('/profile/companies/')

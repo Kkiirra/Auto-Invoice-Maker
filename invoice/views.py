@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from dateutil.parser import parse
-
+import random
 from accounts.models import Account
 from company.models import Company, Currency
 from contractors.models import Contractor
@@ -22,7 +22,6 @@ def invoice(request):
 
 @login_required(login_url='/signin/')
 def delete_invoice(request):
-
     user_account = User_Account.objects.filter(owner=request.user)
     inv_uid = request.POST.get('uid')
 
@@ -57,13 +56,19 @@ def invoice_add(request):
         invoice_total = float(request.POST.get('invoice_total'))
         currency = request.POST.get('currency_name')
         contractor_uid = request.POST.get('contractor_uid')
-        invoice_number = request.POST.get('invoice_number')
         company_uid = request.POST.get('company_uid')
         account_uid = request.POST.get('account_uid')
         order_uid = request.POST.get('order_name')
         invoice_status = request.POST.get('radio')
         invoice_date = parse(request.POST.get('datetimes'), dayfirst=True)
-        print(invoice_total)
+
+        try:
+            invoice_last = Invoice.objects.latest('creation_date')
+            invoice_number = int(invoice_last.invoice_name) + 1
+
+        except Exception:
+            invoice_number = random.randint(20000, 30000)
+
         try:
             invoice_flag = Invoice.objects.get(user_account=user_account, invoice_name=invoice_number)
         except Exception:

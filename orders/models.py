@@ -23,7 +23,7 @@ class Order_status(models.Model):
 class Order(models.Model):
 
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    order_name = models.CharField(max_length=255, unique=True)
+    order_name = models.CharField(max_length=255)
     user_account = models.ForeignKey(User_Account, on_delete=models.CASCADE)
     company = ForeignKey(Company, on_delete=models.CASCADE)
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)
@@ -45,4 +45,4 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
-
+        unique_together = 'order_name', 'user_account'

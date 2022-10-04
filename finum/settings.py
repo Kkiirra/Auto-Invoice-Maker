@@ -82,7 +82,7 @@ DATABASES = {
 #         'USER': 'app_finum_on',
 #         'PASSWORD': 'Dv56wWTRAiN05JUc',
 #         'HOST': 'localhost',
-#         'PORT': 'portNumber',
+#         'PORT': '3306',
 #     }
 # }
 
