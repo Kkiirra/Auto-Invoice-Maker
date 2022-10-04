@@ -19,6 +19,7 @@ def invoice(request):
     invoices = Invoice.objects.filter(user_account=user_account)
     companies = Company.objects.filter(user_account=user_account)
     contractors = Contractor.objects.filter(user_account=user_account)
+
     invoice_stats = Invoice_status.objects.all()
     currencies = Currency.objects.all()
     return render(request, 'invoice/invoice.html', {'invoices': invoices, 'companies': companies, 'contractors': contractors,
@@ -44,6 +45,11 @@ def invoice_add(request):
 
     user_account = User_Account.objects.get(owner=request.user)
 
+    try:
+        invoice_last = Invoice.objects.filter(user_account=user_account).latest('creation_date')
+        invoice_number = int(invoice_last.invoice_name) + 1
+    except Exception:
+        invoice_number = 1
 
     if request.method == 'GET':
 
@@ -54,7 +60,7 @@ def invoice_add(request):
         currencies = Currency.objects.all()
 
         context = {'currencies': currencies, 'companies': companies, 'contractors': contractors, 'orders': orders,
-                   'products': products}
+                   'products': products, 'invoice_number': invoice_number}
 
         return render(request, 'invoice/invoice_add.html', context)
     else:
@@ -67,13 +73,6 @@ def invoice_add(request):
         order_uid = request.POST.get('order_name')
         invoice_status = request.POST.get('radio')
         invoice_date = parse(request.POST.get('datetimes'), dayfirst=True)
-
-        try:
-            invoice_last = Invoice.objects.latest('creation_date')
-            invoice_number = int(invoice_last.invoice_name) + 1
-
-        except Exception:
-            invoice_number = random.randint(20000, 30000)
 
         try:
             invoice_flag = Invoice.objects.get(user_account=user_account, invoice_name=invoice_number)
@@ -135,6 +134,8 @@ def invoice_edit(request, inv_uid):
     orders = Order.objects.filter(user_account=user_account)
     contractors = Contractor.objects.filter(user_account=user_account)
     currencies = Currency.objects.all()
+
+
     context = {'orders': orders, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
                'products': products, 'invoice': invoice}
     if request.method == 'GET':
@@ -213,8 +214,15 @@ def invoice_byOrder(request, ord_uid):
     selected_order = Order.objects.get(user_account=user_account, uid=ord_uid)
     contractors = Contractor.objects.filter(user_account=user_account)
     currencies = Currency.objects.all()
+
+    try:
+        invoice_last = Invoice.objects.filter(user_account=user_account).latest('creation_date')
+        invoice_number = int(invoice_last.invoice_name) + 1
+    except Exception:
+        invoice_number = 1
+
     context = {'orders': orders, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
-               'products': products, 'invoice': invoice, 'selected_order': selected_order}
+               'products': products, 'invoice': invoice, 'selected_order': selected_order, 'invoice_number': invoice_number}
     return render(request, 'invoice/invoice_byorder.html', context)
 
 

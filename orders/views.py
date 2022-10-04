@@ -125,8 +125,14 @@ def order_add(request):
     contractors = Contractor.objects.filter(user_account=user_account)
     currencies = Currency.objects.all()
 
+    try:
+        order_last = Order.objects.filter(user_account=user_account).latest('creation_date')
+        order_number = int(order_last.order_name) + 1
+    except Exception:
+        order_number = 1
+
     context = {'currencies': currencies, 'companies': companies, 'contractors': contractors,
-               'products': products}
+               'products': products, 'order_number': order_number}
 
     if request.method == 'POST':
 
@@ -136,13 +142,6 @@ def order_add(request):
         contractor_uid = request.POST.get('contractor_uid')
         company_uid = request.POST.get('company_uid')
         order_date = parse(request.POST.get('datetimes'), dayfirst=True)
-
-
-        try:
-            order_last = Order.objects.latest('creation_date')
-            order_number = int(order_last.order_name) + 1
-        except Exception:
-            order_number = random.randint(20000, 30000)
 
         try:
             order_flag = Order.objects.get(user_account=user_account, order_name=order_number)

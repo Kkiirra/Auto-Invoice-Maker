@@ -185,12 +185,12 @@ here
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                     <th class="min-w-125px sorting">{% trans "Invoice Date" %}</th>
-                                    <th class="min-w-125px">{% trans "Invoice #" %}</th>
+                                    <th class="min-w-90px">{% trans "Invoice #" %}</th>
                                     <th class="min-w-125px sorting">{% trans "Invoice Total" %}</th>
                                     <th class="min-w-125px ">{% trans "Contractor" %}</th>
-                                    <th class="min-w-125px ">{% trans "Company" %}</th>
+                                    <th class="min-w-90px ">{% trans "Company" %}</th>
                                     <th class="min-w-125px ">{% trans "Account" %}</th>
-                                    <th class="min-w-125px ">{% trans "Stats" %}</th>
+                                    <th class="min-w-80px ">{% trans "Stats" %}</th>
                                     <th class="min-w-125px ">{% trans "Orders" %}</th>
                                     <th class="text-end min-w-70px">{% trans "Actions" %}</th>
                                 </tr>
@@ -203,7 +203,7 @@ here
                                     <tr>
                                     <td> {{ invoice.invoice_date|date:"d.m.Y" }}</td>
                                         <td>#{{ invoice.invoice_name }}</td>
-                                    <td>{{ invoice.invoice_sum }}</td>
+                                    <td>{{ invoice.invoice_sum }} {{ invoice.currency }}</td>
                                     <td>
                                         <a href="{% url 'contractors:contractor_edit' contr_uid=invoice.contractor.uid %}" class="text-gray-800 text-hover-primary mb-1">{{ invoice.contractor }}</a>
                                     </td>

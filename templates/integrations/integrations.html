@@ -56,15 +56,40 @@
 											<div class="card-body p-9">
 												<!--begin::Notice-->
 											<div class="card-title m-0">
-												<h3 class="fw-bold m-0">Connected Accounts</h3>
+												<h3 class="fw-bold m-0">Available Connections</h3>
 											</div>												<!--end::Notice-->
-
 												<div class="py-2">
 													<div class="separator separator-dashed my-5"></div>
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/SANTANDER_PL_CORP_WBKPPLPP.png" class="w-40px me-6" alt="">
+															<img src="https://cdn.nordigen.com/ais/PKO_BPKOPLPW.png" class="w-50px me-6" alt="">
+															<div class="d-flex flex-column">
+																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">PKO Bank Polski</a>
+																<div class="fs-6 fw-semibold text-gray-400">Load transactions from PKO Bank Polski</div>
+															</div>
+														</div>
+														<div class="d-flex justify-content-end">
+															<div class="form-check form-check-solid form-switch">{% csrf_token %}
+																{% if PKO_BPKOPLPW %}
+																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																{% else %}
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="PKO_BPKOPLPW/730">
+																	Connect
+																</a>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+													<!--end::Item-->
+
+												</div>
+												<div class="py-2">
+													<div class="separator separator-dashed my-5"></div>
+													<!--begin::Item-->
+													<div class="d-flex flex-stack">
+														<div class="d-flex">
+															<img src="https://cdn.nordigen.com/ais/SANTANDER_PL_CORP_WBKPPLPP.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Santander Bank</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from Santander bank</div>
@@ -93,7 +118,7 @@
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/BANK_MILLENNIUM_BIGBPLPW.png" class="w-40px me-6" alt="">
+															<img src="https://cdn.nordigen.com/ais/BANK_MILLENNIUM_BIGBPLPW.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Bank Millennium</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from Millennium Bank</div>
@@ -121,7 +146,7 @@
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/SANTANDER_PL_CORP_WBKPPLPP.png" class="w-40px me-6" alt="">
+															<img src="https://www.santander.com/content/dam/santander-com/images/image-resources/san-logo.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Santander Bank Corporate</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from Santander Bank Corporate</div>
@@ -150,7 +175,7 @@
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/ING_PL_INGBPLPW.png" class="w-40px me-6" alt="">
+															<img src="https://cdn.nordigen.com/ais/ING_PL_INGBPLPW.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">ING</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from ING</div>
@@ -176,34 +201,7 @@
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/PKO_BPKOPLPW.png" class="w-40px me-6" alt="">
-															<div class="d-flex flex-column">
-																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">PKO Bank Polski</a>
-																<div class="fs-6 fw-semibold text-gray-400">Load transactions from PKO Bank Polski</div>
-															</div>
-														</div>
-														<div class="d-flex justify-content-end">
-															<div class="form-check form-check-solid form-switch">{% csrf_token %}
-																{% if PKO_BPKOPLPW %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
-																{% else %}
-																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="PKO_BPKOPLPW/730">
-																	Connect
-																</a>
-																{% endif %}
-															</div>
-														</div>
-													</div>
-													<!--end::Item-->
-
-												</div>
-
-												<div class="py-2">
-													<div class="separator separator-dashed my-5"></div>
-													<!--begin::Item-->
-													<div class="d-flex flex-stack">
-														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/MBANK_RETAIL_BREXCZPP.png" class="w-40px me-6" alt="">
+															<img src="https://cdn.nordigen.com/ais/MBANK_RETAIL_BREXCZPP.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">mBank Retail</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from mBank Retail</div>
@@ -224,13 +222,12 @@
 													<!--end::Item-->
 
 												</div>
-
 												<div class="py-2">
 													<div class="separator separator-dashed my-5"></div>
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/IKANO_IKANSE21.png" class="w-40px me-6" alt="">
+															<img src="https://cdn.nordigen.com/ais/IKANO_IKANSE21.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">Ikano Bank</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from Ikano Bank</div>
@@ -251,13 +248,12 @@
 													<!--end::Item-->
 
 												</div>
-
 												<div class="py-2">
 													<div class="separator separator-dashed my-5"></div>
 													<!--begin::Item-->
 													<div class="d-flex flex-stack">
 														<div class="d-flex">
-															<img src="https://cdn.nordigen.com/ais/BNP_PL_PPABPLPK.png" class="w-40px me-6" alt="">
+															<img src="https://cdn.nordigen.com/ais/BNP_PL_PPABPLPK.png" class="w-50px me-6" alt="">
 															<div class="d-flex flex-column">
 																<a href="#" class="fs-5 text-dark text-hover-primary fw-bold">BNP Paribas</a>
 																<div class="fs-6 fw-semibold text-gray-400">Load transactions from BNP Paribas</div>
