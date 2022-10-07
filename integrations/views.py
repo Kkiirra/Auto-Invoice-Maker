@@ -141,49 +141,52 @@ def integrate_account(request):
 
         company, status = Company.objects.get_or_create(user_account=user_account, company_name=company_name, user=request.user)
 
-        user_transactions = requests.get(url=f'https://ob.nordigen.com/api/v2/accounts/{bank_account_uid}/transactions/',
+        user_transactions = requests.get(url=f'https://ob.nordigen.com/api/v2/accounts/c9f6a5a1-9bd3-44b8-a90f-2a6239aa81d7/transactions/',
                                          headers={'accept': 'application/json',
                                                   'Authorization': f'Bearer {access_token}'})
 
         user_transactions_response = user_transactions.json()
+        if user_transactions_response['status_code'] == 429:
+            return JsonResponse(data={}, status=429)
         currency = user_transactions_response['transactions']['booked'][0]['transactionAmount']['currency']
 
         new_account = Account.objects.create(account_id=account_number, user_account=user_account, company=company,
                                              bank=bank_name, currency=currency)
 
         for transaction_info in user_transactions_response['transactions']['booked']:
-            print(transaction_info, 'FFF')
             if transaction_info:
-                transaction_id = transaction_info['transactionId']
-                transaction_amount = transaction_info['transactionAmount']['amount']
-                creation_date = transaction_info['bookingDate']
-                transaction_date = transaction_info['valueDate']
+                transaction_id = transaction_info.get('transactionId')
+                if not Transaction.objects.filter(transaction_id=transaction_id, user_account=user_account):
+                    transaction_amount = transaction_info['transactionAmount']['amount']
+                    creation_date = transaction_info['bookingDate']
+                    transaction_date = transaction_info['valueDate']
 
-                if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
-                    transaction_type = 'Expenses'
+                    if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
+                        transaction_type = 'Expenses'
+                        contractor_name = transaction_info.get('creditorName')
+                        if not contractor_name:
+                            contractor_name = transaction_info.get('debtorName')
+                            if not contractor_name:
+                                contractor_name = company_name
+                    else:
+                        contractor_name = transaction_info.get('debtorName')
+                        if not contractor_name:
+                            contractor_name = transaction_info.get('creditorName')
+                            if not contractor_name:
+                                contractor_name = company_name
+
+                        transaction_type = 'Income'
                     try:
-                        contractor_name = transaction_info['creditorName']
+                        contractor = Contractor.objects.get(contractor_name=contractor_name, user_account=user_account)
                     except Exception:
-                        contractor_name = transaction_info['debtorName']
-                else:
-                    try:
-                        contractor_name = transaction_info['debtorName']
-                    except Exception:
-                        contractor_name = transaction_info['creditorName']
+                        contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
 
-                    transaction_type = 'Income'
-
-                try:
-                    contractor = Contractor.objects.get(contractor_name=contractor_name, user_account=user_account)
-                except Exception:
-                    contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
-
-                new_transaction = Transaction.objects.create(transaction_id=transaction_id, user_account=user_account,
-                                                             account=new_account, contractor=contractor,
-                                                             sum_of_transactions=abs(float(transaction_amount)),
-                                                             transaction_type=transaction_type,
-                                                             transaction_date=transaction_date,
-                                                             creation_date=creation_date, company=company)
+                    Transaction.objects.create(transaction_id=transaction_id, user_account=user_account,
+                                                                 account=new_account, contractor=contractor,
+                                                                 sum_of_transactions=abs(float(transaction_amount)),
+                                                                 transaction_type=transaction_type,
+                                                                 transaction_date=transaction_date,
+                                                                 creation_date=creation_date, company=company)
 
         return JsonResponse(data={'company_name': company_name}, status=200)
 

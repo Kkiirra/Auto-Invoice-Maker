@@ -72,9 +72,11 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if PKO_BPKOPLPW %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																<a href="#" class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="PKO_BPKOPLPW/720">
+																	Refresh
+																</a>
 																{% else %}
-																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="PKO_BPKOPLPW/730">
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="PKO_BPKOPLPW/720">
 																	Connect
 																</a>
 																{% endif %}
@@ -184,7 +186,9 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if ING_PL_INGBPLPW %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																<a href="#" class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="ING_PL_INGBPLPW/365">
+																	Refresh
+																</a>
 																{% else %}
 																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="ING_PL_INGBPLPW/365">
 																	Connect
@@ -210,7 +214,9 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if MBANK_RETAIL_BREXPLPW %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																<a href="#" class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="MBANK_RETAIL_BREXPLPW/90">
+																	Refresh
+																</a>
 																{% else %}
 																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="MBANK_RETAIL_BREXPLPW/90">
 																	Connect
@@ -236,7 +242,9 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if IKANO_HANDPLPW %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																<a href="#" class="btn btn-success align-self-center text-nowrap send_bank w-100px" value="IKANO_HANDPLPW/90">
+																	Refresh
+																</a>
 																{% else %}
 																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="IKANO_HANDPLPW/90">
 																	Connect
@@ -262,7 +270,9 @@
 														<div class="d-flex justify-content-end">
 															<div class="form-check form-check-solid form-switch">{% csrf_token %}
 																{% if BNP_PL_PPABPLPK %}
-																	<div class="badge badge-light-success" style="padding: 15px 21px">Connected</div>
+																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="BNP_PL_PPABPLPK/730">
+																	Refresh
+																</a>
 																{% else %}
 																<a href="#" class="btn btn-primary align-self-center text-nowrap send_bank w-100px" value="BNP_PL_PPABPLPK/730">
 																	Connect
@@ -595,6 +605,11 @@
            row.find('.company_name').text(data.company_name);
            row.find('.company_status').text('CREATED');
          },
+         error: function(data) {
+           $(this_element).remove();
+           $(td_row).find('button').remove();
+           $(td_row).append('<div class="badge badge-light-danger" style="padding: 15px 21px">Daily Limit</div>');
+         }
       });}
       else {
        $(this_input).closest('td').find('.error_li').text('Enter your company name')
