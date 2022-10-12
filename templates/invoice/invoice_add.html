@@ -179,6 +179,7 @@
 															<!--begin::Input group-->
 															<div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">
 																<span class="fs-2x fw-bold text-gray-800">Invoice # {{ invoice_number }}</span>
+																<input type="text" style="display:none" value="{{ invoice_number }}" name="invoice_name">
 															</div>
 															<!--end::Input group-->
 															<!--begin::Input group-->
@@ -189,7 +190,7 @@
 																<!--begin::Input-->
 																<div class="position-relative d-flex align-items-center">
 																	<!--begin::Datepicker-->
-																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="datetimes" type="text">
+																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="invoice_date" type="text">
 																	<!--end::Datepicker-->
 																	<!--begin::Icon-->
 																	<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -219,7 +220,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Companies</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company_uid" data-placeholder="Company">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company" data-placeholder="Company">
                                                                             <option></option>
                                                                             {% for company in companies %}
                                                                                 <option value="{{ company.uid }}">{{ company }}</option>
@@ -243,7 +244,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Accounts</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select required class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_account" name="account_uid" data-placeholder="No one Account">
+																		<select required class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_account" name="account" data-placeholder="No one Account">
                                                                             <option></option>
 																		</select>
                                                                     </div>
@@ -265,7 +266,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Contractor</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor_uid" data-placeholder="Contractor">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor" data-placeholder="Contractor">
                                                                             <option value=""></option>
                                                                             {% for contractor in contractors %}
                                                                                 {% if contractor == order.contractor %}
@@ -296,7 +297,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Currency</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency_name" data-placeholder="Currency">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency" data-placeholder="Currency">
 																			<option></option>
 																			{% for currency in currencies %}
 																			<option value="{{ currency }}">{{ currency.currency }}</option>
@@ -318,7 +319,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Order</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_order" name="order_name" data-placeholder="Not required">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_order" name="order" data-placeholder="Not required">
 																			<option></option>
 																			{% for order in orders %}
 																			<option value="{{ order.uid }}">{{ order }}</option>
@@ -383,7 +384,7 @@
 																	<tbody>
 																		<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																			<td class="pe-7">
-																<select class="form-select form-select-solid product_filter_select" data-placeholder="Product" id="product_filter_select" data-allow-clear="true" name="select_item" required>
+																<select class="form-select form-select-solid product_filter_select" data-placeholder="Product" id="product_filter_select" data-allow-clear="true" name="product" required>
                                                                     <option></option>
                                                                     {% for product in products %}
                                                                     <option value="{{ product.uid }}">{{ product }}</option>
@@ -392,10 +393,10 @@
 
 																			</td>
 																			<td class="ps-0">
-																				<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="1" data-kt-element="quantity">
+																				<input class="form-control form-control-solid" type="number" min="1" name="quantity" placeholder="1" value="1" data-kt-element="quantity">
 																			</td>
 																			<td>
-																				<input type="text" class="form-control form-control-solid text-end price_input" name="price[]" placeholder="0.00" value="0.00" data-kt-element="price">
+																				<input type="text" class="form-control form-control-solid text-end price_input" name="price" placeholder="0.00" value="0.00" data-kt-element="price">
 																			</td>
 																			<td class="pt-8 text-end text-nowrap">zł
 																			<span data-kt-element="total">0.00</span></td>
@@ -437,7 +438,7 @@
 																			<th></th>
 																			<th colspan="2" class="fs-4 ps-0">Total</th>
 																			<th colspan="2" class="text-end fs-4 text-nowrap">zł
-																			<span data-kt-element="grand-total" id="order_total_span">0.00</span><input id="order_total_input" style="display: none" value="0" name="invoice_total" ></th>
+																			<span data-kt-element="grand-total" id="order_total_span">0.00</span><input id="invoice_sum" style="display: none" value="0" name="invoice_sum" ></th>
 																		</tr>
 																	</tfoot>
 																	<!--end::Table foot-->
@@ -481,19 +482,19 @@
 														<!--begin::Option-->
 														<div class="funkyradio">
                                                             <div class="funkyradio-warning">
-                                                                <input type="radio" name="radio" id="radio2" checked="" value="Draft">
+                                                                <input type="radio" name="invoice_status" id="radio2" checked="" value="Draft">
                                                                 <label for="radio2">Draft</label>
                                                             </div>
                                                             <div class="funkyradio-primary">
-                                                                <input type="radio" name="radio" id="radio5" value="Sent">
+                                                                <input type="radio" name="invoice_status" id="radio5" value="Sent">
                                                                 <label for="radio5">Sent</label>
                                                             </div>
                                                             <div class="funkyradio-success">
-                                                                <input type="radio" name="radio" id="radio3" value="Paid">
+                                                                <input type="radio" name="invoice_status" id="radio3" value="Paid">
                                                                 <label for="radio3">Paid</label>
                                                             </div>
                                                             <div class="funkyradio-danger">
-                                                                <input type="radio" name="radio" id="radio4" value="Canceled">
+                                                                <input type="radio" name="invoice_status" id="radio4" value="Canceled">
                                                                 <label for="radio4">Canceled</label>
                                                             </div>
                                                         </div>
@@ -558,6 +559,7 @@
 						</div>
 						<!--end::Content wrapper-->
 					</div>
+
 {% endblock content %}
 
 
@@ -577,7 +579,7 @@
 		</script>
 		<script>
 		$(function() {
-		  $('input[name="datetimes"]').daterangepicker({
+		  $('input[name="invoice_date"]').daterangepicker({
 			timePicker: true,
 			timePicker24Hour: true,
 			timePickerSeconds: true,
@@ -591,7 +593,7 @@
 		</script>
 		<script>
 		  $('body').on('click', '#add_product', function () {
-		 var newselect = $("<tr class='border-bottom border-bottom-dashed' data-kt-element='item'><td class='pe-7'><select class='form-select form-select-solid product_filter_select' name='select_item' data-placeholder='Product'><option></option>{% for product in products %}<option value='{{product.uid}}'>{{ product }}</option>{% endfor %}</select></td><td class='ps-0'><input class='form-control form-control-solid' type='number' min='1' name='quantity[]' placeholder='1' value='1' data-kt-element='quantity'></td><td><input type='text' class='form-control form-control-solid text-end price_input' name='price[]' placeholder='0.00' value='0.00' data-kt-element='price'></td><td class='pt-8 text-end text-nowrap'>zł <span data-kt-element='total'>0.00</span></td><td class='pt-5 text-end'><button type='button' class='btn btn-sm btn-icon btn-active-color-primary' data-kt-element='remove-item'><span class='svg-icon svg-icon-3'><svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path><path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path><path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path></svg></span></button></td></tr>");
+		 var newselect = $("<tr class='border-bottom border-bottom-dashed' data-kt-element='item'><td class='pe-7'><select class='form-select form-select-solid product_filter_select' name='product' data-placeholder='Product'><option></option>{% for product in products %}<option value='{{product.uid}}'>{{ product }}</option>{% endfor %}</select></td><td class='ps-0'><input class='form-control form-control-solid' type='number' min='1' name='quantity' placeholder='1' value='1' data-kt-element='quantity'></td><td><input type='text' class='form-control form-control-solid text-end price_input' name='price' placeholder='0.00' value='0.00' data-kt-element='price'></td><td class='pt-8 text-end text-nowrap'>zł <span data-kt-element='total'>0.00</span></td><td class='pt-5 text-end'><button type='button' class='btn btn-sm btn-icon btn-active-color-primary' data-kt-element='remove-item'><span class='svg-icon svg-icon-3'><svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z' fill='currentColor'></path><path opacity='0.5' d='M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z' fill='currentColor'></path><path opacity='0.5' d='M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z' fill='currentColor'></path></svg></span></button></td></tr>");
 		 $("tbody").append(newselect);
 		  $("tr:last-child td:first-child select").select2({tags: 'true'});
 		});
@@ -599,7 +601,7 @@
 		<script>
 			$('#order_total_span').on('DOMSubtreeModified',function(){
 				var order_total = $('#order_total_span').text();
-				$('#order_total_input').attr('value', order_total);
+				$('#invoice_sum').attr('value', order_total);
 			})
 		</script>
 		<script>

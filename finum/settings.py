@@ -68,23 +68,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'finum.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'app_finum_on',
-        'USER': 'app_finum_on',
-        'PASSWORD': 'Dv56wWTRAiN05JUc',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'app_finum_on',
+#         'USER': 'app_finum_on',
+#         'PASSWORD': 'Dv56wWTRAiN05JUc',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -132,6 +132,7 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'customuser.CustomUser'
+# EMAIL_BACKEND = 'django.finum.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = '159.253.18.106'
 EMAIL_PORT = 587

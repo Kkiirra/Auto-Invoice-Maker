@@ -285,7 +285,7 @@
 									<!--begin::Modal content-->
 									<div class="modal-content">
 										<!--begin::Form-->
-										<form class="form" action="{% url 'accounts:add_account' com_uid=company.uid %}" id="kt_modal_add_account_form" data-kt-redirect="{% url 'company:companies' %}" method="POST">
+										<form class="form" action="" id="kt_modal_add_account_form" method="POST">
 											{% csrf_token %}
 											<!--begin::Modal header-->
 											<div class="modal-header" id="kt_modal_add_account_header">
@@ -311,6 +311,7 @@
 												<!--begin::Scroll-->
 												<div class="scroll-y me-n7 pe-7" id="kt_modal_add_account_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_account_header" data-kt-scroll-wrappers="#kt_modal_add_account_scroll" data-kt-scroll-offset="300px">
 													<!--begin::Input group-->
+													<input type="text" style="display: none" name="company" value="{{company.uid}}">
 													<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="required fs-6 fw-semibold mb-2">{% trans "Account ID" %}</label>
@@ -326,28 +327,26 @@
 														<!--end::Label-->
 														<!--begin::Input-->
 
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" data-control="select2"  id="select_bank" name="bank_name" >
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" data-control="select2"  id="select_bank" name="bank" >
 															{% for bank in banks %}
 															<option value="{{ bank.bank_name }}">{{ bank.bank_name }}</option>
 															{% endfor %}
 														</select>
 														<!--end::Input-->
 													</div>
-
 													<div class="fv-row mb-7">
 														<!--begin::Label-->
-														<label class="required fs-6 fw-semibold mb-2">{% trans "Select your Currency" %}</label>
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Currency" %}</label>
 														<!--end::Label-->
 														<!--begin::Input-->
 
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency_name" >
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency" >
 															{% for currency in currencies %}
 															<option value="{{ currency }}">{{ currency.currency }}</option>
 															{% endfor %}
 														</select>
 														<!--end::Input-->
 													</div>
-
 													<!--end::Input group-->
 												</div>
 												<!--end::Scroll-->

@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from dateutil.parser import parse
-import random
 from accounts.models import Account
+from django.core.exceptions import ObjectDoesNotExist
 from company.models import Company, Currency
 from contractors.models import Contractor
 from customuser.models import User_Account
@@ -11,6 +11,7 @@ from orders.models import Order
 from products.models import Product
 from django.core.exceptions import ValidationError
 from .models import Invoice, InvoiceItem, Invoice_status
+from .forms import InvoiceForm
 
 
 @login_required(login_url='/signin/')
@@ -22,112 +23,94 @@ def invoice(request):
 
     invoice_stats = Invoice_status.objects.all()
     currencies = Currency.objects.all()
-    return render(request, 'invoice/invoice.html', {'invoices': invoices, 'companies': companies, 'contractors': contractors,
-                                                    'currencies': currencies, 'invoice_stats': invoice_stats})
+
+    context = {
+        'invoices': invoices, 'companies': companies, 'contractors': contractors,
+        'currencies': currencies, 'invoice_stats': invoice_stats
+    }
+
+    return render(request, 'invoice/invoice.html', context)
 
 
 @login_required(login_url='/signin/')
 def delete_invoice(request):
-    user_account = User_Account.objects.filter(owner=request.user)
+    Invoice.objects.get(
+        uid=request.POST.get('uid'), user_account=User_Account.objects.get(owner=request.user)
+    ).delete()
 
-    inv_uid = request.POST.get('uid')
-
-    try:
-        invoice = Invoice.objects.get(uid=inv_uid, user_account=user_account[0])
-        invoice.delete()
-        return JsonResponse({}, status=200)
-    except Exception:
-        return redirect('customuser:bad_request')
+    return JsonResponse({}, status=200)
 
 
 @login_required(login_url='/signin/')
 def invoice_add(request):
-
     user_account = User_Account.objects.get(owner=request.user)
+
+    products = Product.objects.filter(user_account=user_account)
+    companies = Company.objects.filter(user_account=user_account)
+    contractors = Contractor.objects.filter(user_account=user_account)
+    orders = Order.objects.filter(user_account=user_account)
+    currencies = Currency.objects.all()
 
     try:
         invoice_last = Invoice.objects.filter(user_account=user_account).latest('creation_date')
         invoice_number = int(invoice_last.invoice_name) + 1
-    except Exception:
+    except ObjectDoesNotExist:
         invoice_number = 1
 
-    if request.method == 'GET':
+    if request.method == 'POST':
 
-        products = Product.objects.filter(user_account=user_account)
-        companies = Company.objects.filter(user_account=user_account)
-        contractors = Contractor.objects.filter(user_account=user_account)
-        orders = Order.objects.filter(user_account=user_account)
-        currencies = Currency.objects.all()
-
-        context = {'currencies': currencies, 'companies': companies, 'contractors': contractors, 'orders': orders,
-                   'products': products, 'invoice_number': invoice_number}
-
-        return render(request, 'invoice/invoice_add.html', context)
-    else:
-
-        invoice_total = float(request.POST.get('invoice_total'))
-        currency = request.POST.get('currency_name')
-        contractor_uid = request.POST.get('contractor_uid')
-        company_uid = request.POST.get('company_uid')
-        account_uid = request.POST.get('account_uid')
-        order_uid = request.POST.get('order_name')
-        invoice_status = request.POST.get('radio')
-        invoice_date = parse(request.POST.get('datetimes'), dayfirst=True)
-
-        try:
-            invoice_flag = Invoice.objects.get(user_account=user_account, invoice_name=invoice_number)
-        except Exception:
-            invoice_flag = False
-
-        if invoice_flag:
-            context = {'invoice_name_error': 'The same number is exist, please, enter the new'}
-        else:
-            context = {}
-
-            quantities = request.POST.getlist('quantity[]')
-            products = request.POST.getlist('select_item')
-            prices = request.POST.getlist('price[]')
-
-            company = Company.objects.get(user_account=user_account, uid=company_uid)
-            account = Account.objects.get(user_account=user_account, uid=account_uid, company=company)
-            status = Invoice_status.objects.get(status=invoice_status)
+        form_invoice = InvoiceForm(request.POST)
+        if form_invoice.is_valid():
 
             try:
-                order = Order.objects.get(user_account=user_account, uid=order_uid)
+                contractor = Contractor.objects.get(uid=request.POST.get('contractor'), user_account=user_account)
             except ValidationError:
-                order = None
+                contractor = Contractor.objects.create(
+                    contractor_name=request.POST.get('contractor'), user_account=user_account)
 
-            try:
-                contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
-            except ValidationError:
-                contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
+            form_invoice.instance.contractor = contractor
+            form_invoice.instance.user_account = user_account
 
+            invoice = form_invoice.save()
 
+            quantities = request.POST.getlist('quantity')
+            products = request.POST.getlist('product')
+            prices = request.POST.getlist('price')
 
-            new_invoice = Invoice.objects.create(user_account=user_account, company=company, currency=currency,
-                                                 contractor=contractor, invoice_name=invoice_number, invoice_sum=invoice_total,
-                                                 invoice_date=invoice_date, order=order, account=account, invoice_status=status)
+            instances = []
+
             for product, price, quantity in zip(products, prices, quantities):
-                print(prices)
+
                 try:
-                    product = Product.objects.get(uid=product)
+                    product = Product.objects.get(uid=product, user_account=user_account)
                 except ValidationError:
-                    product = Product.objects.create(user_account=user_account, product_name=product,
-                                                         product_price=price, currency=currency)
+                    product = Product.objects.create(
+                        user_account=user_account, product_name=product, product_price=price, currency=invoice.currency
+                    )
 
-                invoice_item = InvoiceItem.objects.create(user_account=user_account, product=product, invoice=new_invoice,
-                                                      quantity=int(quantity), price=float(price))
+                instances.append(
+                    InvoiceItem(
+                        user_account=user_account, product=product, invoice=invoice, quantity=int(quantity), price=float(price))
+                )
 
-        if invoice_flag:
-            return render(request, 'invoice/invoice_add.html', context)
-        else:
-            return HttpResponseRedirect('/invoice/')
+            InvoiceItem.objects.bulk_create(instances)
+
+            return redirect('invoice:invoice')
+    else:
+        form_invoice = InvoiceForm()
+
+    context = {
+        'currencies': currencies, 'companies': companies, 'contractors': contractors,
+        'orders': orders, 'products': products, 'invoice_number': invoice_number, 'form_invoice': form_invoice
+    }
+
+    return render(request, 'invoice/invoice_add.html', context)
 
 
 @login_required(login_url='/signin/')
 def invoice_edit(request, inv_uid):
-
     user_account = User_Account.objects.get(owner=request.user)
+
     products = Product.objects.filter(user_account=user_account)
     invoice = Invoice.objects.get(uid=inv_uid, user_account=user_account)
     companies = Company.objects.filter(user_account=user_account)
@@ -136,16 +119,8 @@ def invoice_edit(request, inv_uid):
     currencies = Currency.objects.all()
 
 
-    context = {'orders': orders, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
-               'products': products, 'invoice': invoice}
-    if request.method == 'GET':
-
-
-        return render(request, 'invoice/invoice_edit.html', context)
-
-    else:
+    if request.method == 'POST':
         invoice_total = float(request.POST.get('invoice_total'))
-        items = request.POST.getlist('item[]')
         currency = request.POST.get('currency_name')
         contractor_uid = request.POST.get('contractor_uid')
         invoice_number = request.POST.get('invoice_number')
@@ -153,11 +128,11 @@ def invoice_edit(request, inv_uid):
         account_uid = request.POST.get('account_uid')
         invoice_date = parse(request.POST.get('datetimes'), dayfirst=True)
         order_uid = request.POST.get('order_name')
-        quantities = request.POST.getlist('quantity[]')  # quantity_new
-        products = request.POST.getlist('select_item')  # select_item_new
-        prices = request.POST.getlist('price[]')  # price_new
 
-
+        items = request.POST.getlist('item')
+        quantities = request.POST.getlist('quantity')  # quantity_new
+        products = request.POST.getlist('product')  # select_item_new
+        prices = request.POST.getlist('price')  # price_new
         quantities_new = request.POST.getlist('quantity_new')
         products_new = request.POST.getlist('select_item_new')
         prices_new = request.POST.getlist('price_new')
@@ -176,11 +151,11 @@ def invoice_edit(request, inv_uid):
 
         invoice = Invoice.objects.filter(user_account=user_account, uid=inv_uid)
         invoice.update(user_account=user_account, company=company, currency=currency, account=account,
-                                                 contractor=contractor, invoice_name=invoice_number, invoice_sum=invoice_total,
-                                                 invoice_date=invoice_date, order=order)
+                       contractor=contractor, invoice_name=invoice_number, invoice_sum=invoice_total,
+                       invoice_date=invoice_date, order=order)
 
         for item, product, price, quantity in zip(items, products, prices, quantities):
-
+            print(price)
             invoice_item = InvoiceItem.objects.filter(user_account=user_account, uid=item)
 
             try:
@@ -188,7 +163,7 @@ def invoice_edit(request, inv_uid):
                 product = product[0]
             except ValidationError:
                 product = Product.objects.create(user_account=user_account, product_name=product,
-                                                     product_price=price, currency=currency)
+                                                 product_price=price, currency=currency)
             invoice_item.update(product=product, quantity=quantity, price=price)
 
         if quantities_new is not None and prices_new is not None and products_new is not None:
@@ -199,10 +174,16 @@ def invoice_edit(request, inv_uid):
                     product = Product.objects.create(user_account=user_account, product_name=product,
                                                      product_price=price, currency=currency)
 
-                invoice_item = InvoiceItem.objects.create(user_account=user_account, product=product, invoice=invoice[0],
-                                                      quantity=int(quantity), price=price)
+                invoice_item = InvoiceItem.objects.create(user_account=user_account, product=product,
+                                                          invoice=invoice[0],
+                                                          quantity=int(quantity), price=price)
+        return redirect('invoice:invoice_edit', invoice[0].uid)
+    context = {
+        'orders': orders, 'currencies': currencies, 'companies': companies,
+        'contractors': contractors, 'products': products, 'invoice': invoice
+               }
 
-    return HttpResponseRedirect(f'/invoice/{inv_uid}/')
+    return render(request, 'invoice/invoice_edit.html', context)
 
 
 @login_required(login_url='/signin/')
@@ -222,7 +203,8 @@ def invoice_byOrder(request, ord_uid):
         invoice_number = 1
 
     context = {'orders': orders, 'currencies': currencies, 'companies': companies, 'contractors': contractors,
-               'products': products, 'invoice': invoice, 'selected_order': selected_order, 'invoice_number': invoice_number}
+               'products': products, 'invoice': invoice, 'selected_order': selected_order,
+               'invoice_number': invoice_number}
     return render(request, 'invoice/invoice_byorder.html', context)
 
 
@@ -233,6 +215,5 @@ def change_status(request):
     new_status = Invoice_status.objects.get(status=status)
 
     Invoice.objects.filter(uid=invoice_uid).update(invoice_status=new_status)
-
 
     return JsonResponse({}, status=200)

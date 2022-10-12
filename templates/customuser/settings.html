@@ -158,12 +158,14 @@
                                         <div class="row">
                                             <!--begin::Col-->
                                             <div class="col-lg-6 fv-row">
-                                                <input type="text" name="fname" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="{% trans 'First name' %}" value="{{ request.user.first_name }}"/>
+                                                {{ form.errors.first_name }}
+                                                <input type="text" name="first_name" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="{% trans 'First name' %}" value="{{ request.user.first_name }}"/>
                                             </div>
                                             <!--end::Col-->
                                             <!--begin::Col-->
                                             <div class="col-lg-6 fv-row">
-                                                <input type="text" name="lname" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Last name' %}" value="{{ request.user.last_name }}"/>
+                                                {{ form.errors.last_name }}
+                                                <input type="text" name="last_name" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Last name' %}" value="{{ request.user.last_name }}"/>
                                             </div>
                                             <!--end::Col-->
                                         </div>
@@ -182,7 +184,8 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <input type="tel" name="phone" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Phone number' %}" value="{{ request.user.phone_number }}"/>
+                                        {{ form.errors.phone_number }}
+                                        <input type="number" name="phone_number" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Phone number' %}" value="{{ request.user.phone_number }}"/>
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -195,7 +198,8 @@
 								<!--end::Label-->
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
-                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="country" data-placeholder="Country">
+                                    {{ form.errors.user_country }}
+                                    <select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" name="user_country" data-placeholder="Country">
                                         <option value=""></option>
 
                                         {% for country in countries %}
@@ -210,7 +214,6 @@
 								</div>
 								<!--end::Col-->
 							</div>
-
                             <div class="row mb-6">
 								<!--begin::Label-->
 								<label class="col-lg-4 col-form-label fw-semibold fs-6">

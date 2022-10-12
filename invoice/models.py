@@ -33,7 +33,7 @@ class Invoice(models.Model):
     invoice_name = models.CharField(max_length=255)
     company = ForeignKey(Company, on_delete=models.CASCADE)
     account = ForeignKey(Account, on_delete=models.CASCADE)
-    invoice_status = ForeignKey(Invoice_status, on_delete=models.CASCADE)
+    invoice_status = models.CharField(max_length=255)
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)
     currency = models.CharField(max_length=255)
     invoice_sum = models.DecimalField(decimal_places=2, max_digits=30)
@@ -49,7 +49,7 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return f'Invoice # {self.invoice_name} ({self.invoice_sum} {self.currency})'
+        return f'# {self.invoice_name} ({self.invoice_sum} {self.currency})'
 
     class Meta:
         verbose_name = 'Invoice'

@@ -13,3 +13,7 @@ class Bank_Account(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Bank Account'
+        verbose_name_plural = 'Bank Accounts'

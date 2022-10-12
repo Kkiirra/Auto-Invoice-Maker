@@ -212,11 +212,11 @@ here
                                     </td>
                                         <td>{{ invoice.account }}</td>
                                     <td>
-                                        {% if invoice.invoice_status.status == 'Draft' %}
+                                        {% if invoice.invoice_status == 'Draft' %}
                                             <div class="badge badge-light-warning" style="padding: 5px 5px">Draft</div>
-                                        {% elif invoice.invoice_status.status == 'Paid' %}
+                                        {% elif invoice.invoice_status == 'Paid' %}
                                             <div class="badge badge-light-success" style="padding: 5px 5px">Paid</div>
-                                        {% elif invoice.invoice_status.status == 'Canceled' %}
+                                        {% elif invoice.invoice_status == 'Canceled' %}
                                             <div class="badge badge-light-danger" style="padding: 5px 5px">Canceled</div>
                                         {% else %}
                                             <div class="badge badge-light-primary" style="padding: 5px 5px">Sent</div>

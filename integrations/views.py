@@ -10,6 +10,7 @@ from accounts.models import Account
 from contractors.models import Contractor
 from customuser.models import User_Account
 from transactions.models import Transaction
+from invoice.models import Invoice
 
 
 def refresh_token(request):
@@ -130,7 +131,6 @@ def integrate_account(request):
     if request.method == 'POST':
         user_account = User_Account.objects.get(owner=request.user)
 
-        refresh_token(request)
         access_token = request.session.get('access_token')
 
 
@@ -139,14 +139,15 @@ def integrate_account(request):
         bank_name = request.POST.get('bank').strip()
         account_number = request.POST.get('account_iban').strip()
 
-        company, status = Company.objects.get_or_create(user_account=user_account, company_name=company_name, user=request.user)
+        company, status = Company.objects.get_or_create(user_account=user_account, company_name=company_name)
 
-        user_transactions = requests.get(url=f'https://ob.nordigen.com/api/v2/accounts/c9f6a5a1-9bd3-44b8-a90f-2a6239aa81d7/transactions/',
+        user_transactions = requests.get(url=f'https://ob.nordigen.com/api/v2/accounts/{bank_account_uid}/transactions/',
                                          headers={'accept': 'application/json',
                                                   'Authorization': f'Bearer {access_token}'})
 
         user_transactions_response = user_transactions.json()
-        if user_transactions_response['status_code'] == 429:
+        print(user_transactions_response)
+        if user_transactions_response.get('status_code') == 429:
             return JsonResponse(data={}, status=429)
         currency = user_transactions_response['transactions']['booked'][0]['transactionAmount']['currency']
 
@@ -155,6 +156,7 @@ def integrate_account(request):
 
         for transaction_info in user_transactions_response['transactions']['booked']:
             if transaction_info:
+
                 transaction_id = transaction_info.get('transactionId')
                 if not Transaction.objects.filter(transaction_id=transaction_id, user_account=user_account):
                     transaction_amount = transaction_info['transactionAmount']['amount']
@@ -164,18 +166,22 @@ def integrate_account(request):
                     if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
                         transaction_type = 'Expenses'
                         contractor_name = transaction_info.get('creditorName')
+
                         if not contractor_name:
                             contractor_name = transaction_info.get('debtorName')
                             if not contractor_name:
                                 contractor_name = company_name
+
                     else:
+                        transaction_type = 'Income'
                         contractor_name = transaction_info.get('debtorName')
+
                         if not contractor_name:
                             contractor_name = transaction_info.get('creditorName')
                             if not contractor_name:
                                 contractor_name = company_name
 
-                        transaction_type = 'Income'
+
                     try:
                         contractor = Contractor.objects.get(contractor_name=contractor_name, user_account=user_account)
                     except Exception:
@@ -191,3 +197,12 @@ def integrate_account(request):
         return JsonResponse(data={'company_name': company_name}, status=200)
 
 
+def add_invoices(request):
+    user_account = User_Account.objects.get(owner=request.user)
+    transactions = Transaction.objects.filter(user_account=user_account)
+    for transaction in transactions:
+        invoices = Invoice.objects.filter(user_account=user_account, company=transaction.company,
+                                          account=transaction.account, contractor=transaction.contractor,
+                                          invoice_sum__gte=transaction.sum_of_transactions)
+        transaction.invoice.add(*invoices)
+    return JsonResponse({}, status=200)

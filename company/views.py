@@ -1,81 +1,101 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.db import IntegrityError
+from accounts.forms import AccountForm
 from customuser.models import User_Account
 from .models import Company, Currency, Bank
 from accounts.models import Account
+from .forms import CompanyForm
 
 
 @login_required(login_url='/signin/')
 def companies_list(request):
-
+    """The Page for creating companies/accounts"""
+    user_account = User_Account.objects.get(owner=request.user)
+    companies = Company.objects.filter(user_account=user_account)
     currency = Currency.objects.all()
     banks = Bank.objects.all()
 
-    if request.method == 'GET':
-        try:
-            companies = Company.objects.filter(user=request.user)
-            return render(request, 'company/companies.html', context={'companies': companies,
-                                                                      'currencies': currency, 'banks': banks})
-        except Exception:
-            return redirect('customuser:bad_request')
-    else:
+    form = AccountForm()
+    company_form = CompanyForm()
 
-        user_account = User_Account.objects.get(owner=request.user)
-        company = request.POST.get('company_name')
-        try:
-            Company.objects.get_or_create(company_name=company, user=request.user, user_account=user_account)
-        except Exception:
-            pass
-        return HttpResponseRedirect('/profile/companies/')
+    if 'account_id' in request.POST:
+        form = AccountForm(request.POST)
+
+        if form.is_valid():
+            form.instance.user_account = user_account
+
+            try:
+                form.save()
+            except IntegrityError:
+                form.add_error('account_id', 'Account with this ID already exists')
+
+    elif 'company_name' in request.POST:
+        company_form = CompanyForm(request.POST)
+
+        if company_form.is_valid():
+            company_form.instance.user_account = user_account
+
+            try:
+                company_form.save()
+            except IntegrityError:
+                company_form.add_error('company_name', 'Company with this name already exists')
+
+
+    context = {'companies': companies, 'currencies': currency, 'banks': banks,
+               'form': form, 'company_form': company_form}
+
+    return render(request, 'company/companies.html', context)
+
+
+@login_required(login_url='/signin/')
+def company_edit(request, com_uid):
+    """The Page for creating accounts and edit company settings"""
+
+    user_account = User_Account.objects.get(owner=request.user)
+    currency = Currency.objects.all()
+    banks = Bank.objects.all()
+
+    companies = Company.objects.filter(user_account=user_account)
+    company = Company.objects.get(uid=com_uid, user_account=user_account)
+    accounts = Account.objects.filter(company=company)
+
+    form = AccountForm()
+    company_form = CompanyForm()
+
+    if 'account_id' in request.POST:
+        form = AccountForm(request.POST)
+
+        if form.is_valid():
+            form.instance.user_account = user_account
+
+            try:
+                form.save()
+            except IntegrityError:
+                form.add_error('account_id', 'Account with this ID already exists')
+
+    elif 'company_name' in request.POST:
+        company_form = CompanyForm(request.POST, instance=company)
+
+        if company_form.is_valid():
+            company_form.instance.user_account = user_account
+
+            try:
+                company_form.save()
+            except IntegrityError:
+                company_form.add_error('company_name', 'Company with this name already exists')
+            else:
+                return redirect('company:this_company', company.uid)
+
+    context = {'companies': companies, 'currencies': currency, 'form': form, 'company_form': company_form,
+                   'company': company, 'accounts': accounts, 'banks': banks}
+
+    return render(request, 'company/company_edit.html', context)
 
 
 @login_required(login_url='/signin/')
 def delete_company(request):
-    get_user_account = User_Account.objects.filter(owner=request.user)
-    if get_user_account:
-        uid = request.POST.get('uid')
-        get_company = Company.objects.filter(user_account=get_user_account[0], uid=uid)
-        if get_company:
-            get_company[0].delete()
-            return JsonResponse({}, status=200)
-        else:
-            redirect('customuser:bad_request')
-    else:
-        redirect('customuser:bad_request')
-
-
-@login_required(login_url='/signin/')
-def this_company(request, com_uid):
-
-    currency = Currency.objects.all()
-    banks = Bank.objects.all()
-    try:
-        company = Company.objects.filter(uid=com_uid, user=request.user)
-    except:
-        return redirect('customuser:bad_request')
-
-
-    if request.method == 'GET':
-        accounts = Account.objects.filter(company=company[0])
-        context = {'companies': company, 'currencies': currency,
-                   'company': company[0], 'accounts': accounts, 'banks': banks}
-
-        return render(request, 'company/company_edit.html', context)
-    else:
-
-        new_company_name = request.POST.get('new_company_name')
-        company.update(company_name=new_company_name)
-
-        return HttpResponseRedirect(f'/profile/companies/{com_uid}/')
-
-
-@login_required(login_url='/signin/')
-def start_company(request):
-    user_account = User_Account.objects.get(owner=request.user)
-    company = Company.objects.filter(user_account=user_account)
-    accounts = Account.objects.filter(user_account=user_account)
-    if company and accounts:
-        return redirect('dashboard:dashboard')
-    else:
-        return render(request, 'company/start_company.html')
+    Company.objects.filter(
+        user_account=User_Account.objects.get(owner=request.user), uid=request.POST.get('uid')).delete()
+    return JsonResponse({}, status=200)

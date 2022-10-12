@@ -11,7 +11,7 @@ class AccountAdmin(admin.StackedInline):
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
     inlines = [AccountAdmin]
-    list_display = ['company_name', 'uid']
+    list_display = ['company_name', 'uid', 'user_account']
 
     class Meta:
         model = Company

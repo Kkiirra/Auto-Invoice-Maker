@@ -61,7 +61,7 @@
 								<div class="fv-row mb-8">
 									<!--begin::Email-->
 									<div class="errors_div">
-										{{ errors.email }}
+										{{ form.errors.email }}
 									</div>
 									<input class="form-control bg-transparent" placeholder="{% trans 'Email' %}"  type="email" name="email" maxlength="254" id="id_email" autocomplete="off" autofocus required>
 										<!--end::Email-->
@@ -71,7 +71,7 @@
 									<!--begin::Wrapper-->
 									<div class="mb-1">
 										<!--begin::Input wrapper-->
-											<div class="errors_div">{{ errors.password1 }}</div>
+											<div class="errors_div">{{ form.errors.password1 }}</div>
 
 										<div class="position-relative mb-3" >
 											<input class="pas form-control bg-transparent " type="password"  placeholder="{% trans 'Password' %}" name="password1" id="password1" autocomplete="off">

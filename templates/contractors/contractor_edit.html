@@ -129,6 +129,7 @@
 								<!--end::Label-->
 								<!--begin::Col-->
 								<div class="col-lg-8 fv-row">
+									{{ form.errors.contractor_name }}
 									<input type="tel" name="contractor_name" class="form-control form-control-lg form-control-solid" placeholder="{% trans 'Contractor name' %}" value="{{ contractor.contractor_name }}"/>
 								</div>
 								<!--end::Col-->

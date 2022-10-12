@@ -1,51 +1,63 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Contractor
 from customuser.models import User_Account
+from .forms import ContractorForm
+from django.db import IntegrityError
 
 
 @login_required(login_url='/signin/')
 def contractors_list(request):
 
     user_account = User_Account.objects.get(owner=request.user)
+    contractors = Contractor.objects.filter(user_account=user_account)
 
     if request.method == 'POST':
-        contractor_name = request.POST.get('contractor_name')
-        try:
-            new_contractor = Contractor.objects.create(contractor_name=contractor_name, user_account=user_account)
-        except Exception:
-            pass
-        return redirect('contractors:contractors')
+        form = ContractorForm(request.POST)
+        if form.is_valid():
+            form.instance.user_account = user_account
+
+            try:
+                form.save()
+            except IntegrityError:
+                form.add_error('contractor_name', 'Contractor with this name already exists')
     else:
-        contractors = Contractor.objects.filter(user_account=user_account)
-        return render(request, 'contractors/contractors.html', {'contractors': contractors})
+        form = ContractorForm()
 
+    context = {'contractors': contractors, 'form': form}
 
-@login_required(login_url='/signin/')
-def delete_contractor(request):
-    if request.method == 'POST':
-        contractor_uid = request.POST.get('uid')
-        user_account = User_Account.objects.get(owner=request.user)
-
-        contractor = Contractor.objects.filter(user_account=user_account, uid=contractor_uid)
-
-        if contractor:
-            contractor[0].delete()
-            return JsonResponse({}, status=200)
-        else:
-            return HttpResponseRedirect('/bad_request/')
+    return render(request, 'contractors/contractors.html', context)
 
 
 @login_required(login_url='/signin/')
 def contractor_edit(request, contr_uid):
 
-    user_account = User_Account.objects.filter(owner=request.user)[0]
-    contractor = Contractor.objects.filter(user_account=user_account, uid=contr_uid)
+    user_account = User_Account.objects.get(owner=request.user)
+    contractor = Contractor.objects.get(user_account=user_account, uid=contr_uid)
 
     if request.method == 'POST':
-        contractor_name = request.POST.get('contractor_name')
-        contractor.update(contractor_name=contractor_name)
-        return HttpResponseRedirect(f'/contractors/{contr_uid}/')
+        form = ContractorForm(request.POST, instance=contractor)
+        if form.is_valid():
+
+            try:
+                form.save()
+            except IntegrityError:
+                form.add_error('contractor_name', 'Contractor with this name already exists')
+            else:
+                return redirect('contractors:contractor_edit', contractor.uid)
+
     else:
-        return render(request, 'contractors/contractor_edit.html', {'contractor': contractor[0]})
+        form = ContractorForm(instance=contractor)
+
+    context = {'contractor': contractor, 'form': form}
+
+    return render(request, 'contractors/contractor_edit.html', context)
+
+
+@login_required(login_url='/signin/')
+def delete_contractor(request):
+    if request.method == 'POST':
+        Contractor.objects.filter(
+            user_account=User_Account.objects.get(owner=request.user), uid=request.POST.get('uid')).delete()
+        return JsonResponse({}, status=200)

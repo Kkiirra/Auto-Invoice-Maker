@@ -214,7 +214,7 @@
 															</div>
 										<div class="mb-10">
 																<!--begin::Label-->
-																<label class="form-label fs-5 fw-semibold mb-3">Banks:</label>
+																<label class="form-label fs-5 fw-semibold mb-3">Companies:</label>
 																<!--end::Label-->
 																<!--begin::Input-->
 																<select class="form-select form-select-solid" data-placeholder="Select option" id="companies_filter_select">
@@ -406,6 +406,7 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="required fs-6 fw-semibold mb-2">{% trans "Account ID" %}</label>
+											{{ form.errors.account_id }}
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input required type="text" class="form-control form-control-solid" placeholder="{% trans 'Account ID' %}" name="account_id" id="kt_docs_maxlength_basic" minlength="28" maxlength="28"/>
@@ -416,11 +417,12 @@
 										<!--begin::Input group-->
 										<div class="fv-row mb-7">
 														<!--begin::Label-->
-														<label class="required fs-6 fw-semibold mb-2">{% trans "Bank" %}</label>
-														<!--end::Label-->
-														<!--begin::Input-->
 
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_bank" name="bank_name" >
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Bank" %} </label>
+														<!--end::Label-->
+														{{ form.errors.bank }}
+														<!--begin::Input-->
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_bank" name="bank" >
 															{% for bank in banks %}
 															<option value="{{ bank.bank_name }}">{{ bank.bank_name }}</option>
 															{% endfor %}
@@ -431,10 +433,11 @@
 										<!--end::Input group-->
 										<div class="fv-row mb-7">
 														<!--begin::Label-->
-														<label class="required fs-6 fw-semibold mb-2">{% trans "Select your Company" %}</label>
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Company" %}</label>
 														<!--end::Label-->
+														{{ form.errors.company }}
 														<!--begin::Input-->
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="currency_name" >
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company" >
 															{% for company in companies %}
 															<option value="{{ company.uid }}">{{ company }}</option>
 															{% endfor %}
@@ -443,11 +446,11 @@
 													</div>
 										<div class="fv-row mb-7">
 														<!--begin::Label-->
-														<label class="required fs-6 fw-semibold mb-2">{% trans "Select your Currency" %}</label>
+														<label class="required fs-6 fw-semibold mb-2">{% trans "Currency" %}</label>
 														<!--end::Label-->
 														<!--begin::Input-->
-
-                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency_name" >
+														{{ form.errors.currency }}
+                                    					<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency" >
 															{% for currency in currencies %}
 															<option value="{{ currency }}">{{ currency.currency }}</option>
 															{% endfor %}
@@ -458,6 +461,7 @@
 											<!--begin::Label-->
 											<label class="fs-6 fw-semibold mb-2">{% trans "Account Description" %}</label>
 											<!--end::Label-->
+											{{ form.errors.account_description }}
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" placeholder="{% trans 'Account Description' %}" name="account_description"/>
 											<!--end::Input-->

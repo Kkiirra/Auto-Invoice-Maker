@@ -14,29 +14,27 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/signin/')
 def transactions_view(request):
-    print(request.method)
     if request.method == 'GET':
-        user_account = User_Account.objects.filter(owner=request.user)
-        user_account = user_account[0]
+        user_account = User_Account.objects.get(owner=request.user)
         companies = Company.objects.filter(user_account=user_account)
         if companies:
-            transactions = Transaction.objects.filter(user_account=user_account)
-            if request.GET.get('page') == 'all':
-                pass
-            else:
+            transactions = Transaction.objects.filter(user_account=user_account).order_by('-transaction_date')  # '-transaction_type',
+            if not request.GET.get('page') == 'all':
                 paginator = Paginator(transactions, 8)
                 page = request.GET.get('page')
-
                 transactions = paginator.get_page(page)
 
+            instances = ((transaction, Invoice.objects.filter(company=transaction.company, contractor=transaction.contractor))
+                         for transaction in transactions)
             contractors = Contractor.objects.filter(user_account=user_account)
             currencies = Currency.objects.all()
             transactions_types = Transaction_type.objects.all()
             return render(request, 'transactions/transactions.html', {'currencies': currencies,
-                                                                      'transactions': transactions,
+                                                                      'instances': instances,
                                                                       'contractors': contractors,
                                                                       'transactions_types': transactions_types,
-                                                                      'companies': companies})
+                                                                      'companies': companies,
+                                                                      'transactions': transactions})
         else:
             return redirect('company:start_company')
 
@@ -186,5 +184,16 @@ def delete_invoice(request):
     invoice = Invoice.objects.get(user_account=user_account, uid=invoice_uid)
     print(transaction, invoice)
     transaction.invoice.remove(invoice)
+    transaction.save()
+    return JsonResponse({}, status=200)
+
+
+def add_invoice(request):
+    user_account = User_Account.objects.get(owner=request.user)
+    invoice_uid = request.POST.get('invoice_uid')
+    transaction_uid = request.POST.get('transaction_uid')
+    transaction = Transaction.objects.get(user_account=user_account, uid=transaction_uid)
+    invoice = Invoice.objects.get(user_account=user_account, uid=invoice_uid)
+    transaction.invoice.add(invoice)
     transaction.save()
     return JsonResponse({}, status=200)

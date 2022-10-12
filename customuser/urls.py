@@ -1,4 +1,4 @@
-from django.urls import path, re_path, reverse
+from django.urls import path
 from .views import signup, signin, signout, settings, \
     password_reset_request, activate_link, email_send_success, \
     email_invalid, bad_request, deactivate_user

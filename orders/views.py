@@ -198,14 +198,12 @@ def change_status(request):
 
 @login_required(login_url='/signin/')
 def get_product(request):
-
-    user_account = User_Account.objects.get(owner=request.user)
-
     try:
-        uid_product = request.POST.get('product')
-        product = Product.objects.get(uid=uid_product, user_account=user_account)
+        product = Product.objects.get(
+            uid=request.POST.get('product'), user_account=User_Account.objects.get(owner=request.user)
+        )
+    except ValidationError:
+        return JsonResponse(data={}, status=404)
+    else:
         return JsonResponse(data={'product_price': product.product_price}, status=200)
-
-    except Exception:
-        print('saggdsgasdg')
 
