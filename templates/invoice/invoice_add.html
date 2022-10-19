@@ -393,7 +393,7 @@
 
 																			</td>
 																			<td class="ps-0">
-																				<input class="form-control form-control-solid" type="number" min="1" name="quantity" placeholder="1" value="1" data-kt-element="quantity">
+																				<input class="form-control form-control-solid" type="number" min="1" name="quantity" placeholder="0" data-kt-element="quantity">
 																			</td>
 																			<td>
 																				<input type="text" class="form-control form-control-solid text-end price_input" name="price" placeholder="0.00" value="0.00" data-kt-element="price">
@@ -438,7 +438,7 @@
 																			<th></th>
 																			<th colspan="2" class="fs-4 ps-0">Total</th>
 																			<th colspan="2" class="text-end fs-4 text-nowrap">zł
-																			<span data-kt-element="grand-total" id="order_total_span">0.00</span><input id="invoice_sum" style="display: none" value="0" name="invoice_sum" ></th>
+																			<span data-kt-element="grand-total" class="order_total_span">0.00</span><input id="invoice_sum" style="display: none" name="invoice_sum" ></th>
 																		</tr>
 																	</tfoot>
 																	<!--end::Table foot-->
@@ -599,26 +599,28 @@
 		});
 		</script>
 		<script>
-			$('#order_total_span').on('DOMSubtreeModified',function(){
-				var order_total = $('#order_total_span').text();
+			$('.order_total_span').on('DOMSubtreeModified',function(){
+				var order_total = $('.order_total_span').text();
+				console.log(order_total)
 				$('#invoice_sum').attr('value', order_total);
 			})
 		</script>
 		<script>
-
-		$(document).on('change','.product_filter_select', function(){
-				var row_input = $(this).closest('tr').find('.price_input');
-				$.ajax({
-					type: "POST",
-					url: '{% url 'orders:get_product' %}',
-					data: {
-								product: $(this).val(),
-								csrfmiddlewaretoken: "{{csrf_token}}"
-							},
-					success: function(data) {
-						row_input.val(data.product_price)
-					 },
-				  });
+		$(document).ready(function(){
+			$('.product_filter_select').on('change', function(){
+						var row_input = $(this).closest('tr').find('.price_input');
+						$.ajax({
+							type: "POST",
+							url: '{% url 'orders:get_product' %}',
+							data: {
+										product: $(this).val(),
+										csrfmiddlewaretoken: "{{csrf_token}}"
+									},
+							success: function(data) {
+								row_input.val(data.product_price)
+							 },
+						  });
+			});
 		});
 		</script>
 		<script>

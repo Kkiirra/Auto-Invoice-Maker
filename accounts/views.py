@@ -11,17 +11,18 @@ from .forms import AccountForm
 @login_required(login_url='/signin/')
 def accounts(request):
     """Add account on profile/accounts/"""
-    form = AccountForm()
 
     user_account = User_Account.objects.get(owner=request.user)
     companies = Company.objects.filter(user_account=user_account)
     accounts = Account.objects.filter(user_account=user_account)
 
+    form = AccountForm(user_account)
+
     currency = Currency.objects.all()
     banks = Bank.objects.all()
 
     if request.method == 'POST':
-        form = AccountForm(request.POST)
+        form = AccountForm(user_account, request.POST)
 
         if form.is_valid():
             form.instance.user_account = user_account
@@ -47,14 +48,14 @@ def account_edit(request, ac_uid):
     banks = Bank.objects.all()
 
     if request.method == 'POST':
-        form = AccountForm(request.POST, instance=account)
+        form = AccountForm(user_account, request.POST, instance=account)
 
         if form.is_valid():
             form.save()
             return redirect('accounts:account_edit', account.uid)
 
     else:
-        form = AccountForm(instance=account)
+        form = AccountForm(user_account, instance=account)
 
     context = {'account': account, 'companies': companies, 'currencies': currencies, 'banks': banks, 'form': form}
 

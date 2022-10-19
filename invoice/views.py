@@ -10,19 +10,30 @@ from customuser.models import User_Account
 from orders.models import Order
 from products.models import Product
 from django.core.exceptions import ValidationError
-from .models import Invoice, InvoiceItem, Invoice_status
+from .models import Invoice, InvoiceItem
 from .forms import InvoiceForm
+from django.db.models import Avg, Sum
 
 
 @login_required(login_url='/signin/')
 def invoice(request):
     user_account = User_Account.objects.get(owner=request.user)
-    invoices = Invoice.objects.filter(user_account=user_account)
+    invoices = list()
     companies = Company.objects.filter(user_account=user_account)
     contractors = Contractor.objects.filter(user_account=user_account)
 
-    invoice_stats = Invoice_status.objects.all()
+    invoice_stats = Invoice.invoice_stats
     currencies = Currency.objects.all()
+
+    for invoice in Invoice.objects.filter(user_account=user_account):
+        b = invoice.transactions.all().aggregate(Sum('sum_of_transactions')).get('sum_of_transactions__sum', None)
+        if b:
+            to_pay = round(invoice.invoice_sum - b, 2)
+            if to_pay <= 0:
+                to_pay = 0
+            invoices.append([invoice, round((b / invoice.invoice_sum) * 100, 2), to_pay])
+        else:
+            invoices.append([invoice, 0, invoice.invoice_sum])
 
     context = {
         'invoices': invoices, 'companies': companies, 'contractors': contractors,
@@ -59,7 +70,7 @@ def invoice_add(request):
 
     if request.method == 'POST':
 
-        form_invoice = InvoiceForm(request.POST)
+        form_invoice = InvoiceForm(user_account, request.POST)
         if form_invoice.is_valid():
 
             try:
@@ -97,7 +108,7 @@ def invoice_add(request):
 
             return redirect('invoice:invoice')
     else:
-        form_invoice = InvoiceForm()
+        form_invoice = InvoiceForm(user_account)
 
     context = {
         'currencies': currencies, 'companies': companies, 'contractors': contractors,
@@ -120,67 +131,60 @@ def invoice_edit(request, inv_uid):
 
 
     if request.method == 'POST':
-        invoice_total = float(request.POST.get('invoice_total'))
-        currency = request.POST.get('currency_name')
-        contractor_uid = request.POST.get('contractor_uid')
-        invoice_number = request.POST.get('invoice_number')
-        company_uid = request.POST.get('company_uid')
-        account_uid = request.POST.get('account_uid')
-        invoice_date = parse(request.POST.get('datetimes'), dayfirst=True)
-        order_uid = request.POST.get('order_name')
 
-        items = request.POST.getlist('item')
-        quantities = request.POST.getlist('quantity')  # quantity_new
-        products = request.POST.getlist('product')  # select_item_new
-        prices = request.POST.getlist('price')  # price_new
-        quantities_new = request.POST.getlist('quantity_new')
-        products_new = request.POST.getlist('select_item_new')
-        prices_new = request.POST.getlist('price_new')
-        company = Company.objects.get(user_account=user_account, uid=company_uid)
-        account = Account.objects.get(user_account=user_account, uid=account_uid, company=company)
+        form_invoice = InvoiceForm(user_account, request.POST, instance=invoice)
 
-        try:
-            contractor = Contractor.objects.get(user_account=user_account, uid=contractor_uid)
-        except ValidationError:
-            contractor = Contractor.objects.create(user_account=user_account, contractor_name=contractor_uid)
+        if form_invoice.is_valid():
 
-        try:
-            order = Order.objects.get(user_account=user_account, uid=order_uid)
-        except ValidationError:
-            order = None
-
-        invoice = Invoice.objects.filter(user_account=user_account, uid=inv_uid)
-        invoice.update(user_account=user_account, company=company, currency=currency, account=account,
-                       contractor=contractor, invoice_name=invoice_number, invoice_sum=invoice_total,
-                       invoice_date=invoice_date, order=order)
-
-        for item, product, price, quantity in zip(items, products, prices, quantities):
-            print(price)
-            invoice_item = InvoiceItem.objects.filter(user_account=user_account, uid=item)
+            contractor_uid = request.POST.get('contractor')
 
             try:
-                product = Product.objects.filter(uid=product)
-                product = product[0]
+                contractor = Contractor.objects.get(uid=contractor_uid, user_account=user_account)
             except ValidationError:
-                product = Product.objects.create(user_account=user_account, product_name=product,
-                                                 product_price=price, currency=currency)
-            invoice_item.update(product=product, quantity=quantity, price=price)
+                contractor = Contractor.objects.create(
+                    contractor_name=contractor_uid, user_account=user_account)
 
-        if quantities_new is not None and prices_new is not None and products_new is not None:
-            for product, price, quantity in zip(products_new, prices_new, quantities_new):
+            form_invoice.instance.contractor = contractor
+            invoice = form_invoice.save()
+
+
+            items = request.POST.getlist('item')
+            quantities = request.POST.getlist('quantity')  # quantity_new
+            products = request.POST.getlist('product')  # select_item_new
+            prices = request.POST.getlist('price')  # price_new
+
+            quantities_new = request.POST.getlist('quantity_new')
+            products_new = request.POST.getlist('select_item_new')
+            prices_new = request.POST.getlist('price_new')
+
+            for item, product, price, quantity in zip(items, products, prices, quantities):
+                invoice_item = InvoiceItem.objects.filter(user_account=user_account, uid=item)
+
                 try:
                     product = Product.objects.get(uid=product)
                 except ValidationError:
                     product = Product.objects.create(user_account=user_account, product_name=product,
-                                                     product_price=price, currency=currency)
+                                                     product_price=price, currency=invoice.currency)
 
-                invoice_item = InvoiceItem.objects.create(user_account=user_account, product=product,
-                                                          invoice=invoice[0],
-                                                          quantity=int(quantity), price=price)
-        return redirect('invoice:invoice_edit', invoice[0].uid)
+                invoice_item.update(product=product, quantity=quantity, price=price)
+
+            if quantities_new is not None and prices_new is not None and products_new is not None:
+                for product, price, quantity in zip(products_new, prices_new, quantities_new):
+                    try:
+                        product = Product.objects.get(uid=product)
+                    except ValidationError:
+                        product = Product.objects.create(user_account=user_account, product_name=product,
+                                                         product_price=price, currency=invoice.currency)
+
+                    InvoiceItem.objects.create(user_account=user_account, product=product, invoice=invoice[0],
+                                                              quantity=int(quantity), price=price)
+            return redirect('invoice:invoice_edit', invoice.uid)
+    else:
+        form_invoice = InvoiceForm(user_account, instance=invoice)
+    print(form_invoice.errors)
     context = {
         'orders': orders, 'currencies': currencies, 'companies': companies,
-        'contractors': contractors, 'products': products, 'invoice': invoice
+        'contractors': contractors, 'products': products, 'invoice': invoice, 'form_invoice': form_invoice,
                }
 
     return render(request, 'invoice/invoice_edit.html', context)
@@ -212,8 +216,7 @@ def invoice_byOrder(request, ord_uid):
 def change_status(request):
     status = request.POST.get('status')
     invoice_uid = request.POST.get('invoice')
-    new_status = Invoice_status.objects.get(status=status)
 
-    Invoice.objects.filter(uid=invoice_uid).update(invoice_status=new_status)
+    Invoice.objects.filter(uid=invoice_uid).update(invoice_status=status)
 
     return JsonResponse({}, status=200)

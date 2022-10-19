@@ -205,7 +205,7 @@
 															<!--begin::Input group-->
 															<div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4" data-bs-toggle="tooltip" data-bs-trigger="hover" data-kt-initialized="1">
 																<span class="fs-2x fw-bold text-gray-800">Invoice #</span>
-																<input type="text" class="form-control form-control-flush fs-2x fw-bold text-gray-800 w-100px" value="{{ invoice.invoice_name }}" name="invoice_number" required style="padding: 0">
+																<input type="text" class="form-control form-control-flush fs-2x fw-bold text-gray-800 w-100px" value="{{ invoice.invoice_name }}" name="invoice_name" required style="padding: 0">
 															</div>
 															<!--end::Input group-->
 															<!--begin::Input group-->
@@ -215,9 +215,7 @@
 																<!--end::Date-->
 																<!--begin::Input-->
 																<div class="position-relative d-flex align-items-center">
-																	<!--begin::Datepicker-->
-																	<input class="form-control form-control-transparent fw-bold pe-5 flatpickr-input" placeholder="Select date" name="datetimes" type="text" value="{{ invoice.invoice_date|date:'j.m.Y' }}">
-																	<!--end::Datepicker-->
+																	<input class="form-control form-control-transparent fw-bold pe-5" name="invoice_date" type="text" value="{{ invoice.invoice_date|date:'j.m.Y' }}">
 																	<!--begin::Icon-->
 																	<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
 																	<span class="svg-icon svg-icon-2 position-absolute end-0 ms-4">
@@ -247,7 +245,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Companies</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company_uid" data-placeholder="Company">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_company" name="company" data-placeholder="Company">
                                                                             <option value=""></option>
                                                                             {% for company in companies %}
 																			{% if company == invoice.company %}
@@ -264,7 +262,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Accounts</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_account" name="account_uid" data-placeholder="No one Account">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_account" name="account" data-placeholder="No one Account">
                                                                             <option value=""></option>
                                                                             {% for account in invoice.company.accounts.all %}
 																			{% if account == invoice.account %}
@@ -284,7 +282,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Contractor</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor_uid" data-placeholder="Contractor">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_contractor" name="contractor" data-placeholder="Contractor">
                                                                             <option value=""></option>
                                                                             {% for contractor in contractors %}
                                                                                 {% if contractor == invoice.contractor %}
@@ -315,7 +313,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Currency</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency_name" data-placeholder="Currency">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_currency" name="currency" data-placeholder="Currency">
 																			<option></option>
                                                                             {% for currency in currencies %}
                                                                                 {% if currency.currency == invoice.currency %}
@@ -341,7 +339,7 @@
 																	<label class="form-label fs-6 fw-bold text-gray-700 mb-3">Order</label>
 																	<!--begin::Input group-->
 																	<div class="mb-5">
-																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_order" name="order_name" data-placeholder="Not required">
+																		<select class="js-example-basic-multiple form-select form-select-solid form-select-lg select2-hidden-accessible" id="select_order" name="order" data-placeholder="Not required">
 																			<option></option>
                                                                             {% for order in orders %}
                                                                                 {% if order == invoice.order %}
@@ -411,7 +409,7 @@
 																	{% for item in invoice.items_inv.all %}
 																	<tr class="border-bottom border-bottom-dashed" data-kt-element="item">
 																			<td class="pe-7">
-																<select class="form-select form-select-solid select_for_products product_filter_select" data-placeholder="Product" data-tags="true" data-control="select2" data-allow-clear="true" name="select_item">
+																<select class="form-select form-select-solid select_for_products product_filter_select" data-placeholder="Product" data-tags="true" data-control="select2" data-allow-clear="true" name="product">
                                                                     <option></option>
                                                                     {% for product in products %}
 																	{% if item.product == product %}
@@ -424,11 +422,11 @@
 
 																			</td>
 																			<td class="ps-0">
-																				<input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="{{ item.quantity }}" data-kt-element="quantity">
+																				<input class="form-control form-control-solid" type="number" min="1" name="quantity" placeholder="1" value="{{ item.quantity }}" data-kt-element="quantity">
 																			</td>
 																			<td>
-																				<input type="text" class="form-control form-control-solid text-end price_input" name="price[]" placeholder="0.00" value="{{ item.price|safe }}" data-kt-element="price">
-																				<input type="text" style="display: none" value="{{ item.uid }}" name="item[]">
+																				<input type="text" class="form-control form-control-solid text-end price_input" name="price" placeholder="0.00" value="{{ item.price|safe }}" data-kt-element="price">
+																				<input type="text" style="display: none" value="{{ item.uid }}" name="item">
 																			</td>
 																			<td class="pt-8 text-end text-nowrap">zł
 																			<span data-kt-element="total">0.00</span></td>
@@ -471,7 +469,7 @@
 																			<th></th>
 																			<th colspan="2" class="fs-4 ps-0">Total</th>
 																			<th colspan="2" class="text-end fs-4 text-nowrap">zł
-																			<span data-kt-element="grand-total" id="order_total_span">0.00</span><input id="order_total_input" style="display: none" value="0" name="invoice_total" ></th>
+																			<span data-kt-element="grand-total" id="order_total_span">0.00</span><input id="order_total_input" style="display: none" value="0" name="invoice_sum" ></th>
 																		</tr>
 																	</tfoot>
 																	<!--end::Table foot-->
@@ -503,7 +501,7 @@
 													<!--begin::Input group-->
 													<div class="mb-10 text-center">
 														<!--begin::Label-->
-														<h2 class="">Stats</h2>
+														<h2 class="">Status</h2>
 														<!--end::Select-->
 													</div>
 													<!--end::Input group-->
@@ -515,19 +513,23 @@
 														<!--begin::Option-->
 														<div class="funkyradio">
         <div class="funkyradio-warning">
-            <input type="radio" name="radio" {% if invoice.invoice_status.status == 'Draft' %} checked="" {% endif %} id="radio5" value="Draft">
+            <input type="radio" name="invoice_status" {% if invoice.invoice_status == 'Draft' %} checked="" {% endif %} id="radio5" value="Draft">
             <label for="radio5">Draft</label>
         </div>
         <div class="funkyradio-primary">
-            <input type="radio" name="radio" id="radio2" {% if invoice.invoice_status.status == 'Sent' %} checked="" {% endif %} value="Sent">
+            <input type="radio" name="invoice_status" id="radio2" {% if invoice.invoice_status == 'Sent' %} checked="" {% endif %} value="Sent">
             <label for="radio2">Sent</label>
         </div>
+		<div class="funkyradio-primary">
+            <input type="radio" name="invoice_status" id="radio2" {% if invoice.invoice_status == 'Partially Paid' %} checked="" {% endif %} value="Partially Paid">
+            <label for="radio2">Partially Paid</label>
+        </div>
         <div class="funkyradio-success">
-            <input type="radio" name="radio" {% if invoice.invoice_status.status == 'Paid' %} checked="" {% endif %} id="radio3" value="Paid">
+            <input type="radio" name="invoice_status" {% if invoice.invoice_status == 'Paid' %} checked="" {% endif %} id="radio3" value="Paid">
             <label for="radio3">Paid</label>
         </div>
         <div class="funkyradio-danger">
-            <input type="radio" name="radio" {% if invoice.invoice_status.status == 'Canceled' %} checked="" {% endif %} id="radio4" value="Canceled">
+            <input type="radio" name="invoice_status" {% if invoice.invoice_status == 'Canceled' %} checked="" {% endif %} id="radio4" value="Canceled">
             <label for="radio4">Canceled</label>
         </div>
 
@@ -613,10 +615,7 @@
 		</script>
 		<script>
 		$(function() {
-		  $('input[name="datetimes"]').daterangepicker({
-			timePicker: true,
-			timePicker24Hour: true,
-			timePickerSeconds: true,
+		  $('input[name="invoice_date"]').daterangepicker({
 			drops: "down",
 			locale: {
 			  format: 'DD.MM.YYYY',
@@ -699,7 +698,7 @@
 		});
 		</script>
 		<script>
-		$(document).on("change", "input[name='radio']", function () {
+		$(document).on("change", "input[name='invoice_status']", function () {
 		  $.ajax({
 			type: "POST",
 			url: '{% url 'invoice:change_status' %}',

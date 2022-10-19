@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from customuser.models import User_Account
-from .models import Transaction, Transaction_type
+from .models import Transaction
 from accounts.models import Account
 from company.models import Currency, Company
 from contractors.models import Contractor
@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from invoice.models import Invoice
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 
 
 @login_required(login_url='/signin/')
@@ -28,7 +29,7 @@ def transactions_view(request):
                          for transaction in transactions)
             contractors = Contractor.objects.filter(user_account=user_account)
             currencies = Currency.objects.all()
-            transactions_types = Transaction_type.objects.all()
+            transactions_types = Transaction.transaction_types
             return render(request, 'transactions/transactions.html', {'currencies': currencies,
                                                                       'instances': instances,
                                                                       'contractors': contractors,
@@ -96,15 +97,14 @@ def transaction_edit(request, tr_uid):
     if request.method == 'GET':
         if user_account:
             user_account = user_account[0]
-            transaction = Transaction.objects.filter(user_account=user_account, uid=tr_uid)[0]
+            transaction = Transaction.objects.get(user_account=user_account, uid=tr_uid)
             contractors = Contractor.objects.filter(user_account=user_account)
             companies = Company.objects.filter(user_account=user_account)
             user_invoices = Invoice.objects.filter(user_account=user_account, contractor=transaction.contractor,
                                               company=transaction.company, account=transaction.account)
             currencies = Currency.objects.all()
-            transaction_types = Transaction_type.objects.all()
-            selected_invoice = transaction.invoice.all()
-            print(selected_invoice, 'GGGGG')
+            transaction_types = Transaction.transaction_types
+            selected_invoice = transaction.invoice
             return render(request, 'transactions/transaction_edit.html', {'transaction': transaction,
                                                                           'accounts': transaction.company.accounts.all(),
                                                                           'contractors': contractors,
@@ -126,20 +126,19 @@ def transaction_edit(request, tr_uid):
         account = Account.objects.get(uid=account_uid, user_account=user_account, company=company)
         transaction.update(company=company, account=account, sum_of_transactions=transaction_amount, transaction_date=transaction_date)
 
-        transaction_relation = transaction[0]
+        transaction_relation = transaction[0].invoice
+        if transaction_relation:
 
-        for index in transaction_relation.invoice.all():
-
-            if (index.company != transaction_relation.company) or (index.account != transaction_relation.account)\
-                    or (index.contractor != transaction_relation.contractor):
-                transaction_relation.invoice.remove(index)
+            if (transaction_relation.company != transaction_relation.company) or (transaction_relation.account != transaction_relation.account)\
+                    or (transaction_relation.contractor != transaction_relation.contractor):
+                transaction_relation.invoice.remove(transaction_relation)
 
         for invoice_uid in invoices:
             new_invoice = Invoice.objects.get(uid=invoice_uid)
 
             transaction_relation.invoice.add(new_invoice)
 
-        transaction_relation.save()
+            transaction_relation.save()
 
 
         if contractor_uid:
@@ -171,29 +170,32 @@ def get_transaction_company(request):
     company = Company.objects.get(uid=request.POST.get('company'))
     for index in company.accounts.all():
         context[f'{index.currency} - {index.account_id} - {index.bank}'] = index.uid
-    print(context)
     return JsonResponse(context, status=200)
 
 
 @login_required(login_url='/signin/')
 def delete_invoice(request):
     user_account = User_Account.objects.get(owner=request.user)
-    invoice_uid = request.POST.get('invoice_uid')
     transaction_uid = request.POST.get('transaction_uid')
     transaction = Transaction.objects.get(user_account=user_account, uid=transaction_uid)
-    invoice = Invoice.objects.get(user_account=user_account, uid=invoice_uid)
-    print(transaction, invoice)
-    transaction.invoice.remove(invoice)
+    invoice = transaction.invoice
+    transaction.invoice = None
     transaction.save()
+    invoice.save()
+
     return JsonResponse({}, status=200)
 
 
 def add_invoice(request):
     user_account = User_Account.objects.get(owner=request.user)
+
     invoice_uid = request.POST.get('invoice_uid')
     transaction_uid = request.POST.get('transaction_uid')
+
     transaction = Transaction.objects.get(user_account=user_account, uid=transaction_uid)
     invoice = Invoice.objects.get(user_account=user_account, uid=invoice_uid)
-    transaction.invoice.add(invoice)
+    transaction.invoice = invoice
+
     transaction.save()
+
     return JsonResponse({}, status=200)

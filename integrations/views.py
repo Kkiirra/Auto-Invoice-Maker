@@ -204,5 +204,7 @@ def add_invoices(request):
         invoices = Invoice.objects.filter(user_account=user_account, company=transaction.company,
                                           account=transaction.account, contractor=transaction.contractor,
                                           invoice_sum__gte=transaction.sum_of_transactions)
-        transaction.invoice.add(*invoices)
+        if invoices:
+            transaction.invoice = invoices[0]
+            transaction.save()
     return JsonResponse({}, status=200)

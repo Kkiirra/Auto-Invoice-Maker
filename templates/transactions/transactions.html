@@ -73,7 +73,6 @@
                             <!--begin::Toolbar-->
                             <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                                 <!--begin::Filter-->
-                                <button type="button" class="btn btn-light-primary me-15" id="check_invoices">{% trans "Check Invoices" %}</button>
 
                                 <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" >
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
@@ -169,10 +168,12 @@
 														<!--end::Content-->
 													</div>
                                 <!--end::Filter-->
+                                <button type="button" class="btn btn-light-primary me-5" id="check_invoices">{% trans "Check Invoices" %}</button>
 
                                 <!--begin::Add customer-->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_customer">{% trans "Add Transaction" %}</button>
                                 <!--end::Add customer-->
+
                             </div>
                             <!--end::Toolbar-->
                             <!--begin::Group actions-->
@@ -195,14 +196,14 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="min-w-100px sorting">{% trans "Date" %}</th>
+                                    <th class="min-w-10px sorting">{% trans "Date" %}</th>
                                     <th class="min-w-90px">{% trans "Company" %}</th>
                                     <th class="min-w-50px text-center">{% trans "Contractor" %}</th>
                                     <th class="min-w-10px">{% trans "Amount" %}</th>
                                     <th class="min-w-10px">{% trans "Type" %}</th>
                                     <th class="min-w-10px text-center">{% trans "Account" %}</th>
                                     <th class="min-w-150px ">{% trans "Invoices" %}</th>
-                                    <th class="text-end min-w-40px">{% trans "Actions" %}</th>
+                                    <th class="text-end min-w-10px">{% trans "Actions" %}</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
@@ -233,10 +234,10 @@
                                     </td>
                                     <td>
 
-                                        <select class="form-select form-select-solid invoice_select" data-placeholder="Invoices" name="select_invoice" multiple data-control="select2">
+                                        <select class="form-select form-select-solid invoice_select" data-placeholder="Invoices" name="select_invoice" data-control="select2" data-allow-clear="true">
                                             <option></option>
                                         {% for invoice in invoices %}
-                                            {% if invoice in transaction.invoice.all %}
+                                            {% if invoice == transaction.invoice %}
                                             <option value="{{ invoice.uid }}" selected>{{ invoice }}</option>
                                             {% else %}
                                             <option value="{{ invoice.uid }}">{{ invoice }}</option>

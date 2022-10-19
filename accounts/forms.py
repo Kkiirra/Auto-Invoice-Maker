@@ -1,4 +1,6 @@
 from django.forms import ModelForm
+
+from company.models import Company
 from .models import Account
 
 
@@ -8,10 +10,7 @@ class AccountForm(ModelForm):
         fields = ['account_id', 'account_description', 'bank', 'currency', 'company']
 
 
-    # def clean(self):
-    #     cleaned_data = self.cleaned_data
-    #     print(self.cleaned_data)
-    #     if Account.objects.filter(account_id=cleaned_data['account_id'], user_account=self.user_account):
-    #         self.add_error('account_id', 'Account with this Name already exists')
-    #
-    #     return cleaned_data
+    def __init__(self, user, *args, **kwargs):
+        super(AccountForm, self).__init__(*args, **kwargs)
+
+        self.fields['company'].queryset = Company.objects.filter(user_account=user)

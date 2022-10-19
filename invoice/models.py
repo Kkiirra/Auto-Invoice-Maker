@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.db.models import ForeignKey
+from django.db.models import Sum
 
 from accounts.models import Account
 from company.models import Company
@@ -14,18 +15,22 @@ from orders.models import Order
 from products.models import Product
 
 
-class Invoice_status(models.Model):
-    status = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.status
-
-    class Meta:
-        verbose_name = 'Invoice status'
-        verbose_name_plural = 'Invoice stats'
-
-
 class Invoice(models.Model):
+
+    draft = 'Draft'
+    sent = 'Sent'
+    paid = 'Paid'
+    paid_part = 'Partially Paid'
+    canceled = 'Canceled'
+
+    invoice_stats = (
+        (draft, 'Draft'),
+        (sent, 'Sent'),
+        (paid, 'Paid'),
+        (paid_part, 'Partially Paid'),
+        (canceled, 'Canceled'),
+    )
+
 
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_account = models.ForeignKey(User_Account, on_delete=models.CASCADE)
@@ -33,7 +38,7 @@ class Invoice(models.Model):
     invoice_name = models.CharField(max_length=255)
     company = ForeignKey(Company, on_delete=models.CASCADE)
     account = ForeignKey(Account, on_delete=models.CASCADE)
-    invoice_status = models.CharField(max_length=255)
+    invoice_status = models.CharField(max_length=255, choices=invoice_stats)
     contractor = ForeignKey(Contractor, on_delete=models.CASCADE)
     currency = models.CharField(max_length=255)
     invoice_sum = models.DecimalField(decimal_places=2, max_digits=30)
@@ -57,6 +62,18 @@ class Invoice(models.Model):
         unique_together = 'invoice_name', 'user_account'
 
 
+    def save(self, *args, **kwargs):
+        transactions_sum = self.transactions.all().aggregate(Sum('sum_of_transactions')).get('sum_of_transactions__sum', None)
+        if transactions_sum is not None:
+            if self.invoice_sum <= transactions_sum:
+                self.invoice_status = Invoice.paid
+            elif self.invoice_sum > transactions_sum and transactions_sum is not None:
+                self.invoice_status = Invoice.paid_part
+        else:
+            self.invoice_status = Invoice.draft
+        super(Invoice, self).save(*args, **kwargs)
+
+
 class InvoiceItem(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_account = models.ForeignKey(User_Account, on_delete=models.CASCADE)
@@ -68,5 +85,3 @@ class InvoiceItem(models.Model):
     class Meta:
         verbose_name = 'Invoice Item'
         verbose_name_plural = 'Invoice Items'
-
-

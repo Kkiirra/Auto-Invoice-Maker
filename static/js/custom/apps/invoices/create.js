@@ -13,7 +13,7 @@ var KTAppInvoicesCreate = function() {
 					r = n.from(l.value);
 				r = !r || r < 0 ? 0 : r;
 				var i = parseInt(t.value);
-				i = !i || i < 0 ? 1 : i, l.value = n.to(r), t.value = i, e.querySelector('[data-kt-element="total"]').innerText = n.to(r * i), a += r * i
+				i = !i || i < 0 ? 0 : i, l.value = n.to(r), t.value = i, e.querySelector('[data-kt-element="total"]').innerText = n.to(r * i), a += r * i
 			})), e.querySelector('[data-kt-element="sub-total"]').innerText = n.to(a), e.querySelector('[data-kt-element="grand-total"]').innerText = n.to(a)
 		},
 		a = function() {
@@ -32,7 +32,7 @@ var KTAppInvoicesCreate = function() {
 				e.preventDefault(), KTUtil.remove(this.closest('[data-kt-element="item"]')), a(), t()
 			})), KTUtil.on(e, '[data-kt-element="items"] [data-kt-element="quantity"], [data-kt-element="items"] [data-kt-element="price"]', "change", (function(e) {
 				e.preventDefault(), t()
-			})), $(e.querySelector('[name="invoice_date"]')).flatpickr({
+			})), $(e.querySelector('[name="date_of_selected_invoice"]')).flatpickr({
 				enableTime: !1,
 				dateFormat: "d, M Y"
 			}), $(e.querySelector('[name="invoice_due_date"]')).flatpickr({
