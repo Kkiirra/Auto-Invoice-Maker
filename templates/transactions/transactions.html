@@ -696,6 +696,8 @@ $('#apply_filter').on('click',function(){
 $(document).on("click", "#check_invoices", function () {
   $(this).text('Loading... ')
   $(this).append('<span class="spinner-border spinner-border-sm"></span>')
+  var this_but = $(this);
+
   $.ajax({
     type: "POST",
     url: '{% url 'integrations:add_invoices' %}',
@@ -706,6 +708,8 @@ $(document).on("click", "#check_invoices", function () {
     location.href = "{% url 'transactions:transactions_list' %}"
      },
      error: function(data) {
+          $(this_but).attr('class', 'btn btn-light-danger me-5')
+          $(this_but).text('Something was wrong')
      }
   })
 });
@@ -714,6 +718,7 @@ $(document).on("click", "#check_invoices", function () {
 $(document).on("click", "#check_transact", function () {
   $(this).text('Loading... ')
   $(this).append('<span class="spinner-border spinner-border-sm"></span>')
+  var this_but = $(this);
   $.ajax({
     type: "POST",
     url: '{% url 'transactions:load_transactions' %}',
@@ -724,6 +729,8 @@ $(document).on("click", "#check_transact", function () {
     location.href = "{% url 'transactions:transactions_list' %}"
      },
      error: function(data) {
+          $(this_but).attr('class', 'btn btn-light-danger me-5')
+          $(this_but).text('Something was wrong')
      }
   })
 });

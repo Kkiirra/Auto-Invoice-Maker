@@ -17,15 +17,15 @@ def orders_view(request):
     currencies = Currency.objects.all()
     user_account = User_Account.objects.filter(owner=request.user)[0]
     companies = Company.objects.filter(user_account=user_account)
+    context = {'companies': companies, 'currencies': currencies, 'statuses': statuses}
 
     if companies:
         orders = Order.objects.filter(user_account=user_account)
         contractors = Contractor.objects.filter(user_account=user_account)
-        return render(request, 'orders/order.html', {'orders': orders, 'companies': companies,
-                                                     'contractors': contractors,
-                                                     'currencies': currencies, 'statuses': statuses})
-    else:
-        return redirect('company:start_company')
+
+        context.update({'orders': orders, 'contractors': contractors})
+
+    return render(request, 'orders/order.html', context)
 
 
 @login_required(login_url='/signin/')

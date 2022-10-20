@@ -18,6 +18,7 @@ import requests
 @login_required(login_url='/signin/')
 def transactions_view(request):
     user_account = User_Account.objects.get(owner=request.user)
+    context = dict()
 
     if request.method == 'GET':
         companies = Company.objects.filter(user_account=user_account)
@@ -35,9 +36,10 @@ def transactions_view(request):
             currencies = Currency.objects.all()
             transactions_types = Transaction.transaction_types
 
-            context = {'currencies': currencies, 'instances': instances, 'contractors': contractors,
-                        'transactions_types': transactions_types, 'companies': companies, 'transactions': transactions}
-            return render(request, 'transactions/transactions.html', context)
+            context.update({'currencies': currencies, 'instances': instances, 'contractors': contractors,
+                        'transactions_types': transactions_types, 'companies': companies, 'transactions': transactions})
+
+        return render(request, 'transactions/transactions.html', context)
 
 
 @login_required(login_url='/signin/')
@@ -211,7 +213,7 @@ def load_transactions(request):
     user_account = User_Account.objects.get(owner=request.user)
     bank_accounts = Bank_Account.objects.filter(user_account=user_account)
     for index in bank_accounts:
-        accounts = index.data['accounts']
+        accounts = index.data.get('accounts', None)
         if accounts:
             for bank_account_uid, data in accounts[0].items():
                 print(bank_account_uid, data)
