@@ -169,6 +169,7 @@
 													</div>
                                 <!--end::Filter-->
                                 <button type="button" class="btn btn-light-primary me-5" id="check_invoices">{% trans "Check Invoices" %}</button>
+                                <button type="button" class="btn btn-light-primary me-5" id="check_transact">{% trans "Load Transactions" %}</button>
 
                                 <!--begin::Add customer-->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_customer">{% trans "Add Transaction" %}</button>
@@ -709,6 +710,25 @@ $(document).on("click", "#check_invoices", function () {
   })
 });
 </script>
+<script>
+$(document).on("click", "#check_transact", function () {
+  $(this).text('Loading... ')
+  $(this).append('<span class="spinner-border spinner-border-sm"></span>')
+  $.ajax({
+    type: "POST",
+    url: '{% url 'transactions:load_transactions' %}',
+    data: {
+            csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+    success: function(data) {
+    location.href = "{% url 'transactions:transactions_list' %}"
+     },
+     error: function(data) {
+     }
+  })
+});
+</script>
+
 <script>
 $('.invoice_select').on("select2:unselect", function(e){
          var data = e.params.data;

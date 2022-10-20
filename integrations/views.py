@@ -13,13 +13,13 @@ from transactions.models import Transaction
 from invoice.models import Invoice
 
 
-def refresh_token(request):
+def refresh_token():
     get_access = requests.post(url='https://ob.nordigen.com/api/v2/token/new/',
                                headers={'accept': 'application/json', 'Content-Type': 'application/json'},
                                json={'secret_id': 'bd5516c3-3bfd-4f1a-828e-a5a0b9e7d58c',
                                      'secret_key': '10c6d6126ae3557a18ed905359633a246df6566ff5a047f82fd3dde3d7f9176b91ba5b0178228b8b9e9d3e90a39de563e2973a4c536f8958317ea81493dba2f1'})
     access_token = get_access.json()['access']
-    request.session['access_token'] = access_token
+    return access_token
 
 
 @login_required(login_url='/signin/')
@@ -28,9 +28,9 @@ def integrations_view(request):
     reference = randint(1000, 1000000)
     user_account = User_Account.objects.get(owner=request.user)
 
-    refresh_token(request)
 
-    access_token = request.session.get('access_token')
+
+    access_token = refresh_token()
 
 
     if request.method == 'POST':
@@ -71,7 +71,7 @@ def integrations_view(request):
                 'agreement_id': user_login_token['id'],
                 'institution_id': user_login_token['institution_id'],
                 'agreement': user_login_token['agreement'],
-                'accounts': user_login_token['accounts'],
+                'accounts': [{index: {}} for index in user_login_token['accounts']],
             }
         else:
             bank_account.data['agreement_id'] = user_login_token['id']
@@ -82,10 +82,11 @@ def integrations_view(request):
     else:
         context = {}
         banks_accounts = user_account.bank_account.all()
-        print(banks_accounts)
+
         for index in banks_accounts:
             context[index.name] = []
             for account in index.data['accounts']:
+                account = list(account.keys())[0]
                 user_transactions = requests.get(url=f'https://ob.nordigen.com/api/v2/accounts/{account}',
                                                  headers={'accept': 'application/json',
                                                           'Authorization': f'Bearer {access_token}'})
@@ -94,7 +95,6 @@ def integrations_view(request):
                     created_account = Account.objects.get(user_account=user_account, account_id=iban)
                 except Exception:
                     created_account = None
-                print(created_account)
 
                 if not created_account:
                     status = user_transactions.json()['status']
@@ -111,16 +111,16 @@ def integrations_response(request):
     user_account = User_Account.objects.get(owner=request.user)
     bank_account = Bank_Account.objects.get(user_account=user_account, name=request.GET.get('bank'))
     agreement_id = bank_account.data['agreement_id']
-    access_token = request.session.get('access_token')
+    access_token = refresh_token()
 
     get_user_accounts = requests.get(url=f'https://ob.nordigen.com/api/v2/requisitions/{agreement_id}/',
                                      headers={'accept': 'application/json', 'Content-Type': 'application/json',
                                               'Authorization': f'Bearer {access_token}'})
     print(get_user_accounts.json())
-    bank_id = bank_account.data['institution_id']
     user_accounts = get_user_accounts.json()['accounts']
-    print(user_accounts)
-    bank_account.data['accounts'] = user_accounts
+
+    for index in user_accounts:
+        bank_account.data['accounts'].append({index: {}})
     bank_account.save()
 
     return HttpResponseRedirect('/integrations/')
@@ -131,13 +131,14 @@ def integrate_account(request):
     if request.method == 'POST':
         user_account = User_Account.objects.get(owner=request.user)
 
-        access_token = request.session.get('access_token')
+        access_token = refresh_token()
 
 
         bank_account_uid = request.POST.get('account')
         company_name = request.POST.get('company')
         bank_name = request.POST.get('bank').strip()
         account_number = request.POST.get('account_iban').strip()
+        bank_account = Bank_Account.objects.get(user_account=user_account, data__accounts=[{bank_account_uid: {}}])
 
         company, status = Company.objects.get_or_create(user_account=user_account, company_name=company_name)
 
@@ -146,7 +147,7 @@ def integrate_account(request):
                                                   'Authorization': f'Bearer {access_token}'})
 
         user_transactions_response = user_transactions.json()
-        print(user_transactions_response)
+
         if user_transactions_response.get('status_code') == 429:
             return JsonResponse(data={}, status=429)
         currency = user_transactions_response['transactions']['booked'][0]['transactionAmount']['currency']
@@ -154,6 +155,9 @@ def integrate_account(request):
         new_account = Account.objects.create(account_id=account_number, user_account=user_account, company=company,
                                              bank=bank_name, currency=currency)
 
+        bank_account.data['accounts'][0][bank_account_uid].update({'account_uid': f'{new_account.uid}',
+                                                                         'company_uid': f'{company.uid}'})
+        bank_account.save()
         for transaction_info in user_transactions_response['transactions']['booked']:
             if transaction_info:
 
@@ -198,13 +202,18 @@ def integrate_account(request):
 
 
 def add_invoices(request):
+
     user_account = User_Account.objects.get(owner=request.user)
-    transactions = Transaction.objects.filter(user_account=user_account)
+    transactions = Transaction.objects.filter(user_account=user_account, transaction_type='Income')
+
     for transaction in transactions:
         invoices = Invoice.objects.filter(user_account=user_account, company=transaction.company,
                                           account=transaction.account, contractor=transaction.contractor,
-                                          invoice_sum__gte=transaction.sum_of_transactions)
+                                          invoice_sum__gte=transaction.sum_of_transactions,
+                                          invoice_date__gte=transaction.transaction_date)
+
         if invoices:
             transaction.invoice = invoices[0]
             transaction.save()
+            transaction.invoice.save()
     return JsonResponse({}, status=200)

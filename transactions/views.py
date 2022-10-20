@@ -10,13 +10,16 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from invoice.models import Invoice
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from integrations.views import refresh_token
+from integrations.models import Bank_Account
+import requests
 
 
 @login_required(login_url='/signin/')
 def transactions_view(request):
+    user_account = User_Account.objects.get(owner=request.user)
+
     if request.method == 'GET':
-        user_account = User_Account.objects.get(owner=request.user)
         companies = Company.objects.filter(user_account=user_account)
         if companies:
             transactions = Transaction.objects.filter(user_account=user_account).order_by('-transaction_date')  # '-transaction_type',
@@ -27,17 +30,14 @@ def transactions_view(request):
 
             instances = ((transaction, Invoice.objects.filter(company=transaction.company, contractor=transaction.contractor))
                          for transaction in transactions)
+
             contractors = Contractor.objects.filter(user_account=user_account)
             currencies = Currency.objects.all()
             transactions_types = Transaction.transaction_types
-            return render(request, 'transactions/transactions.html', {'currencies': currencies,
-                                                                      'instances': instances,
-                                                                      'contractors': contractors,
-                                                                      'transactions_types': transactions_types,
-                                                                      'companies': companies,
-                                                                      'transactions': transactions})
-        else:
-            return redirect('company:start_company')
+
+            context = {'currencies': currencies, 'instances': instances, 'contractors': contractors,
+                        'transactions_types': transactions_types, 'companies': companies, 'transactions': transactions}
+            return render(request, 'transactions/transactions.html', context)
 
 
 @login_required(login_url='/signin/')
@@ -83,7 +83,9 @@ def delete_transaction(request):
         transaction = Transaction.objects.filter(user_account=user_account[0], uid=uid)
 
         if transaction:
+            pre_invoice = transaction[0].invoice
             transaction[0].delete()
+            pre_invoice.save()
 
         return JsonResponse({}, status=200)
 
@@ -155,12 +157,10 @@ def get_invoice_val(request):
     company = Company.objects.get(user_account=user_account, uid=request.POST.get('company'))
     contractor = Contractor.objects.get(user_account=user_account, uid=request.POST.get('contractor'))
     account = Account.objects.get(user_account=user_account, uid=request.POST.get('account'))
-    print(contractor, account, company)
 
     invoice = Invoice.objects.filter(contractor=contractor, account=account, company=company)
     for index in invoice:
         context[index.__str__()] = index.uid
-    print(context)
     return JsonResponse(context, status=200)
 
 
@@ -193,9 +193,89 @@ def add_invoice(request):
     transaction_uid = request.POST.get('transaction_uid')
 
     transaction = Transaction.objects.get(user_account=user_account, uid=transaction_uid)
+    pre_invoice = transaction.invoice
     invoice = Invoice.objects.get(user_account=user_account, uid=invoice_uid)
-    transaction.invoice = invoice
 
+    transaction.invoice = invoice
     transaction.save()
+    transaction.invoice.save()
+
+    if pre_invoice is not None:
+        pre_invoice.save()
+
+    return JsonResponse({}, status=200)
+
+
+def load_transactions(request):
+    access_token = refresh_token()
+    user_account = User_Account.objects.get(owner=request.user)
+    bank_accounts = Bank_Account.objects.filter(user_account=user_account)
+    for index in bank_accounts:
+        accounts = index.data['accounts']
+        if accounts:
+            for bank_account_uid, data in accounts[0].items():
+                print(bank_account_uid, data)
+
+                user_transactions = requests.get(
+                    url=f'https://ob.nordigen.com/api/v2/accounts/{bank_account_uid}/transactions/',
+                    headers={'accept': 'application/json',
+                             'Authorization': f'Bearer {access_token}'})
+
+                user_transactions_response = user_transactions.json()
+                account = Account.objects.get(user_account=user_account, uid=data['account_uid'])
+                company = Company.objects.get(user_account=user_account, uid=data['company_uid'])
+
+                for transaction_info in user_transactions_response['transactions']['booked']:
+                    if transaction_info:
+
+                        transaction_id = transaction_info.get('transactionId')
+
+                        if not Transaction.objects.filter(transaction_id=transaction_id, user_account=user_account):
+
+                            transaction_amount = transaction_info['transactionAmount']['amount']
+                            creation_date = transaction_info['bookingDate']
+                            transaction_date = transaction_info['valueDate']
+
+                            if float(transaction_amount) < 0 and not transaction_info.get('creditorName') is None:
+                                transaction_type = 'Expenses'
+                                contractor_name = transaction_info.get('creditorName')
+
+                                if not contractor_name:
+                                    contractor_name = transaction_info.get('debtorName')
+                                    if not contractor_name:
+                                        contractor_name = company.company_name
+
+                            else:
+                                transaction_type = 'Income'
+                                contractor_name = transaction_info.get('debtorName')
+
+                                if not contractor_name:
+                                    contractor_name = transaction_info.get('creditorName')
+                                    if not contractor_name:
+                                        contractor_name = company.company_name
+
+                            try:
+                                contractor = Contractor.objects.get(contractor_name=contractor_name,
+                                                                    user_account=user_account)
+                            except Exception:
+                                contractor = Contractor.objects.create(contractor_name=contractor_name,
+                                                                       user_account=user_account)
+
+                            transaction = Transaction.objects.create(transaction_id=transaction_id, user_account=user_account,
+                                                       account=account, contractor=contractor,
+                                                       sum_of_transactions=abs(float(transaction_amount)),
+                                                       transaction_type=transaction_type,
+                                                       transaction_date=transaction_date,
+                                                       creation_date=creation_date, company=company)
+                            if transaction_type == 'Income':
+                                invoices = Invoice.objects.filter(user_account=user_account, company=company,
+                                                                  account=account, contractor=contractor,
+                                                                  invoice_sum__gte=abs(float(transaction_amount)),
+                                                                  invoice_date__gte=transaction_date)
+
+                                if invoices:
+                                    transaction.invoice = invoices[0]
+                                    transaction.save()
+                                    transaction.invoice.save()
 
     return JsonResponse({}, status=200)

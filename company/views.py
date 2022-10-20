@@ -17,11 +17,11 @@ def companies_list(request):
     currency = Currency.objects.all()
     banks = Bank.objects.all()
 
-    form = AccountForm()
+    form = AccountForm(user_account)
     company_form = CompanyForm()
 
     if 'account_id' in request.POST:
-        form = AccountForm(request.POST)
+        form = AccountForm(user_account, request.POST)
 
         if form.is_valid():
             form.instance.user_account = user_account
@@ -61,11 +61,11 @@ def company_edit(request, com_uid):
     company = Company.objects.get(uid=com_uid, user_account=user_account)
     accounts = Account.objects.filter(company=company)
 
-    form = AccountForm()
+    form = AccountForm(user_account)
     company_form = CompanyForm()
 
     if 'account_id' in request.POST:
-        form = AccountForm(request.POST)
+        form = AccountForm(user_account, request.POST)
 
         if form.is_valid():
             form.instance.user_account = user_account

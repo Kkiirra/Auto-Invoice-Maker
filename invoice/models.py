@@ -69,6 +69,8 @@ class Invoice(models.Model):
                 self.invoice_status = Invoice.paid
             elif self.invoice_sum > transactions_sum and transactions_sum is not None:
                 self.invoice_status = Invoice.paid_part
+            else:
+                self.invoice_status = Invoice.draft
         else:
             self.invoice_status = Invoice.draft
         super(Invoice, self).save(*args, **kwargs)

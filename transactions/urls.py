@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import transactions_view, add_transaction, delete_transaction, transaction_edit, get_invoice_val, \
-    get_transaction_company, delete_invoice, add_invoice
+    get_transaction_company, delete_invoice, add_invoice, load_transactions
 
 app_name = 'transactions'
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('get_transaction_company/', get_transaction_company, name='get_transaction_company'),
     path('delete_invoice/', delete_invoice, name='delete_invoice'),
     path('add_invoice/', add_invoice, name='add_invoice'),
+    path('load_transactions/', load_transactions, name='load_transactions')
 ]
