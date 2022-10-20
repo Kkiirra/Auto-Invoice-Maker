@@ -80,7 +80,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name=_("date joined"), default=timezone.now,
     )
 
-    user_country = models.CharField(max_length=255)
+    user_country = models.CharField(max_length=255, blank=True, null=True)
 
     objects = UserManager()
 

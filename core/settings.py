@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'products',
     'invoice',
     'integrations',
+    'coverage',
 ]
 
 MIDDLEWARE = [
@@ -78,9 +79,9 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'app_finum_on',
-#         'USER': 'app_finum_on',
-#         'PASSWORD': 'Dv56wWTRAiN05JUc',
+#         'NAME': 'name',
+#         'USER': 'user',
+#         'PASSWORD': 'password',
 #         'HOST': 'localhost',
 #         'PORT': '3306',
 #     }
@@ -108,8 +109,6 @@ LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 LANGUAGES = (
     ('en', _("English")),
-    # ('ru', _('Russian')),
-    # ('uk', _('Ukrainian')),
     # ('pl', _("Polish")),
 )
 
@@ -134,9 +133,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'customuser.CustomUser'
 # EMAIL_BACKEND = 'django.finum.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = '159.253.18.106'
+EMAIL_HOST = None
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'hello@finum.online'
-EMAIL_HOST_PASSWORD = 'Ov0FfDUcFFVFJtrp'
+EMAIL_HOST_USER = None
+EMAIL_HOST_PASSWORD = None
 
