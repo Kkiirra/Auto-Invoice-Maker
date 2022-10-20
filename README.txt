@@ -1,3 +1,7 @@
+YOU CAN CHECK ON APP.FINUM.ONLINE 
+user: test@gmail.com
+test: test
+
 The essence of this project is to keep an automatic record of your company.
 
 On the site you can create your company and link your account to it, as well as integrate your bank account from 8 popular banks in Poland. (Thanks NordigenAPI)
